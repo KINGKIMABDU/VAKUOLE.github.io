@@ -2,7 +2,7 @@
 
 An advanced, interactive educational platform designed to visualize the structure and function of the plant vacuole. This project combines biology and modern web technology to make cellular processes easier to understand.
 
-## 🚀 Live Demo
+## 🚀 Live Website
 **View the site here: [https://VAKUOLE.github.io](https://kingkimabdu.github.io/VAKUOLE.github.io/)**
 
 ## 🧬 Project Overview
