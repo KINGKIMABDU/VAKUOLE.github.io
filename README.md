@@ -3,7 +3,7 @@
 An advanced, interactive educational platform designed to visualize the structure and function of the plant vacuole. This project combines biology and modern web technology to make cellular processes easier to understand.
 
 ## 🚀 Live Demo
-**View the site here: [https://VAKUOLE.github.io](https://VAKUOLE.github.io)**
+**View the site here: [https://VAKUOLE.github.io](https://kingkimabdu.github.io/VAKUOLE.github.io/)**
 
 ## 🧬 Project Overview
 This site was developed as a biology school project. It features a real-time 3D-style simulation of a plant cell, focusing on how the vacuole regulates turgor pressure and stores essential molecules.
