@@ -19,7 +19,6 @@
     --heading-font: 'Nunito', sans-serif;
     --body-font: 'Nunito', sans-serif;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
@@ -30,306 +29,233 @@
     line-height: 1.75;
     min-height: 100vh;
     overflow-x: hidden;
+    cursor: none;
   }
 
+  /* Custom cursor */
+  #cursor-dot {
+    position: fixed; width: 8px; height: 8px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: width .2s, height .2s;
+  }
+  #cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1.5px solid rgba(167,209,41,0.5); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: width .25s, height .25s, border-color .2s;
+  }
+  body.cursor-hover #cursor-dot  { width: 14px; height: 14px; }
+  body.cursor-hover #cursor-ring { width: 52px; height: 52px; border-color: var(--accent); }
+  body.cursor-click #cursor-dot  { transform: translate(-50%,-50%) scale(0.6); }
+
+  /* BG */
   body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
+    content: ''; position: fixed; inset: 0;
     background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(167,209,41,0.07) 0%, transparent 60%),
                 radial-gradient(ellipse 60% 80% at 80% 90%, rgba(97,111,57,0.06) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
+    pointer-events: none; z-index: 0;
   }
 
-  .wrapper {
-    position: relative;
-    z-index: 1;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem 4rem;
+  /* Ambient orbs */
+  .orb {
+    position: fixed; border-radius: 50%; pointer-events: none;
+    filter: blur(80px); z-index: 0; opacity: .07;
+    animation: orbFloat linear infinite;
+  }
+  .orb-1 { width:400px;height:400px;background:var(--accent);top:-100px;left:-100px;animation-duration:22s; }
+  .orb-2 { width:300px;height:300px;background:var(--accent2);bottom:-50px;right:-50px;animation-duration:28s;animation-direction:reverse; }
+  @keyframes orbFloat {
+    0%   { transform:translate(0,0) scale(1); }
+    33%  { transform:translate(60px,40px) scale(1.08); }
+    66%  { transform:translate(-30px,70px) scale(0.95); }
+    100% { transform:translate(0,0) scale(1); }
   }
 
-  .hero {
-    text-align: center;
-    padding: 5rem 0 3rem;
+  /* Scroll progress */
+  #scroll-bar {
+    position:fixed;top:0;left:0;height:3px;
+    background:linear-gradient(90deg,var(--accent2),var(--accent),var(--accent3));
+    width:0%;z-index:9999;transition:width .05s linear;
   }
+
+  .wrapper { position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 2rem 4rem; }
+
+  /* Hero */
+  .hero { text-align:center;padding:5rem 0 3rem; }
   .hero-label {
-    display: inline-block;
-    font-size: 0.75rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid rgba(167,209,41,0.35);
-    padding: 0.3rem 1rem;
-    border-radius: 999px;
-    margin-bottom: 1.5rem;
-    backdrop-filter: blur(4px);
+    display:inline-block;font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--accent);border:1px solid rgba(167,209,41,.35);padding:.3rem 1rem;
+    border-radius:999px;margin-bottom:1.5rem;backdrop-filter:blur(4px);
+    animation:heroIn .8s cubic-bezier(.22,1,.36,1) both;
   }
   .hero h1 {
-    font-family: var(--heading-font);
-    font-size: clamp(2.8rem, 6vw, 5rem);
-    font-weight: 900;
-    line-height: 1.05;
-    background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent2) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 1rem;
+    font-family:var(--heading-font);font-size:clamp(2.8rem,6vw,5rem);font-weight:900;line-height:1.05;
+    background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    margin-bottom:1rem;animation:heroIn 1s cubic-bezier(.22,1,.36,1) .15s both;
   }
-  .hero p {
-    max-width: 600px;
-    margin: 0 auto;
-    color: var(--muted);
-    font-size: 1.05rem;
-  }
+  .hero p { max-width:600px;margin:0 auto;color:var(--muted);font-size:1.05rem;animation:heroIn 1s cubic-bezier(.22,1,.36,1) .3s both; }
+  @keyframes heroIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-  .tabs {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 2.5rem 0;
-  }
+  /* Tabs */
+  .tabs { display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:2.5rem 0;animation:heroIn .8s .45s both; }
   .tab-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: var(--body-font);
-    font-size: 0.875rem;
-    padding: 0.5rem 1.25rem;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: all 0.25s;
+    background:var(--card);border:1px solid var(--border);color:var(--muted);
+    font-family:var(--body-font);font-size:.875rem;padding:.5rem 1.25rem;border-radius:999px;
+    cursor:none;position:relative;overflow:hidden;
+    transition:all .25s cubic-bezier(.22,1,.36,1);
   }
-  .tab-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .tab-btn.active {
-    background: rgba(167,209,41,0.12);
-    border-color: var(--accent);
-    color: var(--accent);
-  }
+  .tab-btn:hover { border-color:var(--accent);color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(167,209,41,.12); }
+  .tab-btn:active { transform:scale(.95); }
+  .tab-btn.active { background:rgba(167,209,41,.12);border-color:var(--accent);color:var(--accent);box-shadow:0 0 18px rgba(167,209,41,.15); }
 
-  /* ── Tab animations ── */
-  .section {
-    display: none;
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  .section.active {
-    display: block;
-  }
-  @keyframes tabFadeIn {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .section.tab-enter {
-    animation: tabFadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
+  /* Tab sections */
+  .section { display:none;opacity:0; }
+  .section.active { display:block; }
+  @keyframes tabIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .section.tab-enter { animation:tabIn .4s cubic-bezier(.22,1,.36,1) forwards; }
 
+  /* Scroll reveal */
+  .reveal { opacity:0;transform:translateY(28px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1); }
+  .reveal.visible { opacity:1;transform:translateY(0); }
+
+  .reveal-stagger > * { opacity:0;transform:translateY(22px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1); }
+  .reveal-stagger.visible > *:nth-child(1){opacity:1;transform:none;transition-delay:.00s}
+  .reveal-stagger.visible > *:nth-child(2){opacity:1;transform:none;transition-delay:.07s}
+  .reveal-stagger.visible > *:nth-child(3){opacity:1;transform:none;transition-delay:.14s}
+  .reveal-stagger.visible > *:nth-child(4){opacity:1;transform:none;transition-delay:.21s}
+  .reveal-stagger.visible > *:nth-child(5){opacity:1;transform:none;transition-delay:.28s}
+  .reveal-stagger.visible > *:nth-child(6){opacity:1;transform:none;transition-delay:.35s}
+  .reveal-stagger.visible > *:nth-child(7){opacity:1;transform:none;transition-delay:.42s}
+  .reveal-stagger.visible > *:nth-child(8){opacity:1;transform:none;transition-delay:.49s}
+
+  /* Card */
   .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 1.25rem;
-    padding: 2rem 2.25rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-    overflow: hidden;
+    background:var(--card);border:1px solid var(--border);border-radius:1.25rem;
+    padding:2rem 2.25rem;margin-bottom:1.5rem;position:relative;overflow:hidden;
+    transition:border-color .3s,box-shadow .3s,transform .3s cubic-bezier(.22,1,.36,1);
   }
+  .card:hover { border-color:rgba(167,209,41,.3);box-shadow:0 8px 40px rgba(0,0,0,.4);transform:translateY(-3px); }
   .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0.5;
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.5;transition:opacity .3s;
   }
-  .card h2 {
-    font-family: var(--heading-font);
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-    color: #fff;
+  .card:hover::before { opacity:1; }
+  /* shimmer sweep */
+  .card::after {
+    content:'';position:absolute;top:-50%;left:-75%;width:50%;height:200%;
+    background:linear-gradient(105deg,transparent 40%,rgba(200,232,106,.06) 50%,transparent 60%);
+    transform:skewX(-20deg);transition:left .6s ease;pointer-events:none;
   }
-  .card h3 {
-    font-family: var(--heading-font);
-    font-size: 1.15rem;
-    color: var(--accent);
-    margin: 1.2rem 0 0.4rem;
-  }
-  .card p { color: var(--text); margin-bottom: 0.75rem; }
-  .card ul { padding-left: 1.5rem; margin-bottom: 0.75rem; }
-  .card ul li { margin-bottom: 0.4rem; color: var(--text); }
-  .card ul li::marker { color: var(--accent); }
+  .card:hover::after { left:125%; }
+  .card h2 { font-family:var(--heading-font);font-size:1.6rem;font-weight:700;margin-bottom:.75rem;color:#fff; }
+  .card h3 { font-family:var(--heading-font);font-size:1.15rem;color:var(--accent);margin:1.2rem 0 .4rem; }
+  .card p { color:var(--text);margin-bottom:.75rem; }
+  .card ul { padding-left:1.5rem;margin-bottom:.75rem; }
+  .card ul li { margin-bottom:.4rem;color:var(--text); }
+  .card ul li::marker { color:var(--accent); }
 
-  .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.25rem;
-    margin-bottom: 1.5rem;
-  }
+  /* Info chips */
+  .info-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-bottom:1.5rem; }
   .info-chip {
-    background: rgba(167,209,41,0.06);
-    border: 1px solid rgba(167,209,41,0.2);
-    border-radius: 1rem;
-    padding: 1.25rem 1.5rem;
+    background:rgba(167,209,41,.06);border:1px solid rgba(167,209,41,.2);border-radius:1rem;padding:1.25rem 1.5rem;
+    transition:background .25s,border-color .25s,transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s;
   }
-  .info-chip .ic-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    margin-bottom: 0.4rem;
-  }
-  .info-chip .ic-value {
-    font-size: 1rem;
-    color: #fff;
-    font-weight: 500;
-  }
+  .info-chip:hover { background:rgba(167,209,41,.11);border-color:rgba(167,209,41,.45);transform:translateY(-3px) scale(1.02);box-shadow:0 6px 24px rgba(0,0,0,.3); }
+  .info-chip .ic-label { font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:.4rem; }
+  .info-chip .ic-value { font-size:1rem;color:#fff;font-weight:500; }
 
   .badge {
-    display: inline-block;
-    background: rgba(97,111,57,0.18);
-    border: 1px solid rgba(97,111,57,0.4);
-    color: var(--accent3);
-    font-size: 0.75rem;
-    padding: 0.2rem 0.75rem;
-    border-radius: 999px;
-    margin: 0.2rem;
+    display:inline-block;background:rgba(97,111,57,.18);border:1px solid rgba(97,111,57,.4);
+    color:var(--accent3);font-size:.75rem;padding:.2rem .75rem;border-radius:999px;margin:.2rem;
+    transition:background .2s,transform .2s;cursor:none;
   }
+  .badge:hover { background:rgba(97,111,57,.35);transform:scale(1.08); }
 
-  .sim-wrapper {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 1.25rem;
-    overflow: hidden;
-    margin-bottom: 1.5rem;
-  }
-  .sim-header {
-    padding: 1.25rem 2rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .sim-header h2 {
-    font-family: var(--heading-font);
-    font-size: 1.4rem;
-    color: #fff;
-  }
-  .sim-controls { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+  /* Sim wrapper */
+  .sim-wrapper { background:var(--card);border:1px solid var(--border);border-radius:1.25rem;overflow:hidden;margin-bottom:1.5rem;transition:box-shadow .3s; }
+  .sim-wrapper:hover { box-shadow:0 0 50px rgba(167,209,41,.07); }
+  .sim-header { padding:1.25rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem; }
+  .sim-header h2 { font-family:var(--heading-font);font-size:1.4rem;color:#fff; }
+  .sim-controls { display:flex;gap:.75rem;align-items:center;flex-wrap:wrap; }
+
+  /* Buttons */
   .btn {
-    font-family: var(--body-font);
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.55rem 1.4rem;
-    border-radius: 999px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.03em;
+    font-family:var(--body-font);font-size:.875rem;font-weight:500;padding:.55rem 1.4rem;
+    border-radius:999px;border:none;cursor:none;letter-spacing:.03em;position:relative;overflow:hidden;
+    transition:all .22s cubic-bezier(.22,1,.36,1);
   }
-  .btn-start {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #000;
-  }
-  .btn-start:hover { opacity: 0.85; transform: translateY(-1px); }
-  .btn-stop {
-    background: transparent;
-    border: 1px solid #e04060;
-    color: #e04060;
-  }
-  .btn-stop:hover { background: rgba(224,64,96,0.12); }
-  .btn-reset {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-  }
-  .btn-reset:hover { border-color: var(--accent2); color: var(--accent2); }
+  .btn .ripple { position:absolute;border-radius:50%;background:rgba(255,255,255,.25);transform:scale(0);animation:rippleA .55s linear forwards;pointer-events:none; }
+  @keyframes rippleA { to{transform:scale(4);opacity:0} }
+  .btn-start { background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000; }
+  .btn-start:hover { opacity:.88;transform:translateY(-2px);box-shadow:0 6px 20px rgba(167,209,41,.3); }
+  .btn-start:active { transform:scale(.95); }
+  .btn-stop { background:transparent;border:1px solid #e04060;color:#e04060; }
+  .btn-stop:hover { background:rgba(224,64,96,.12);transform:translateY(-2px);box-shadow:0 4px 14px rgba(224,64,96,.2); }
+  .btn-stop:active { transform:scale(.95); }
+  .btn-reset { background:transparent;border:1px solid var(--border);color:var(--muted); }
+  .btn-reset:hover { border-color:var(--accent2);color:var(--accent2);transform:translateY(-2px); }
+  .btn-reset:active { transform:scale(.95); }
 
-  .sim-status {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 999px;
-    font-weight: 500;
-  }
-  .sim-status.idle    { background: rgba(122,138,90,0.15); color: var(--muted); }
-  .sim-status.running { background: rgba(167,209,41,0.12); color: var(--accent3); }
-  .sim-status.stopped { background: rgba(224,64,96,0.12);  color: #e04060; }
+  .sim-status { font-size:.75rem;padding:.25rem .75rem;border-radius:999px;font-weight:500;transition:all .3s; }
+  .sim-status.idle    { background:rgba(122,138,90,.15);color:var(--muted); }
+  .sim-status.running { background:rgba(167,209,41,.12);color:var(--accent3);animation:pulseBadge 2s ease infinite; }
+  .sim-status.stopped { background:rgba(224,64,96,.12);color:#e04060; }
+  @keyframes pulseBadge { 0%,100%{box-shadow:0 0 0 0 rgba(167,209,41,.4)} 50%{box-shadow:0 0 0 6px rgba(167,209,41,0)} }
 
-  canvas#simCanvas {
-    display: block;
-    width: 100%;
-    height: 520px;
-    cursor: grab;
-    touch-action: none;
-  }
-  canvas#simCanvas:active { cursor: grabbing; }
+  canvas#simCanvas { display:block;width:100%;height:520px;cursor:none;touch-action:none; }
 
-  .sim-legend {
-    padding: 1rem 2rem;
-    border-top: 1px solid var(--border);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--muted); }
-  .legend-dot  { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .sim-legend { padding:1rem 2rem;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:1rem; }
+  .legend-item { display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--muted);transition:color .2s,transform .2s;cursor:none; }
+  .legend-item:hover { color:var(--text);transform:translateX(3px); }
+  .legend-dot { width:12px;height:12px;border-radius:50%;flex-shrink:0; }
 
-  .sim-info-bar {
-    padding: 0.75rem 2rem;
-    border-top: 1px solid var(--border);
-    font-size: 0.8rem;
-    color: var(--muted);
-    background: rgba(0,0,0,0.15);
-  }
+  .sim-info-bar { padding:.75rem 2rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted);background:rgba(0,0,0,.15); }
 
-  .func-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
+  /* Func cards */
+  .func-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:1rem; }
   .func-card {
-    background: rgba(0,0,0,0.2);
-    border: 1px solid var(--border);
-    border-radius: 1rem;
-    padding: 1.25rem;
-    transition: border-color 0.2s;
+    background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:1rem;padding:1.25rem;cursor:none;
+    transition:border-color .25s,transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s,background .25s;
   }
-  .func-card:hover { border-color: rgba(167,209,41,0.4); }
-  .func-card .fc-icon { font-size: 1.8rem; margin-bottom: 0.5rem; display: block; }
-  .func-card h4 { font-family: var(--heading-font); font-size: 1rem; color: #fff; margin-bottom: 0.4rem; }
-  .func-card p  { font-size: 0.875rem; color: var(--muted); margin: 0; }
+  .func-card:hover { border-color:rgba(167,209,41,.45);transform:translateY(-5px) scale(1.01);box-shadow:0 10px 40px rgba(0,0,0,.5);background:rgba(167,209,41,.04); }
+  .func-card:active { transform:scale(.98); }
+  .func-card .fc-icon { font-size:1.8rem;margin-bottom:.5rem;display:block;transition:transform .3s cubic-bezier(.22,1,.36,1); }
+  .func-card:hover .fc-icon { transform:scale(1.25) rotate(-4deg); }
+  .func-card h4 { font-family:var(--heading-font);font-size:1rem;color:#fff;margin-bottom:.4rem; }
+  .func-card p  { font-size:.875rem;color:var(--muted);margin:0; }
 
-  .footer {
-    text-align: center;
-    padding: 2rem 0 1rem;
-    color: var(--muted);
-    font-size: 0.8rem;
-    border-top: 1px solid var(--border);
-    margin-top: 3rem;
-  }
-  .copyright-note {
-    margin-top: 0.6rem;
-    font-size: 0.75rem;
-    color: var(--accent);
-    letter-spacing: 0.08em;
-    opacity: 0.7;
-  }
+  /* Table hover */
+  table tr { transition:background .2s; }
+  table tr:hover td { background:rgba(167,209,41,.05) !important; }
 
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  /* Footer */
+  .footer { text-align:center;padding:2rem 0 1rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:3rem; }
+  .copyright-note { margin-top:.6rem;font-size:.75rem;color:var(--accent);letter-spacing:.08em;opacity:.7; }
 
-  @media (max-width: 640px) {
-    .sim-header { flex-direction: column; align-items: flex-start; }
-    canvas#simCanvas { height: 380px; }
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border);border-radius:3px; }
+
+  @media (max-width:640px) {
+    .sim-header { flex-direction:column;align-items:flex-start; }
+    canvas#simCanvas { height:380px; }
+    body { cursor:auto; }
+    #cursor-dot,#cursor-ring { display:none; }
   }
 </style>
 </head>
 <body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="scroll-bar"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
 <div class="wrapper">
 
   <div class="hero">
@@ -339,16 +265,16 @@
   </div>
 
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('simulation', this)">Simulation</button>
-    <button class="tab-btn" onclick="showTab('aufbau', this)">Aufbau</button>
-    <button class="tab-btn" onclick="showTab('funktionen', this)">Funktionen</button>
-    <button class="tab-btn" onclick="showTab('typen', this)">Typen & Vorkommen</button>
-    <button class="tab-btn" onclick="showTab('vergleich', this)">Pflanzen vs. Tiere</button>
+    <button class="tab-btn active" onclick="showTab('simulation',this)">Simulation</button>
+    <button class="tab-btn" onclick="showTab('aufbau',this)">Aufbau</button>
+    <button class="tab-btn" onclick="showTab('funktionen',this)">Funktionen</button>
+    <button class="tab-btn" onclick="showTab('typen',this)">Typen & Vorkommen</button>
+    <button class="tab-btn" onclick="showTab('vergleich',this)">Pflanzen vs. Tiere</button>
   </div>
 
-  <!-- SIMULATION TAB -->
+  <!-- SIMULATION -->
   <div class="section active tab-enter" id="tab-simulation">
-    <div class="sim-wrapper">
+    <div class="sim-wrapper reveal">
       <div class="sim-header">
         <div>
           <h2>Zell-Simulation</h2>
@@ -357,25 +283,22 @@
         <div class="sim-controls">
           <span class="sim-status idle" id="simStatus">● Bereit</span>
           <button class="btn btn-reset" onclick="resetSim()">↺ Reset</button>
-          <button class="btn btn-stop" onclick="stopSim()">⏹ Stopp</button>
+          <button class="btn btn-stop"  onclick="stopSim()">⏹ Stopp</button>
           <button class="btn btn-start" onclick="startSim()">▶ Simulation starten</button>
         </div>
       </div>
       <canvas id="simCanvas"></canvas>
       <div class="sim-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#616F39"></div> Zellmembran</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#3E432E"></div> Chloroplasten</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#A7D129"></div> Vakuole (Tonoplast)</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#e0a030"></div> Zellkern</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#c8e86a"></div> Zellsaft / Wasser</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#ff6688"></div> Ionen / Moleküle</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#616F39"></div>Zellmembran</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3E432E"></div>Chloroplasten</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#A7D129"></div>Vakuole (Tonoplast)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#e0a030"></div>Zellkern</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#c8e86a"></div>Zellsaft / Wasser</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#ff6688"></div>Ionen / Moleküle</div>
       </div>
-      <div class="sim-info-bar" id="simInfoBar">
-        Starte die Simulation, um zu sehen, wie die Vakuole Turgor aufbaut und Ionen transportiert.
-      </div>
+      <div class="sim-info-bar" id="simInfoBar">Starte die Simulation, um zu sehen, wie die Vakuole Turgor aufbaut und Ionen transportiert.</div>
     </div>
-
-    <div class="card">
+    <div class="card reveal">
       <h2>Was zeigt die Simulation?</h2>
       <p>Du siehst eine vereinfachte <strong>Pflanzenzelle</strong> mit einer großen zentralen Vakuole. Im Ruhezustand kannst du die Zelle frei drehen und erkunden. Wenn du die Simulation startest, passiert Folgendes:</p>
       <ul>
@@ -384,153 +307,97 @@
         <li>Die Vakuole <strong>wächst sichtbar</strong> und drückt das Zytoplasma an die Zellwand.</li>
         <li>Am Ende kehrt sich der Prozess um, Ionenpumpen können Stoffe auch wieder herausschleusen.</li>
       </ul>
-      <p style="color:var(--muted);font-size:0.875rem">Hinweis: Die Animation ist sehr vereinfacht und dient nur als Modell, nicht als eine maßstäbliche Darstellung.</p>
+      <p style="color:var(--muted);font-size:.875rem">Hinweis: Die Animation ist sehr vereinfacht und dient nur als Modell, nicht als eine maßstäbliche Darstellung.</p>
     </div>
   </div>
 
-  <!-- AUFBAU TAB -->
+  <!-- AUFBAU -->
   <div class="section" id="tab-aufbau">
-    <div class="card">
+    <div class="card reveal">
       <h2>Aufbau der Vakuole</h2>
       <p>Die Vakuole ist ein von einer Membran umschlossener Bereich im Inneren der Zelle, der mit Flüssigkeit, dem sogenannten Zellsaft gefüllt ist. Sie zählt zu den Organellen, also zu den funktionellen Bestandteilen einer Zelle.</p>
-      <div class="info-grid">
-        <div class="info-chip">
-          <div class="ic-label">Größe (Pflanzenzelle)</div>
-          <div class="ic-value">bis zu 90 % des Zellvolumens</div>
-        </div>
-        <div class="info-chip">
-          <div class="ic-label">Membran</div>
-          <div class="ic-value">Tonoplast (Lipiddoppelschicht)</div>
-        </div>
-        <div class="info-chip">
-          <div class="ic-label">Inhalt</div>
-          <div class="ic-value">Zellsaft (wässrige Lösung)</div>
-        </div>
-        <div class="info-chip">
-          <div class="ic-label">pH-Wert (Zellsaft)</div>
-          <div class="ic-value">oft sauer (pH 3–6)</div>
-        </div>
+      <div class="info-grid reveal-stagger">
+        <div class="info-chip"><div class="ic-label">Größe (Pflanzenzelle)</div><div class="ic-value">bis zu 90 % des Zellvolumens</div></div>
+        <div class="info-chip"><div class="ic-label">Membran</div><div class="ic-value">Tonoplast (Lipiddoppelschicht)</div></div>
+        <div class="info-chip"><div class="ic-label">Inhalt</div><div class="ic-value">Zellsaft (wässrige Lösung)</div></div>
+        <div class="info-chip"><div class="ic-label">pH-Wert (Zellsaft)</div><div class="ic-value">oft sauer (pH 3–6)</div></div>
       </div>
       <h3>Der Tonoplast</h3>
       <p>Die Membran, die die Vakuole umgibt, nennt man <strong>Tonoplast</strong>. Wie alle biologischen Membranen besteht sie aus einer <em>Lipiddoppelschicht</em>, in die verschiedene Proteine eingelagert sind.</p>
       <ul>
-        <li><strong>Aquaporine (TIP-Proteine):</strong> Das sind spezielle Wasserkanäle, die den Durchtritt von Wasser durch die Membran ermöglichen und damit die Osmose regulieren.</li>
-        <li><strong>Protonenpumpen (H⁺-ATPasen):</strong> Diese Pumpen transportieren aktiv Wasserstoffionen (H⁺) in die Vakuole. Dadurch wird der pH-Wert im Inneren abgesenkt und ein Konzentrationsgradient aufgebaut.</li>
-        <li><strong>Transporter (z. B. ABC-Transporter):</strong> Sie sorgen dafür, dass Ionen, Zucker, Aminosäuren oder auch Fremdstoffe gezielt in die Vakuole hinein oder aus ihr heraus transportiert werden.</li>
+        <li><strong>Aquaporine (TIP-Proteine):</strong> Spezielle Wasserkanäle, die Osmose regulieren.</li>
+        <li><strong>Protonenpumpen (H⁺-ATPasen):</strong> Transportieren aktiv H⁺-Ionen in die Vakuole, senken den pH-Wert.</li>
+        <li><strong>Transporter (z. B. ABC-Transporter):</strong> Befördern Ionen, Zucker und Aminosäuren gezielt in die Vakuole oder aus ihr heraus.</li>
       </ul>
       <h3>Der Zellsaft</h3>
-      <p>Das Innere der Vakuole ist mit <strong>Zellsaft</strong> (Vakuolenflüssigkeit) gefüllt. Dieser enthält:</p>
+      <p>Das Innere der Vakuole ist mit <strong>Zellsaft</strong> gefüllt. Dieser enthält:</p>
       <ul>
         <li>Wasser als Hauptbestandteil</li>
         <li>Anorganische Ionen (K⁺, Na⁺, Ca²⁺, Cl⁻, PO₄³⁻)</li>
         <li>Organische Säuren (Äpfelsäure, Zitronensäure)</li>
         <li>Zucker und Aminosäuren</li>
-        <li>Sekundäre Pflanzenstoffe wie Anthocyane (Farbstoffe), Tannine oder Alkaloide</li>
-        <li>Abbauenzyme wie Proteasen und Nukleasen, besonders in sogenannten lytischen Vakuolen</li>
+        <li>Sekundäre Pflanzenstoffe wie Anthocyane, Tannine oder Alkaloide</li>
+        <li>Abbauenzyme wie Proteasen und Nukleasen</li>
       </ul>
       <h3>Entstehung der Vakuole</h3>
-      <p>Vakuolen entstehen durch das Verschmelzen kleiner Vesikel. Diese Vesikel werden vom Endoplasmatischen Retikulum (ER) oder vom Golgi-Apparat abgeschnürt. In jungen Pflanzenzellen gibt es zunächst viele kleine Vakuolen. Mit dem Wachstum der Zelle verbinden sich diese nach und nach miteinander, bis schließlich eine große zentrale Vakuole entsteht, die den Großteil des Zellinnenraums einnimmt.</p>
+      <p>Vakuolen entstehen durch das Verschmelzen kleiner Vesikel aus dem ER oder Golgi-Apparat. In jungen Pflanzenzellen gibt es zunächst viele kleine Vakuolen, die zu einer großen zentralen Vakuole verschmelzen.</p>
     </div>
   </div>
 
-  <!-- FUNKTIONEN TAB -->
+  <!-- FUNKTIONEN -->
   <div class="section" id="tab-funktionen">
-    <div class="card">
+    <div class="card reveal">
       <h2>Funktionen der Vakuole</h2>
       <p>Die Vakuole ist viel mehr als nur ein passiver Flüssigkeitsspeicher. Sie erfüllt in der Zelle zahlreiche wichtige Funktionen:</p>
-      <div class="func-grid">
-        <div class="func-card">
-          <h4>Osmoregulation & Turgor</h4>
-          <p>Durch die Aufnahme von Wasser und Ionen erzeugt die Vakuole den Turgordruck. Dieser drückt das Zellinnere gegen die Zellwand und sorgt für die Stabilität der Pflanze. Ohne die Vakuole würden Pflanzen schnell welken.</p>
-        </div>
-        <div class="func-card">
-          <h4>Speicherung & Entsorgung</h4>
-          <p>Die Vakuole speichert Nährstoffe wie Stärke, Proteine und Mineralstoffe. Gleichzeitig lagert sie Schadstoffe, Giftstoffe und zelluläre Abfallprodukte ein, die sonst das Zytoplasma schädigen würden.</p>
-        </div>
-        <div class="func-card">
-          <h4>Abbau (Lysis)</h4>
-          <p>Pflanzliche Vakuolen enthalten Hydrolasen (Abbauenzyme), die beschädigte Proteine, alte Organellen und eingedrungene Mikroorganismen abbauen, ähnlich wie Lysosomen bei Tierzellen.</p>
-        </div>
-        <div class="func-card">
-          <h4>Pigmentspeicherung</h4>
-          <p>Anthocyane in der Vakuole verleihen Blüten und Früchten rote, blaue oder violette Farben, die wichtig sind, um Bestäuber anzulocken und Samen zu verbreiten.</p>
-        </div>
-        <div class="func-card">
-          <h4>Abwehr & Schutz</h4>
-          <p>Die Vakuole speichert Toxine wie Alkaloide oder Tannine, die Fraßfeinde abwehren. Manche Pflanzen lagern auch Vorstufen ein, die bei Verletzung giftige Substanzen freisetzen.</p>
-        </div>
-        <div class="func-card">
-          <h4>pH-Regulation</h4>
-          <p>Mit Hilfe von H⁺-Pumpen im Tonoplast wird der pH-Wert im Zellsaft auf 3–6 gesenkt. Dies ermöglicht saure Abbauprozesse und schützt das Zytoplasma (pH ~7,2) vor Ansäuerung.</p>
-        </div>
-        <div class="func-card">
-          <h4>Proteinspeicherung</h4>
-          <p>In Samen speichern spezielle Proteinspeichervakuolen (PSV) Reserveproteine, die beim Keimen wieder abgebaut und als Nährstoffe genutzt werden.</p>
-        </div>
-        <div class="func-card">
-          <h4>Zellwachstum</h4>
-          <p>Die Aufnahme von Wasser in die Vakuole ermöglicht der Zelle schnelles und energiesparendes Wachstum, ohne dass viel neues Zytoplasma produziert werden muss.</p>
-        </div>
+      <div class="func-grid reveal-stagger">
+        <div class="func-card"><h4>Osmoregulation & Turgor</h4><p>Durch Wasser- und Ionenaufnahme erzeugt die Vakuole den Turgordruck. Dieser drückt das Zellinnere gegen die Zellwand und sorgt für die Stabilität der Pflanze.</p></div>
+        <div class="func-card"><h4>Speicherung & Entsorgung</h4><p>Die Vakuole speichert Nährstoffe wie Stärke, Proteine und Mineralstoffe und lagert Schadstoffe und zelluläre Abfallprodukte sicher ein.</p></div>
+        <div class="func-card"><h4>Abbau (Lysis)</h4><p>Pflanzliche Vakuolen enthalten Hydrolasen, die beschädigte Proteine, alte Organellen und eingedrungene Mikroorganismen abbauen – ähnlich wie Lysosomen bei Tierzellen.</p></div>
+        <div class="func-card"><h4>Pigmentspeicherung</h4><p>Anthocyane in der Vakuole verleihen Blüten und Früchten rote, blaue oder violette Farben, um Bestäuber anzulocken und Samen zu verbreiten.</p></div>
+        <div class="func-card"><h4>Abwehr & Schutz</h4><p>Toxine wie Alkaloide oder Tannine werden in der Vakuole gespeichert, um Fraßfeinde abzuwehren. Manche Pflanzen lagern auch Vorstufen ein, die bei Verletzung giftige Substanzen freisetzen.</p></div>
+        <div class="func-card"><h4>pH-Regulation</h4><p>H⁺-Pumpen im Tonoplast senken den pH-Wert im Zellsaft auf 3–6, ermöglichen saure Abbauprozesse und schützen das Zytoplasma (pH ~7,2).</p></div>
+        <div class="func-card"><h4>Proteinspeicherung</h4><p>Spezielle Proteinspeichervakuolen (PSV) in Samen lagern Reserveproteine, die beim Keimen abgebaut und als Nährstoffe genutzt werden.</p></div>
+        <div class="func-card"><h4>Zellwachstum</h4><p>Wasseraufnahme in die Vakuole ermöglicht schnelles, energiesparendes Zellwachstum ohne viel neues Zytoplasma produzieren zu müssen.</p></div>
       </div>
     </div>
   </div>
 
-  <!-- TYPEN TAB -->
+  <!-- TYPEN -->
   <div class="section" id="tab-typen">
-    <div class="card">
+    <div class="card reveal">
       <h2>Typen von Vakuolen & Vorkommen</h2>
       <p>Vakuolen kommen in verschiedenen Formen vor, abhängig von Zelltyp, Organismus und Funktion.</p>
       <h3>1. Zentrale Vakuole (Pflanzenzellen)</h3>
-      <p>Die bekannteste Form ist die zentrale Vakuole in ausgereiften Pflanzenzellen. Sie ist meist die einzige große Vakuole und kann 70–90 % des Zellvolumens einnehmen. Sie übernimmt klassische Vakuolenfunktionen wie Turgoraufbau, Speicherung von Nährstoffen, Pigmente und Abbau von Abfallstoffen. Dabei wird der Zellkern an den Rand der Zelle gedrängt.</p>
+      <p>Die bekannteste Form: eine einzige große Vakuole in ausgereiften Pflanzenzellen, die 70–90 % des Zellvolumens ausfüllt und Turgoraufbau, Speicherung und Abbau übernimmt.</p>
       <h3>2. Proteinspeichervakuolen (PSV)</h3>
-      <p>findet man vor allem in Samen, zum Beispiel bei Bohnen, Erbsen oder Weizen. Sie speichern Reserveproteine wie Gluteline, Prolamine und Legumine, die beim Keimen durch Proteasen abgebaut und als Stickstoffquelle genutzt werden.</p>
+      <p>Kommen in Samen vor (Bohnen, Erbsen, Weizen). Sie speichern Reserveproteine wie Gluteline, Prolamine und Legumine, die beim Keimen abgebaut werden.</p>
       <h3>3. Lytische Vakuolen</h3>
-      <p>besitzen einen niedrigen pH-Wert von etwa 5 und enthalten viele Abbauenzyme (Hydrolasen). Sie erfüllen eine ähnliche Funktion wie Lysosomen in Tierzellen und bauen zelluläre Bestandteile im Rahmen der Autophagie ab.</p>
+      <p>Niedriger pH (~5), reich an Hydrolasen. Funktionell den Lysosomen in Tierzellen vergleichbar – zuständig für Autophagie.</p>
       <h3>4. Kontraktile Vakuolen</h3>
-      <p>treten bei Süßwasser-Einzellern wie Paramecium oder Amöben auf. Sie pumpen überschüssiges Wasser aus der Zelle und regulieren so den osmotischen Druck. Dabei pulsieren sie rhythmisch, was ihren Namen erklärt.</p>
-      <h3>5. Gasvakuolen (Cyanobakterien & Prokaryoten)</h3>
-      <p>Bei manchen Bakterien, zum Beispiel Cyanobakterien, gibt es Gasvakuolen, gasgefüllte Proteinzylinder, die als Auftriebskörper dienen. Sie sind nicht mit eukaryotischen Vakuolen zu verwechseln.</p>
+      <p>Bei Süßwasser-Einzellern wie Paramecium oder Amöben: pumpen überschüssiges Wasser rhythmisch aus der Zelle.</p>
+      <h3>5. Gasvakuolen (Cyanobakterien)</h3>
+      <p>Gasgefüllte Proteinzylinder als Auftriebskörper – nicht mit eukaryotischen Vakuolen zu verwechseln.</p>
       <h3>Vorkommen im Überblick</h3>
-      <div class="info-grid">
-        <div class="info-chip">
-          <div class="ic-label">Pflanzenzellen:</div>
-          <div class="ic-value">zentrale Vakuole, Proteinspeichervakuolen, lytische Vakuolen</div>
-        </div>
-        <div class="info-chip">
-          <div class="ic-label">Pilze (Fungi):</div>
-          <div class="ic-value">kleine bis mittelgroße Vakuolen für Speicherung und Abbau</div>
-        </div>
-        <div class="info-chip">
-          <div class="ic-label">Tierzellen:</div>
-          <div class="ic-value">kleine Vesikel oder frühe Endosomen; Lysosomen übernehmen die Abbauaufgaben</div>
-        </div>
-        <div class="info-chip">
-          <div class="ic-label">Protisten:</div>
-          <div class="ic-value">kontraktile und nahrungsaufnehmende Vakuolen</div>
-        </div>
+      <div class="info-grid reveal-stagger">
+        <div class="info-chip"><div class="ic-label">Pflanzenzellen:</div><div class="ic-value">zentrale Vakuole, PSV, lytische Vakuolen</div></div>
+        <div class="info-chip"><div class="ic-label">Pilze (Fungi):</div><div class="ic-value">kleine bis mittelgroße Vakuolen für Speicherung und Abbau</div></div>
+        <div class="info-chip"><div class="ic-label">Tierzellen:</div><div class="ic-value">kleine Vesikel; Lysosomen übernehmen die Abbauaufgaben</div></div>
+        <div class="info-chip"><div class="ic-label">Protisten:</div><div class="ic-value">kontraktile und nahrungsaufnehmende Vakuolen</div></div>
       </div>
     </div>
   </div>
 
-  <!-- VERGLEICH TAB -->
+  <!-- VERGLEICH -->
   <div class="section" id="tab-vergleich">
-    <div class="card">
+    <div class="card reveal">
       <h2>Pflanzenzelle vs. Tierzelle — Vakuolen im Vergleich</h2>
       <p>Eines der auffälligsten Unterschiede zwischen Pflanzen- und Tierzellen ist das Vorhandensein und die Größe der Vakuole.</p>
-      <div class="info-grid" style="margin-top:1.5rem">
-        <div class="func-card">
-          <span class="fc-icon">🌱</span>
-          <h4>Pflanzenzelle</h4>
-          <p><strong>Große zentrale Vakuole</strong> — sie kann bis zu 90 % des Zellvolumens ausfüllen und ist von der festen Zellwand eingebettet. Sie sorgt für Turgor, speichert Farbstoffe und dient als Recycling-Station. Der Tonoplast steuert dabei gezielt den Stoffaustausch.</p>
-        </div>
-        <div class="func-card">
-          <span class="fc-icon">🐾</span>
-          <h4>Tierzelle</h4>
-          <p>Keine echte Vakuole — die Funktion des Abbaus übernehmen <em>Lysosomen</em> (membrangebundene Organellen mit sauren Hydrolasen). Es gibt kleine Endosomen und phagosomale Vesikel, aber keine raumgreifende zentrale Vakuole.</p>
-        </div>
+      <div class="info-grid reveal-stagger" style="margin-top:1.5rem">
+        <div class="func-card"><span class="fc-icon">🌱</span><h4>Pflanzenzelle</h4><p><strong>Große zentrale Vakuole</strong> — bis zu 90 % des Zellvolumens. Eingebettet in feste Zellwand. Sorgt für Turgor, speichert Farbstoffe und dient als Recycling-Station.</p></div>
+        <div class="func-card"><span class="fc-icon">🐾</span><h4>Tierzelle</h4><p>Keine echte Vakuole — Abbau übernehmen <em>Lysosomen</em>. Es gibt kleine Endosomen und phagosomale Vesikel, aber keine raumgreifende zentrale Vakuole.</p></div>
       </div>
       <h3>Warum haben Tierzellen keine Vakuole?</h3>
-      <p>Tierzellen sind von einer flexiblen Membran umgeben und besitzen keine starre Zellwand. Eine große Vakuole würde bei Wasseraufnahme zum Platzen der Zelle führen. Stattdessen regulieren Tierzellen ihren Wasserhaushalt über andere Mechanismen, zum Beispiel über Ausscheidungsorgane wie die Nieren. Pflanzen dagegen nutzen den Turgordruck innerhalb ihrer stabilen Zellwand, um Stabilität zu gewinnen.</p>
+      <p>Tierzellen haben keine starre Zellwand. Eine große Vakuole würde bei Wasseraufnahme zum Platzen führen. Stattdessen regulieren Nieren und andere Organe den Wasserhaushalt.</p>
       <h3>Lysosom vs. Vakuole — Gemeinsamkeiten</h3>
       <ul>
         <li>Beide sind membranumhüllte, saure Kompartimente</li>
@@ -538,416 +405,154 @@
         <li>Beide entstehen aus dem ER/Golgi-System</li>
         <li>Beide dienen dem Abbau und der Wiederverwertung von Zellmaterial</li>
       </ul>
-      <p>Manche Biologen betrachten die pflanzliche lytische Vakuole deshalb als das funktionelle Gegenstück zum Lysosom in Tierzellen.</p>
       <h3>Vergleichstabelle</h3>
-      <div style="overflow-x:auto;margin-top:1rem">
-        <table style="width:100%;border-collapse:collapse;font-size:0.875rem">
-          <tr style="background:rgba(167,209,41,0.08)">
-            <th style="text-align:left;padding:0.7rem 1rem;border-bottom:1px solid var(--border);color:var(--accent)">Merkmal</th>
-            <th style="text-align:left;padding:0.7rem 1rem;border-bottom:1px solid var(--border);color:var(--accent)">Pflanzenzelle</th>
-            <th style="text-align:left;padding:0.7rem 1rem;border-bottom:1px solid var(--border);color:var(--accent)">Tierzelle</th>
+      <div class="reveal" style="overflow-x:auto;margin-top:1rem">
+        <table style="width:100%;border-collapse:collapse;font-size:.875rem">
+          <tr style="background:rgba(167,209,41,.08)">
+            <th style="text-align:left;padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--accent)">Merkmal</th>
+            <th style="text-align:left;padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--accent)">Pflanzenzelle</th>
+            <th style="text-align:left;padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--accent)">Tierzelle</th>
           </tr>
-          <tr style="border-bottom:1px solid var(--border)">
-            <td style="padding:0.6rem 1rem">Vakuole vorhanden?</td>
-            <td style="padding:0.6rem 1rem">✅ Ja, groß</td>
-            <td style="padding:0.6rem 1rem">⚠️ Nein (nur kleine Vesikel)</td>
-          </tr>
-          <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02)">
-            <td style="padding:0.6rem 1rem">Größe</td>
-            <td style="padding:0.6rem 1rem">70–90 % der Zelle</td>
-            <td style="padding:0.6rem 1rem">Sehr klein</td>
-          </tr>
-          <tr style="border-bottom:1px solid var(--border)">
-            <td style="padding:0.6rem 1rem">Membran</td>
-            <td style="padding:0.6rem 1rem">Tonoplast</td>
-            <td style="padding:0.6rem 1rem">Lysosomenmembran</td>
-          </tr>
-          <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02)">
-            <td style="padding:0.6rem 1rem">Funktion Abbau</td>
-            <td style="padding:0.6rem 1rem">Lytische Vakuole</td>
-            <td style="padding:0.6rem 1rem">Lysosom</td>
-          </tr>
-          <tr style="border-bottom:1px solid var(--border)">
-            <td style="padding:0.6rem 1rem">Turgor</td>
-            <td style="padding:0.6rem 1rem">✅ Ja (wichtig für Stabilität)</td>
-            <td style="padding:0.6rem 1rem">❌ Nein</td>
-          </tr>
-          <tr style="background:rgba(255,255,255,0.02)">
-            <td style="padding:0.6rem 1rem">Pigmentspeicherung</td>
-            <td style="padding:0.6rem 1rem">✅ Anthocyane, etc.</td>
-            <td style="padding:0.6rem 1rem">❌ Nein</td>
-          </tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.6rem 1rem">Vakuole vorhanden?</td><td style="padding:.6rem 1rem">✅ Ja, groß</td><td style="padding:.6rem 1rem">⚠️ Nein (nur kleine Vesikel)</td></tr>
+          <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)"><td style="padding:.6rem 1rem">Größe</td><td style="padding:.6rem 1rem">70–90 % der Zelle</td><td style="padding:.6rem 1rem">Sehr klein</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.6rem 1rem">Membran</td><td style="padding:.6rem 1rem">Tonoplast</td><td style="padding:.6rem 1rem">Lysosomenmembran</td></tr>
+          <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)"><td style="padding:.6rem 1rem">Funktion Abbau</td><td style="padding:.6rem 1rem">Lytische Vakuole</td><td style="padding:.6rem 1rem">Lysosom</td></tr>
+          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.6rem 1rem">Turgor</td><td style="padding:.6rem 1rem">✅ Ja (wichtig für Stabilität)</td><td style="padding:.6rem 1rem">❌ Nein</td></tr>
+          <tr style="background:rgba(255,255,255,.02)"><td style="padding:.6rem 1rem">Pigmentspeicherung</td><td style="padding:.6rem 1rem">✅ Anthocyane, etc.</td><td style="padding:.6rem 1rem">❌ Nein</td></tr>
         </table>
       </div>
     </div>
   </div>
 
-  <div class="footer">
+  <div class="footer reveal">
     Interaktive Lernseite zur Vakuole · Biologie Schulprojekt
     <p class="copyright-note">© <span id="current-year"></span> Abdullah, Hennes, Fabian und Moritz</p>
   </div>
 </div>
 
 <script>
-// =========================================================
-// TAB NAVIGATION  (with animation)
-// =========================================================
-function showTab(id, btn) {
-  // Hide current active section
-  const current = document.querySelector('.section.active');
-  if (current && current.id === 'tab-' + id) return; // already on this tab
+// ── Custom Cursor ──
+const dot=document.getElementById('cursor-dot'), ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function animRing(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);})();
+document.querySelectorAll('button,a,.func-card,.info-chip,.badge,.legend-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
+});
+document.addEventListener('mousedown',()=>document.body.classList.add('cursor-click'));
+document.addEventListener('mouseup',()=>document.body.classList.remove('cursor-click'));
 
-  // Deactivate all tabs & buttons
-  document.querySelectorAll('.section').forEach(s => {
-    s.classList.remove('active', 'tab-enter');
-    s.style.display = 'none';
+// ── Scroll Progress ──
+const scrollBar=document.getElementById('scroll-bar');
+window.addEventListener('scroll',()=>{
+  scrollBar.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';
+},{passive:true});
+
+// ── Scroll Reveal ──
+const revObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.12});
+function attachReveal(){
+  document.querySelectorAll('.reveal:not(.visible),.reveal-stagger:not(.visible)').forEach(el=>revObs.observe(el));
+}
+attachReveal();
+
+// ── Button Ripple ──
+document.querySelectorAll('.btn').forEach(btn=>{
+  btn.addEventListener('click',function(e){
+    const r=document.createElement('span');
+    r.classList.add('ripple');
+    const s=Math.max(this.offsetWidth,this.offsetHeight);
+    const rc=this.getBoundingClientRect();
+    r.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-rc.left-s/2}px;top:${e.clientY-rc.top-s/2}px`;
+    this.appendChild(r);
+    setTimeout(()=>r.remove(),600);
   });
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+});
 
-  // Activate new tab with animation
-  const next = document.getElementById('tab-' + id);
-  next.style.display = 'block';
-  // Force reflow so animation re-triggers
+// ── Tab Navigation ──
+function showTab(id,btn){
+  const cur=document.querySelector('.section.active');
+  if(cur&&cur.id==='tab-'+id) return;
+  document.querySelectorAll('.section').forEach(s=>{s.classList.remove('active','tab-enter');s.style.display='none';});
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const next=document.getElementById('tab-'+id);
+  next.style.display='block';
   void next.offsetWidth;
-  next.classList.add('active', 'tab-enter');
-
+  next.classList.add('active','tab-enter');
   btn.classList.add('active');
-
-  // If switching TO the simulation tab, trigger a canvas resize+redraw
-  if (id === 'simulation') {
-    setTimeout(() => { resize(); draw(); }, 50);
-  }
+  setTimeout(attachReveal,50);
+  if(id==='simulation') setTimeout(()=>{resize();draw();},50);
 }
 
-// =========================================================
-// SIMULATION ENGINE
-// =========================================================
-const canvas = document.getElementById('simCanvas');
-const ctx = canvas.getContext('2d');
+// ── Simulation ──
+const canvas=document.getElementById('simCanvas'),ctx=canvas.getContext('2d');
+let W,H,simRunning=false,animId=null,tick=0;
+let rotX=.3,rotY=.5,isDragging=false,lastMX=0,lastMY=0,zoom=1;
+let vakuoleScale=.38,targetVakuoleScale=.38,particles=[],phase=0;
 
-let W, H;
-let simRunning = false;
-let animId = null;
-let tick = 0;
-
-let rotX = 0.3, rotY = 0.5;
-let isDragging = false;
-let lastMX = 0, lastMY = 0;
-let zoom = 1.0;
-
-let vakuoleScale = 0.38;
-let targetVakuoleScale = 0.38;
-let particles = [];
-let phase = 0;
-
-function resize() {
-  const rect = canvas.getBoundingClientRect();
-  W = canvas.width = rect.width * window.devicePixelRatio;
-  H = canvas.height = rect.height * window.devicePixelRatio;
-  canvas.style.width = rect.width + 'px';
-  canvas.style.height = rect.height + 'px';
-}
-window.addEventListener('resize', () => { resize(); draw(); });
+function resize(){const r=canvas.getBoundingClientRect();W=canvas.width=r.width*devicePixelRatio;H=canvas.height=r.height*devicePixelRatio;canvas.style.width=r.width+'px';canvas.style.height=r.height+'px';}
+window.addEventListener('resize',()=>{resize();draw();});
 resize();
 
-// Mouse
-canvas.addEventListener('mousedown', e => { isDragging = true; lastMX = e.clientX; lastMY = e.clientY; });
-window.addEventListener('mouseup', () => isDragging = false);
-window.addEventListener('mousemove', e => {
-  if (!isDragging) return;
-  rotY += (e.clientX - lastMX) * 0.012;
-  rotX += (e.clientY - lastMY) * 0.008;
-  rotX = Math.max(-0.6, Math.min(0.6, rotX));
-  lastMX = e.clientX; lastMY = e.clientY;
-  if (!simRunning) draw();
-});
-canvas.addEventListener('wheel', e => {
-  zoom -= e.deltaY * 0.001;
-  zoom = Math.max(0.5, Math.min(1.8, zoom));
-  if (!simRunning) draw();
-  e.preventDefault();
-}, { passive: false });
+canvas.addEventListener('mousedown',e=>{isDragging=true;lastMX=e.clientX;lastMY=e.clientY;});
+window.addEventListener('mouseup',()=>isDragging=false);
+window.addEventListener('mousemove',e=>{if(!isDragging)return;rotY+=(e.clientX-lastMX)*.012;rotX+=(e.clientY-lastMY)*.008;rotX=Math.max(-.6,Math.min(.6,rotX));lastMX=e.clientX;lastMY=e.clientY;if(!simRunning)draw();});
+canvas.addEventListener('wheel',e=>{zoom-=e.deltaY*.001;zoom=Math.max(.5,Math.min(1.8,zoom));if(!simRunning)draw();e.preventDefault();},{passive:false});
 
-// Touch
-let lastTouchDist = 0;
-canvas.addEventListener('touchstart', e => {
-  if (e.touches.length === 1) { isDragging = true; lastMX = e.touches[0].clientX; lastMY = e.touches[0].clientY; }
-  if (e.touches.length === 2) lastTouchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-  e.preventDefault();
-}, { passive: false });
-canvas.addEventListener('touchend', () => { isDragging = false; });
-canvas.addEventListener('touchmove', e => {
-  if (e.touches.length === 1 && isDragging) {
-    rotY += (e.touches[0].clientX - lastMX) * 0.012;
-    rotX += (e.touches[0].clientY - lastMY) * 0.008;
-    lastMX = e.touches[0].clientX; lastMY = e.touches[0].clientY;
-    if (!simRunning) draw();
-  }
-  if (e.touches.length === 2) {
-    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    zoom += (d - lastTouchDist) * 0.003;
-    zoom = Math.max(0.5, Math.min(1.8, zoom));
-    lastTouchDist = d;
-    if (!simRunning) draw();
-  }
-  e.preventDefault();
-}, { passive: false });
+let lastTD=0;
+canvas.addEventListener('touchstart',e=>{if(e.touches.length===1){isDragging=true;lastMX=e.touches[0].clientX;lastMY=e.touches[0].clientY;}if(e.touches.length===2)lastTD=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);e.preventDefault();},{passive:false});
+canvas.addEventListener('touchend',()=>isDragging=false);
+canvas.addEventListener('touchmove',e=>{if(e.touches.length===1&&isDragging){rotY+=(e.touches[0].clientX-lastMX)*.012;rotX+=(e.touches[0].clientY-lastMY)*.008;lastMX=e.touches[0].clientX;lastMY=e.touches[0].clientY;if(!simRunning)draw();}if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);zoom+=(d-lastTD)*.003;zoom=Math.max(.5,Math.min(1.8,zoom));lastTD=d;if(!simRunning)draw();}e.preventDefault();},{passive:false});
 
-// 3D projection
-function project3D(x3d, y3d, z3d) {
-  const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
-  const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
-  const xr = x3d * cosY + z3d * sinY;
-  const yr_temp = -x3d * sinY + z3d * cosY;
-  const zr = y3d * sinX + yr_temp * cosX;
-  const yr = y3d * cosX - yr_temp * sinX;
-  const fov = 900;
-  const pz = fov + zr;
-  return { x: (xr / pz) * fov + W / 2, y: (yr / pz) * fov + H / 2, z: zr };
+function project3D(x,y,z){const cY=Math.cos(rotY),sY=Math.sin(rotY),cX=Math.cos(rotX),sX=Math.sin(rotX);const xr=x*cY+z*sY,yt=-x*sY+z*cY,zr=y*sX+yt*cX,yr=y*cX-yt*sX,fov=900,pz=fov+zr;return{x:xr/pz*fov+W/2,y:yr/pz*fov+H/2,z:zr};}
+
+function spawnParticle(ph){const R=180*zoom,vR=vakuoleScale*R/.38;if(ph===1||ph===2){const a=Math.random()*Math.PI*2,r=vR*1.6+Math.random()*40;return{x:Math.cos(a)*r,y:(Math.random()-.5)*r*.6,z:Math.sin(a)*r,tx:Math.cos(a)*vR*.5,ty:(Math.random()-.5)*vR*.4,tz:Math.sin(a)*vR*.5,life:1,speed:.015+Math.random()*.01,progress:0,color:ph===2?'#c8e86a':'#ff6688',size:ph===2?4:5};}const a=Math.random()*Math.PI*2,r=vR*.5;return{x:Math.cos(a)*r,y:(Math.random()-.5)*r*.6,z:Math.sin(a)*r,tx:Math.cos(a)*vR*1.5,ty:(Math.random()-.5)*vR*.6,tz:Math.sin(a)*vR*1.5,life:1,speed:.02,progress:0,color:'#ffba40',size:4};}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const cx=W/2,cy=H/2,R=200*zoom,vR=vakuoleScale*R/.38,cY2=Math.cos(rotX);
+  const g=ctx.createRadialGradient(cx,cy,0,cx,cy,R*1.2);g.addColorStop(0,'rgba(167,209,41,.05)');g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(cx,cy,R*1.3,R*.9,0,0,Math.PI*2);ctx.fill();
+  ctx.save();ctx.globalAlpha=.2;const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,R);cg.addColorStop(0,'#2a3010');cg.addColorStop(1,'#0d1008');ctx.beginPath();ctx.ellipse(cx,cy,R,R*Math.max(.3,Math.abs(cY2))*.9,0,0,Math.PI*2);ctx.fillStyle=cg;ctx.fill();ctx.restore();
+  for(const[bx,by,bz] of [[-0.7,-0.5,0.3],[0.7,-0.4,0.2],[-0.5,0.6,0.4],[0.6,0.5,-0.3],[-0.3,-0.7,-0.4],[0.4,-0.6,0.5]]){const pr=(R-vR*1.15)*.5,lx=bx*pr,ly=by*pr*.6,lz=bz*pr,p=project3D(lx,ly,lz),pE=project3D(lx+18*zoom,ly,lz),sz=Math.max(2,Math.hypot(pE.x-p.x,pE.y-p.y)),dep=Math.max(.1,(lz+200)/400);ctx.save();ctx.globalAlpha=.75*dep;ctx.beginPath();ctx.ellipse(p.x,p.y,sz,sz*.55,rotY+.5,0,Math.PI*2);const cl=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,sz);cl.addColorStop(0,'#616F39');cl.addColorStop(1,'#3E432E');ctx.fillStyle=cl;ctx.fill();ctx.restore();}
+  const nP=project3D(-R*.35,-R*.25,0);{const nR=R*.12;ctx.save();ctx.globalAlpha=.85;const ng=ctx.createRadialGradient(nP.x,nP.y,0,nP.x,nP.y,nR*1.5);ng.addColorStop(0,'#e0a030');ng.addColorStop(.6,'#a06010');ng.addColorStop(1,'#603010');ctx.beginPath();ctx.ellipse(nP.x,nP.y,nR*1.5,nR,.3,0,Math.PI*2);ctx.fillStyle=ng;ctx.fill();ctx.globalAlpha=.6;ctx.beginPath();ctx.ellipse(nP.x-nR*.2,nP.y-nR*.15,nR*.5,nR*.35,0,0,Math.PI*2);ctx.fillStyle='#ffd060';ctx.fill();ctx.restore();}
+  {ctx.save();ctx.globalAlpha=.28;const vg=ctx.createRadialGradient(cx,cy-vR*.1,vR*.1,cx,cy,vR*1.1);vg.addColorStop(0,'#d8f07a');vg.addColorStop(.5,'#A7D129');vg.addColorStop(1,'#3E432E');ctx.beginPath();ctx.ellipse(cx,cy,vR,vR*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);ctx.fillStyle=vg;ctx.fill();ctx.globalAlpha=.65;ctx.beginPath();ctx.ellipse(cx,cy,vR,vR*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);ctx.strokeStyle='#A7D129';ctx.lineWidth=3.5*zoom;ctx.setLineDash([8,4]);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=.12;ctx.beginPath();ctx.ellipse(cx,cy,vR+8,(vR+8)*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);ctx.strokeStyle='#c8e86a';ctx.lineWidth=12*zoom;ctx.stroke();ctx.restore();}
+  for(const p of particles){const c3x=p.x+(p.tx-p.x)*p.progress,c3y=p.y+(p.ty-p.y)*p.progress,c3z=p.z+(p.tz-p.z)*p.progress,pp=project3D(c3x,c3y,c3z);ctx.save();ctx.globalAlpha=p.life*(.4+.6*p.progress);const pg=ctx.createRadialGradient(pp.x,pp.y,0,pp.x,pp.y,p.size*zoom*1.5);pg.addColorStop(0,p.color);pg.addColorStop(1,'transparent');ctx.beginPath();ctx.arc(pp.x,pp.y,p.size*zoom*1.5,0,Math.PI*2);ctx.fillStyle=pg;ctx.fill();ctx.restore();}
+  ctx.save();ctx.globalAlpha=.55;ctx.beginPath();ctx.ellipse(cx,cy,R,R*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);ctx.strokeStyle='#616F39';ctx.lineWidth=4*zoom;ctx.stroke();ctx.globalAlpha=.18;ctx.beginPath();ctx.ellipse(cx,cy,R+10*zoom,(R+10*zoom)*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);ctx.strokeStyle='#616F39';ctx.lineWidth=10*zoom;ctx.stroke();ctx.restore();
+  drawLabel('Vakuole\n(Tonoplast)',cx+vR*.7,cy-vR*.6,'#A7D129');
+  drawLabel('Zellkern',nP.x+40,nP.y-20,'#e0a030');
+  drawLabel('Zellmembran\n+ Zellwand',cx+R*.82,cy-R*.2,'#616F39');
 }
 
-// Particles
-function spawnParticle(ph) {
-  const R = 180 * zoom;
-  const vR = vakuoleScale * R / 0.38;
-  if (ph === 1 || ph === 2) {
-    const angle = Math.random() * Math.PI * 2;
-    const r = vR * 1.6 + Math.random() * 40;
-    return {
-      x: Math.cos(angle) * r, y: (Math.random() - 0.5) * r * 0.6, z: Math.sin(angle) * r,
-      tx: Math.cos(angle) * vR * 0.5, ty: (Math.random() - 0.5) * vR * 0.4, tz: Math.sin(angle) * vR * 0.5,
-      life: 1, speed: 0.015 + Math.random() * 0.01, progress: 0,
-      color: ph === 2 ? '#c8e86a' : '#ff6688', size: ph === 2 ? 4 : 5
-    };
-  } else {
-    const angle = Math.random() * Math.PI * 2;
-    const r = vR * 0.5;
-    return {
-      x: Math.cos(angle) * r, y: (Math.random() - 0.5) * r * 0.6, z: Math.sin(angle) * r,
-      tx: Math.cos(angle) * vR * 1.5, ty: (Math.random() - 0.5) * vR * 0.6, tz: Math.sin(angle) * vR * 1.5,
-      life: 1, speed: 0.02, progress: 0, color: '#ffba40', size: 4
-    };
-  }
-}
+function drawLabel(t,x,y,c){const ls=t.split('\n');ctx.save();ctx.font=`${Math.max(13,13*zoom)}px Nunito,sans-serif`;ctx.fillStyle=c;ctx.globalAlpha=.8;ls.forEach((l,i)=>ctx.fillText(l,x,y+i*17*zoom));ctx.restore();}
 
-// Main draw
-function draw() {
-  ctx.clearRect(0, 0, W, H);
-  const cx = W / 2, cy = H / 2;
-  const R = 200 * zoom;
-  const vR = vakuoleScale * R / 0.38;
-  const cY2 = Math.cos(rotX);
-
-  // Outer glow
-  const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.2);
-  grd.addColorStop(0, 'rgba(167,209,41,0.05)');
-  grd.addColorStop(1, 'transparent');
-  ctx.fillStyle = grd;
-  ctx.beginPath();
-  ctx.ellipse(cx, cy, R * 1.3, R * 0.9, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Cell body
-  ctx.save();
-  ctx.globalAlpha = 0.2;
-  const cellGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
-  cellGrad.addColorStop(0, '#2a3010');
-  cellGrad.addColorStop(1, '#0d1008');
-  ctx.beginPath();
-  ctx.ellipse(cx, cy, R, R * Math.max(0.3, Math.abs(cY2)) * 0.9, 0, 0, Math.PI * 2);
-  ctx.fillStyle = cellGrad;
-  ctx.fill();
-  ctx.restore();
-
-  // Chloroplasts
-  const chloroPos = [[-0.7,-0.5,0.3],[0.7,-0.4,0.2],[-0.5,0.6,0.4],[0.6,0.5,-0.3],[-0.3,-0.7,-0.4],[0.4,-0.6,0.5]];
-  for (const [bx, by, bz] of chloroPos) {
-    const pr = (R - vR * 1.15) * 0.5;
-    const lx = bx * pr, ly = by * pr * 0.6, lz = bz * pr;
-    const p = project3D(lx, ly, lz);
-    const pE = project3D(lx + 18 * zoom, ly, lz);
-    const sz = Math.max(2, Math.hypot(pE.x - p.x, pE.y - p.y));
-    const dep = Math.max(0.1, (lz + 200) / 400);
-    ctx.save();
-    ctx.globalAlpha = 0.75 * dep;
-    ctx.beginPath();
-    ctx.ellipse(p.x, p.y, sz, sz * 0.55, rotY + 0.5, 0, Math.PI * 2);
-    const cg = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, sz);
-    cg.addColorStop(0, '#616F39');
-    cg.addColorStop(1, '#3E432E');
-    ctx.fillStyle = cg;
-    ctx.fill();
-    ctx.restore();
-  }
-
-  // Nucleus
-  const nucleusP = project3D(-R * 0.35, -R * 0.25, 0);
-  {
-    const nR = R * 0.12;
-    ctx.save();
-    ctx.globalAlpha = 0.85;
-    const ng = ctx.createRadialGradient(nucleusP.x, nucleusP.y, 0, nucleusP.x, nucleusP.y, nR * 1.5);
-    ng.addColorStop(0, '#e0a030');
-    ng.addColorStop(0.6, '#a06010');
-    ng.addColorStop(1, '#603010');
-    ctx.beginPath();
-    ctx.ellipse(nucleusP.x, nucleusP.y, nR * 1.5, nR, 0.3, 0, Math.PI * 2);
-    ctx.fillStyle = ng;
-    ctx.fill();
-    ctx.globalAlpha = 0.6;
-    ctx.beginPath();
-    ctx.ellipse(nucleusP.x - nR * 0.2, nucleusP.y - nR * 0.15, nR * 0.5, nR * 0.35, 0, 0, Math.PI * 2);
-    ctx.fillStyle = '#ffd060';
-    ctx.fill();
-    ctx.restore();
-  }
-
-  // Vakuole
-  {
-    ctx.save();
-    ctx.globalAlpha = 0.28;
-    const vg = ctx.createRadialGradient(cx, cy - vR * 0.1, vR * 0.1, cx, cy, vR * 1.1);
-    vg.addColorStop(0, '#d8f07a');
-    vg.addColorStop(0.5, '#A7D129');
-    vg.addColorStop(1, '#3E432E');
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, vR, vR * Math.max(0.35, Math.abs(cY2)), 0, 0, Math.PI * 2);
-    ctx.fillStyle = vg;
-    ctx.fill();
-    ctx.globalAlpha = 0.65;
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, vR, vR * Math.max(0.35, Math.abs(cY2)), 0, 0, Math.PI * 2);
-    ctx.strokeStyle = '#A7D129';
-    ctx.lineWidth = 3.5 * zoom;
-    ctx.setLineDash([8, 4]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.globalAlpha = 0.12;
-    ctx.beginPath();
-    ctx.ellipse(cx, cy, vR + 8, (vR + 8) * Math.max(0.35, Math.abs(cY2)), 0, 0, Math.PI * 2);
-    ctx.strokeStyle = '#c8e86a';
-    ctx.lineWidth = 12 * zoom;
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  // Particles
-  for (const p of particles) {
-    const cx3 = p.x + (p.tx - p.x) * p.progress;
-    const cy3 = p.y + (p.ty - p.y) * p.progress;
-    const cz3 = p.z + (p.tz - p.z) * p.progress;
-    const pp = project3D(cx3, cy3, cz3);
-    ctx.save();
-    ctx.globalAlpha = p.life * (0.4 + 0.6 * p.progress);
-    const pg = ctx.createRadialGradient(pp.x, pp.y, 0, pp.x, pp.y, p.size * zoom * 1.5);
-    pg.addColorStop(0, p.color);
-    pg.addColorStop(1, 'transparent');
-    ctx.beginPath();
-    ctx.arc(pp.x, pp.y, p.size * zoom * 1.5, 0, Math.PI * 2);
-    ctx.fillStyle = pg;
-    ctx.fill();
-    ctx.restore();
-  }
-
-  // Cell wall
-  ctx.save();
-  ctx.globalAlpha = 0.55;
-  ctx.beginPath();
-  ctx.ellipse(cx, cy, R, R * Math.max(0.35, Math.abs(cY2)), 0, 0, Math.PI * 2);
-  ctx.strokeStyle = '#616F39';
-  ctx.lineWidth = 4 * zoom;
-  ctx.stroke();
-  ctx.globalAlpha = 0.18;
-  ctx.beginPath();
-  ctx.ellipse(cx, cy, R + 10 * zoom, (R + 10 * zoom) * Math.max(0.35, Math.abs(cY2)), 0, 0, Math.PI * 2);
-  ctx.strokeStyle = '#616F39';
-  ctx.lineWidth = 10 * zoom;
-  ctx.stroke();
-  ctx.restore();
-
-  // Labels
-  drawLabel('Vakuole\n(Tonoplast)', cx + vR * 0.7, cy - vR * 0.6, '#A7D129');
-  drawLabel('Zellkern', nucleusP.x + 40, nucleusP.y - 20, '#e0a030');
-  drawLabel('Zellmembran\n+ Zellwand', cx + R * 0.82, cy - R * 0.2, '#616F39');
-}
-
-function drawLabel(text, x, y, color) {
-  const lines = text.split('\n');
-  ctx.save();
-  ctx.font = `${Math.max(13, 13 * zoom)}px Nunito, sans-serif`;
-  ctx.fillStyle = color;
-  ctx.globalAlpha = 0.8;
-  lines.forEach((l, i) => ctx.fillText(l, x, y + i * 17 * zoom));
-  ctx.restore();
-}
-
-// Sim loop
-function simLoop() {
+function simLoop(){
   tick++;
-  if (tick < 200) phase = 1;
-  else if (tick < 500) phase = 2;
-  else if (tick < 600) phase = 3;
-  else { tick = 0; phase = 1; }
-
-  if (phase === 1) targetVakuoleScale = 0.38 + (tick / 200) * 0.04;
-  if (phase === 2) targetVakuoleScale = 0.42 + ((tick - 200) / 300) * 0.14;
-  if (phase === 3) targetVakuoleScale = 0.56 - ((tick - 500) / 100) * 0.18;
-
-  vakuoleScale += (targetVakuoleScale - vakuoleScale) * 0.03;
-  vakuoleScale = Math.max(0.3, Math.min(0.58, vakuoleScale));
-  rotY += 0.004;
-
-  if (tick % 6 === 0) particles.push(spawnParticle(phase));
-  for (const p of particles) {
-    p.progress = Math.min(1, p.progress + p.speed);
-    if (p.progress >= 1) p.life -= 0.08;
-  }
-  particles = particles.filter(p => p.life > 0);
-
-  const bar = document.getElementById('simInfoBar');
-  if (phase === 1) bar.textContent = '⚡ Phase 1: Ionen (K⁺, Cl⁻) werden aktiv über H⁺-ATPasen in die Vakuole gepumpt — Osmotisches Potential sinkt.';
-  else if (phase === 2) bar.textContent = '💧 Phase 2: Wasser strömt durch Aquaporine osmotisch nach — die Vakuole wächst, Turgordruck steigt auf ~8 bar.';
-  else bar.textContent = '🔁 Phase 3: Ionenpumpen arbeiten rückwärts — Zellsaft wird teilweise entleert, Vakuole schrumpft.';
-
+  if(tick<200)phase=1;else if(tick<500)phase=2;else if(tick<600)phase=3;else{tick=0;phase=1;}
+  if(phase===1)targetVakuoleScale=.38+(tick/200)*.04;
+  if(phase===2)targetVakuoleScale=.42+((tick-200)/300)*.14;
+  if(phase===3)targetVakuoleScale=.56-((tick-500)/100)*.18;
+  vakuoleScale+=(targetVakuoleScale-vakuoleScale)*.03;
+  vakuoleScale=Math.max(.3,Math.min(.58,vakuoleScale));
+  rotY+=.004;
+  if(tick%6===0)particles.push(spawnParticle(phase));
+  for(const p of particles){p.progress=Math.min(1,p.progress+p.speed);if(p.progress>=1)p.life-=.08;}
+  particles=particles.filter(p=>p.life>0);
+  const bar=document.getElementById('simInfoBar');
+  if(phase===1)bar.textContent='⚡ Phase 1: Ionen (K⁺, Cl⁻) werden aktiv über H⁺-ATPasen in die Vakuole gepumpt — Osmotisches Potential sinkt.';
+  else if(phase===2)bar.textContent='💧 Phase 2: Wasser strömt durch Aquaporine osmotisch nach — die Vakuole wächst, Turgordruck steigt auf ~8 bar.';
+  else bar.textContent='🔁 Phase 3: Ionenpumpen arbeiten rückwärts — Zellsaft wird teilweise entleert, Vakuole schrumpft.';
   draw();
-  if (simRunning) animId = requestAnimationFrame(simLoop);
+  if(simRunning)animId=requestAnimationFrame(simLoop);
 }
 
-function startSim() {
-  if (simRunning) return;
-  simRunning = true;
-  document.getElementById('simStatus').textContent = '● Läuft';
-  document.getElementById('simStatus').className = 'sim-status running';
-  simLoop();
-}
+function startSim(){if(simRunning)return;simRunning=true;document.getElementById('simStatus').textContent='● Läuft';document.getElementById('simStatus').className='sim-status running';simLoop();}
+function stopSim(){simRunning=false;if(animId)cancelAnimationFrame(animId);document.getElementById('simStatus').textContent='● Gestoppt';document.getElementById('simStatus').className='sim-status stopped';document.getElementById('simInfoBar').textContent='Simulation gestoppt. Du kannst die Zelle noch drehen und zoomen.';}
+function resetSim(){stopSim();vakuoleScale=.38;targetVakuoleScale=.38;rotX=.3;rotY=.5;zoom=1;particles=[];tick=0;phase=0;document.getElementById('simStatus').textContent='● Bereit';document.getElementById('simStatus').className='sim-status idle';document.getElementById('simInfoBar').textContent='Starte die Simulation, um zu sehen, wie die Vakuole Turgor aufbaut und Ionen transportiert.';draw();}
 
-function stopSim() {
-  simRunning = false;
-  if (animId) cancelAnimationFrame(animId);
-  document.getElementById('simStatus').textContent = '● Gestoppt';
-  document.getElementById('simStatus').className = 'sim-status stopped';
-  document.getElementById('simInfoBar').textContent = 'Simulation gestoppt. Du kannst die Zelle noch drehen und zoomen.';
-}
-
-function resetSim() {
-  stopSim();
-  vakuoleScale = 0.38; targetVakuoleScale = 0.38;
-  rotX = 0.3; rotY = 0.5; zoom = 1.0;
-  particles = []; tick = 0; phase = 0;
-  document.getElementById('simStatus').textContent = '● Bereit';
-  document.getElementById('simStatus').className = 'sim-status idle';
-  document.getElementById('simInfoBar').textContent = 'Starte die Simulation, um zu sehen, wie die Vakuole Turgor aufbaut und Ionen transportiert.';
-  draw();
-}
-
-// Init
-setTimeout(() => { resize(); draw(); }, 100);
-
-// Copyright year
-(function() {
-  const y = document.getElementById('current-year');
-  if (y) y.textContent = new Date().getFullYear();
-})();
+setTimeout(()=>{resize();draw();},100);
+(function(){const y=document.getElementById('current-year');if(y)y.textContent=new Date().getFullYear();})();
 </script>
 </body>
 </html>
