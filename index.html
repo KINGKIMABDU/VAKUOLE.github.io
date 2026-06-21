@@ -4,336 +4,317 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Die Vakuole – Interaktive Lernseite</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #000000;
-    --surface: #0d1008;
-    --card: #1a1f0e;
-    --border: #3E432E;
-    --accent: #A7D129;
-    --accent2: #616F39;
-    --accent3: #c8e86a;
-    --text: #dde8c0;
-    --muted: #7a8a5a;
-    --heading-font: 'Nunito', sans-serif;
-    --body-font: 'Nunito', sans-serif;
+    /* ── Light botanical editorial palette ── */
+    --paper:      #efe9da;   /* page background — warm cream */
+    --paper-tint: #e7e0cd;   /* deeper cream for subtle panels */
+    --card:       #f7f2e7;   /* card surface — light on cream */
+    --ink:        #1f2a1b;   /* darkest text / display */
+    --text:       #2f3a27;   /* body text */
+    --muted:      #6c7458;   /* secondary text */
+    --line:       #d8d0bb;   /* hairline borders */
+    --green:      #3c6b39;   /* primary botanical accent */
+    --green-deep: #264a26;   /* deep heading green */
+    --green-soft: #e3ecd2;   /* faint green tint */
+    --ochre:      #a06d1a;   /* secondary accent (warm) */
+    --ochre-soft: #f0e3c4;
+
+    /* aliases kept so inline references resolve */
+    --accent: var(--green);
+    --border: var(--line);
+
+    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --sans:  'Inter', system-ui, -apple-system, sans-serif;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  html { scroll-behavior: smooth; }
+
   body {
-    background: var(--bg);
+    background: var(--paper);
     color: var(--text);
-    font-family: var(--body-font);
+    font-family: var(--sans);
     font-size: 16px;
-    line-height: 1.75;
+    line-height: 1.7;
     min-height: 100vh;
     overflow-x: hidden;
-    cursor: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  /* ── CUSTOM CURSOR (leaf / cell shape) ── */
-  #cur-leaf {
-    position: fixed; pointer-events: none; z-index: 10000;
-    width: 22px; height: 22px;
-    transform: translate(-50%, -50%) rotate(0deg);
-    transition: transform .12s cubic-bezier(.22,1,.36,1), width .2s, height .2s, filter .2s;
-    will-change: transform, left, top;
-    filter: drop-shadow(0 0 3px rgba(167,209,41,.45));
-  }
-  #cur-leaf svg {
-    width: 100%; height: 100%;
-    overflow: visible;
-  }
-  body.cursor-hover #cur-leaf {
-    width: 28px; height: 28px;
-    filter: drop-shadow(0 0 6px rgba(167,209,41,.7));
-  }
-  body.cursor-click #cur-leaf {
-    width: 17px; height: 17px;
-    filter: drop-shadow(0 0 2px rgba(167,209,41,.3));
-  }
-
-  @media (max-width:640px) {
-    body { cursor: auto; }
-    #cur-leaf { display: none; }
-  }
-
-  /* Scroll progress */
-  #scroll-bar {
-    position: fixed; top: 0; left: 0; height: 3px;
-    background: linear-gradient(90deg, var(--accent2), var(--accent), var(--accent3));
-    width: 0%; z-index: 9999; transition: width .04s linear;
-  }
-
-  /* BG */
+  /* faint botanical paper texture — extremely subtle, no glow */
   body::before {
-    content: ''; position: fixed; inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(167,209,41,.07) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 80% at 80% 90%, rgba(97,111,57,.06) 0%, transparent 60%);
-    pointer-events: none; z-index: 0;
+    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 50% at 15% 0%,  rgba(60,107,57,.05) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(160,109,26,.04) 0%, transparent 55%);
   }
 
-  .orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(80px); z-index: 0; opacity: .07; animation: orbFloat linear infinite; }
-  .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -100px; left: -100px; animation-duration: 22s; }
-  .orb-2 { width: 300px; height: 300px; background: var(--accent2); bottom: -50px; right: -50px; animation-duration: 28s; animation-direction: reverse; }
-  @keyframes orbFloat { 0% { transform: translate(0,0) scale(1); } 33% { transform: translate(60px,40px) scale(1.08); } 66% { transform: translate(-30px,70px) scale(.95); } 100% { transform: translate(0,0) scale(1); } }
+  ::selection { background: rgba(60,107,57,.18); }
 
-  .wrapper { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 2rem 4rem; }
+  /* slim scroll progress — single hue, understated */
+  #scroll-bar {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: var(--green); width: 0%; z-index: 9999;
+    transition: width .08s linear; opacity: .7;
+  }
 
-  /* Hero */
-  .hero { text-align: center; padding: 5rem 0 3rem; }
+  .wrapper { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 2rem 5rem; }
+
+  a { color: var(--green); text-decoration-color: rgba(60,107,57,.35); text-underline-offset: 3px; }
+
+  /* ── HERO ── */
+  .hero { padding: 6rem 0 2.5rem; max-width: 720px; }
   .hero-label {
-    display: inline-block; font-size: .75rem; letter-spacing: .25em; text-transform: uppercase;
-    color: var(--accent); border: 1px solid rgba(167,209,41,.35); padding: .3rem 1rem;
-    border-radius: 999px; margin-bottom: 1.5rem; backdrop-filter: blur(4px);
-    animation: heroIn .8s cubic-bezier(.22,1,.36,1) both;
+    display: inline-flex; align-items: center; gap: .55rem;
+    font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+    font-weight: 600; color: var(--ochre); margin-bottom: 1.6rem;
+    animation: rise .7s cubic-bezier(.22,1,.36,1) both;
+  }
+  .hero-label::before {
+    content: ''; width: 1.6rem; height: 1px; background: var(--ochre); opacity: .6;
   }
   .hero h1 {
-    font-family: var(--heading-font); font-size: clamp(2.8rem,6vw,5rem); font-weight: 900; line-height: 1.05;
-    background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent2) 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    margin-bottom: 1rem; animation: heroIn 1s cubic-bezier(.22,1,.36,1) .15s both;
+    font-family: var(--serif);
+    font-optical-sizing: auto;
+    font-size: clamp(3rem, 7vw, 5.4rem);
+    font-weight: 600; line-height: 1.0; letter-spacing: -.015em;
+    color: var(--green-deep); margin-bottom: 1.4rem;
+    animation: rise .8s cubic-bezier(.22,1,.36,1) .08s both;
   }
-  .hero p { max-width: 600px; margin: 0 auto; color: var(--muted); font-size: 1.05rem; animation: heroIn 1s cubic-bezier(.22,1,.36,1) .3s both; }
-  @keyframes heroIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .hero .rule { width: 64px; height: 3px; background: var(--green); margin-bottom: 1.6rem;
+    animation: grow .7s cubic-bezier(.22,1,.36,1) .2s both; transform-origin: left; }
+  .hero p { color: var(--muted); font-size: 1.12rem; line-height: 1.7; max-width: 640px;
+    animation: rise .8s cubic-bezier(.22,1,.36,1) .28s both; }
 
-  /* ── REDESIGNED TABS ── */
-  .tabs-wrap {
-    position: relative; display: flex; justify-content: center;
-    margin: 2.5rem 0 2rem; animation: heroIn .8s .45s both;
-  }
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  /* ── TABS (editorial underline) ── */
+  .tabs-wrap { margin: 2.75rem 0 2.25rem; animation: rise .8s .4s both; }
   .tabs-inner {
-    position: relative; display: flex; gap: 0;
-    background: rgba(255,255,255,.03); border: 1px solid var(--border);
-    border-radius: 14px; padding: 5px; overflow: hidden;
+    position: relative; display: flex; gap: .35rem; flex-wrap: wrap;
+    border-bottom: 1px solid var(--line); padding-bottom: 0;
   }
-  /* sliding bg pill */
   .tab-slider {
-    position: absolute; top: 5px; left: 5px; height: calc(100% - 10px);
-    background: rgba(167,209,41,.13); border: 1px solid rgba(167,209,41,.35);
-    border-radius: 10px; transition: left .35s cubic-bezier(.65,0,.35,1), width .35s cubic-bezier(.65,0,.35,1);
-    pointer-events: none; z-index: 0;
-    box-shadow: 0 0 20px rgba(167,209,41,.08) inset;
+    position: absolute; bottom: -1px; left: 0; height: 2px; width: 0;
+    background: var(--green);
+    transition: left .4s cubic-bezier(.65,0,.35,1), width .4s cubic-bezier(.65,0,.35,1);
+    pointer-events: none;
   }
   .tab-btn {
-    position: relative; z-index: 1;
-    background: transparent; border: none; color: var(--muted);
-    font-family: var(--body-font); font-size: .85rem; font-weight: 600;
-    padding: .55rem 1.2rem; border-radius: 10px; cursor: none;
-    display: flex; align-items: center; gap: .45rem;
-    transition: color .25s cubic-bezier(.22,1,.36,1), transform .2s;
-    white-space: nowrap; letter-spacing: .01em;
+    position: relative; background: transparent; border: none;
+    font-family: var(--sans); font-size: .9rem; font-weight: 500; color: var(--muted);
+    padding: .7rem .95rem; cursor: pointer; white-space: nowrap;
+    transition: color .25s ease;
   }
-  .tab-btn .tab-icon { font-size: 1em; transition: transform .3s cubic-bezier(.22,1,.36,1); }
-  .tab-btn:hover { color: var(--accent3); transform: translateY(-1px); }
-  .tab-btn:hover .tab-icon { transform: scale(1.25) rotate(-6deg); }
-  .tab-btn:active { transform: scale(.96); }
-  .tab-btn.active { color: var(--accent); }
-  .tab-btn.active .tab-icon { transform: scale(1.15); }
+  .tab-btn:hover { color: var(--green); }
+  .tab-btn.active { color: var(--green-deep); font-weight: 600; }
 
-  /* Tab sections */
+  /* ── SECTIONS ── */
   .section { display: none; }
   .section.active { display: block; }
-  @keyframes tabIn { from { opacity: 0; transform: translateY(18px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes tabIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
   .section.tab-enter { animation: tabIn .45s cubic-bezier(.22,1,.36,1) forwards; }
 
-  /* Scroll reveal */
-  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1); }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  .reveal-stagger > * { opacity: 0; transform: translateY(22px); transition: opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1); }
-  .reveal-stagger.visible > *:nth-child(1) { opacity:1;transform:none;transition-delay:.00s }
-  .reveal-stagger.visible > *:nth-child(2) { opacity:1;transform:none;transition-delay:.07s }
-  .reveal-stagger.visible > *:nth-child(3) { opacity:1;transform:none;transition-delay:.14s }
-  .reveal-stagger.visible > *:nth-child(4) { opacity:1;transform:none;transition-delay:.21s }
-  .reveal-stagger.visible > *:nth-child(5) { opacity:1;transform:none;transition-delay:.28s }
-  .reveal-stagger.visible > *:nth-child(6) { opacity:1;transform:none;transition-delay:.35s }
-  .reveal-stagger.visible > *:nth-child(7) { opacity:1;transform:none;transition-delay:.42s }
-  .reveal-stagger.visible > *:nth-child(8) { opacity:1;transform:none;transition-delay:.49s }
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(16px);
+    transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1); }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-stagger > * { opacity: 0; transform: translateY(14px);
+    transition: opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1); }
+  .reveal-stagger.visible > * { opacity: 1; transform: none; }
+  .reveal-stagger.visible > *:nth-child(1){transition-delay:.0s}
+  .reveal-stagger.visible > *:nth-child(2){transition-delay:.06s}
+  .reveal-stagger.visible > *:nth-child(3){transition-delay:.12s}
+  .reveal-stagger.visible > *:nth-child(4){transition-delay:.18s}
+  .reveal-stagger.visible > *:nth-child(5){transition-delay:.24s}
+  .reveal-stagger.visible > *:nth-child(6){transition-delay:.30s}
+  .reveal-stagger.visible > *:nth-child(7){transition-delay:.36s}
+  .reveal-stagger.visible > *:nth-child(8){transition-delay:.42s}
 
-  /* Card */
+  /* ── CARD ── */
   .card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 1.25rem;
-    padding: 2rem 2.25rem; margin-bottom: 1.5rem; position: relative; overflow: hidden;
-    transition: border-color .35s, box-shadow .35s, transform .35s cubic-bezier(.22,1,.36,1);
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 2.5rem 2.75rem; margin-bottom: 1.5rem;
+    box-shadow: 0 1px 2px rgba(31,42,27,.03);
+    transition: border-color .35s ease, box-shadow .35s ease, transform .35s cubic-bezier(.22,1,.36,1);
   }
-  .card:hover { border-color: rgba(167,209,41,.32); box-shadow: 0 10px 50px rgba(0,0,0,.45), 0 0 0 1px rgba(167,209,41,.06); transform: translateY(-4px); }
-  .card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: .5; transition: opacity .35s;
+  .card:hover { border-color: #c8bfa4; box-shadow: 0 14px 40px rgba(31,42,27,.07); transform: translateY(-2px); }
+  .card h2 {
+    font-family: var(--serif); font-optical-sizing: auto;
+    font-size: 1.95rem; font-weight: 600; line-height: 1.15; letter-spacing: -.01em;
+    color: var(--green-deep); margin-bottom: 1rem;
   }
-  .card:hover::before { opacity: 1; }
-  .card::after {
-    content: ''; position: absolute; top: -50%; left: -75%; width: 50%; height: 200%;
-    background: linear-gradient(105deg, transparent 40%, rgba(200,232,106,.06) 50%, transparent 60%);
-    transform: skewX(-20deg); transition: left .65s ease; pointer-events: none;
+  .card h3 {
+    font-family: var(--serif); font-size: 1.28rem; font-weight: 600;
+    color: var(--green); margin: 1.8rem 0 .5rem; display: flex; align-items: baseline; gap: .55rem;
   }
-  .card:hover::after { left: 125%; }
-  .card h2 { font-family: var(--heading-font); font-size: 1.6rem; font-weight: 700; margin-bottom: .75rem; color: #fff; }
-  .card h3 { font-family: var(--heading-font); font-size: 1.15rem; color: var(--accent); margin: 1.2rem 0 .4rem; }
-  .card p  { color: var(--text); margin-bottom: .75rem; }
-  .card ul { padding-left: 1.5rem; margin-bottom: .75rem; }
-  .card ul li { margin-bottom: .4rem; color: var(--text); }
-  .card ul li::marker { color: var(--accent); }
+  .card h3::before { content: ''; flex: 0 0 1.1rem; height: 2px; background: var(--ochre); align-self: center; opacity: .8; }
+  .card p  { color: var(--text); margin-bottom: .85rem; }
+  .card ul { list-style: none; margin-bottom: .85rem; }
+  .card ul li { position: relative; padding-left: 1.5rem; margin-bottom: .5rem; color: var(--text); }
+  .card ul li::before {
+    content: ''; position: absolute; left: .15rem; top: .68em;
+    width: 5px; height: 5px; border-radius: 1px; background: var(--green); transform: rotate(45deg);
+  }
+  .card strong { color: var(--green-deep); font-weight: 600; }
+  .card em { color: var(--ochre); font-style: italic; }
 
-  /* Info chips */
-  .info-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+  /* ── SPEC / INFO CHIPS ── */
+  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
   .info-chip {
-    background: rgba(167,209,41,.06); border: 1px solid rgba(167,209,41,.2); border-radius: 1rem; padding: 1.25rem 1.5rem;
-    transition: background .28s, border-color .28s, transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s;
-    position: relative; overflow: hidden;
+    background: var(--green-soft); border: 1px solid #cdd9b4; border-left: 3px solid var(--green);
+    border-radius: 10px; padding: 1.15rem 1.35rem;
+    transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease;
   }
-  .info-chip::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(167,209,41,.04) 0%, transparent 60%);
-    opacity: 0; transition: opacity .3s;
-  }
-  .info-chip:hover { background: rgba(167,209,41,.12); border-color: rgba(167,209,41,.45); transform: translateY(-4px) scale(1.02); box-shadow: 0 8px 28px rgba(0,0,0,.3); }
-  .info-chip:hover::after { opacity: 1; }
-  .info-chip .ic-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .15em; color: var(--accent); margin-bottom: .4rem; }
-  .info-chip .ic-value { font-size: 1rem; color: #fff; font-weight: 500; }
+  .info-chip:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(31,42,27,.08); }
+  .info-chip .ic-label { font-size: .68rem; text-transform: uppercase; letter-spacing: .14em; font-weight: 600; color: var(--ochre); margin-bottom: .4rem; }
+  .info-chip .ic-value { font-size: 1rem; color: var(--ink); font-weight: 500; line-height: 1.5; }
 
-  .badge { display: inline-block; background: rgba(97,111,57,.18); border: 1px solid rgba(97,111,57,.4); color: var(--accent3); font-size: .75rem; padding: .2rem .75rem; border-radius: 999px; margin: .2rem; transition: background .2s, transform .2s; cursor: none; }
-  .badge:hover { background: rgba(97,111,57,.35); transform: scale(1.08); }
+  /* ── BADGE ── */
+  .badge { display: inline-block; background: var(--green-soft); border: 1px solid #cdd9b4; color: var(--green-deep);
+    font-size: .75rem; padding: .2rem .75rem; border-radius: 999px; margin: .2rem; }
 
-  /* Sim */
-  .sim-wrapper { background: var(--card); border: 1px solid var(--border); border-radius: 1.25rem; overflow: hidden; margin-bottom: 1.5rem; transition: box-shadow .35s; }
-  .sim-wrapper:hover { box-shadow: 0 0 60px rgba(167,209,41,.08); }
-  .sim-header { padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-  .sim-header h2 { font-family: var(--heading-font); font-size: 1.4rem; color: #fff; }
-  .sim-controls { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
+  /* ── SIMULATION ── */
+  .sim-wrapper { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem;
+    box-shadow: 0 1px 2px rgba(31,42,27,.03); transition: box-shadow .35s ease; }
+  .sim-wrapper:hover { box-shadow: 0 14px 40px rgba(31,42,27,.07); }
+  .sim-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .sim-header h2 { font-family: var(--serif); font-size: 1.5rem; font-weight: 600; color: var(--green-deep); }
+  .sim-header small { color: var(--muted); }
+  .sim-controls { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
 
-  /* Buttons */
-  .btn { font-family: var(--body-font); font-size: .875rem; font-weight: 500; padding: .55rem 1.4rem; border-radius: 999px; border: none; cursor: none; letter-spacing: .03em; position: relative; overflow: hidden; transition: all .22s cubic-bezier(.22,1,.36,1); }
-  .btn .ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,.25); transform: scale(0); animation: rippleA .55s linear forwards; pointer-events: none; }
-  @keyframes rippleA { to { transform: scale(4); opacity: 0; } }
-  .btn-start { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #000; }
-  .btn-start:hover { opacity: .88; transform: translateY(-2px); box-shadow: 0 6px 22px rgba(167,209,41,.32); }
-  .btn-start:active { transform: scale(.95); }
-  .btn-stop  { background: transparent; border: 1px solid #e04060; color: #e04060; }
-  .btn-stop:hover  { background: rgba(224,64,96,.12); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(224,64,96,.22); }
-  .btn-stop:active  { transform: scale(.95); }
-  .btn-reset { background: transparent; border: 1px solid var(--border); color: var(--muted); }
-  .btn-reset:hover { border-color: var(--accent2); color: var(--accent2); transform: translateY(-2px); }
-  .btn-reset:active { transform: scale(.95); }
+  /* ── BUTTONS ── */
+  .btn { font-family: var(--sans); font-size: .85rem; font-weight: 500; padding: .58rem 1.3rem; border-radius: 8px;
+    border: 1px solid transparent; cursor: pointer; letter-spacing: .01em;
+    transition: background .22s ease, color .22s ease, border-color .22s ease, transform .15s ease, box-shadow .22s ease; }
+  .btn:active { transform: translateY(1px); }
+  .btn-start { background: var(--green); color: #f7f6ee; border-color: var(--green); }
+  .btn-start:hover { background: var(--green-deep); box-shadow: 0 6px 18px rgba(38,74,38,.22); }
+  .btn-stop  { background: transparent; border-color: #c06a52; color: #a8533c; }
+  .btn-stop:hover  { background: rgba(192,106,82,.1); }
+  .btn-reset { background: transparent; border-color: var(--line); color: var(--muted); }
+  .btn-reset:hover { border-color: var(--muted); color: var(--ink); }
 
-  .sim-status { font-size: .75rem; padding: .25rem .75rem; border-radius: 999px; font-weight: 500; transition: all .3s; }
-  .sim-status.idle    { background: rgba(122,138,90,.15); color: var(--muted); }
-  .sim-status.running { background: rgba(167,209,41,.12); color: var(--accent3); animation: pulseBadge 2s ease infinite; }
-  .sim-status.stopped { background: rgba(224,64,96,.12); color: #e04060; }
-  @keyframes pulseBadge { 0%,100% { box-shadow: 0 0 0 0 rgba(167,209,41,.4); } 50% { box-shadow: 0 0 0 6px rgba(167,209,41,0); } }
+  .sim-status { font-size: .74rem; padding: .28rem .8rem; border-radius: 999px; font-weight: 600; letter-spacing: .02em; transition: all .3s; }
+  .sim-status.idle    { background: var(--paper-tint); color: var(--muted); }
+  .sim-status.running { background: var(--green-soft); color: var(--green-deep); }
+  .sim-status.stopped { background: rgba(192,106,82,.14); color: #a8533c; }
 
-  canvas#simCanvas { display: block; width: 100%; height: 520px; cursor: none; touch-action: none; }
+  canvas#simCanvas { display: block; width: 100%; height: 520px; touch-action: none;
+    background: radial-gradient(ellipse 75% 70% at 50% 45%, #f9f5ea 0%, #ece5d2 100%); cursor: grab; }
+  canvas#simCanvas:active { cursor: grabbing; }
 
-  .sim-legend { padding: 1rem 2rem; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 1rem; }
-  .legend-item { display: flex; align-items: center; gap: .5rem; font-size: .8rem; color: var(--muted); transition: color .22s, transform .22s; cursor: none; }
-  .legend-item:hover { color: var(--text); transform: translateX(4px); }
-  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .sim-legend { padding: 1.1rem 2rem; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 1.1rem 1.4rem; }
+  .legend-item { display: flex; align-items: center; gap: .5rem; font-size: .8rem; color: var(--muted); transition: color .22s; }
+  .legend-item:hover { color: var(--ink); }
+  .legend-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
 
-  .sim-info-bar { padding: .75rem 2rem; border-top: 1px solid var(--border); font-size: .8rem; color: var(--muted); background: rgba(0,0,0,.15); }
+  .sim-info-bar { padding: .9rem 2rem; border-top: 1px solid var(--line); font-size: .82rem; color: var(--muted);
+    background: var(--paper-tint); line-height: 1.6; }
 
-  /* Func cards */
-  .func-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1rem; margin-top: 1rem; }
+  /* ── FUNCTION CARDS ── */
+  .func-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1.5rem; counter-reset: fc; }
   .func-card {
-    background: rgba(0,0,0,.2); border: 1px solid var(--border); border-radius: 1rem; padding: 1.25rem; cursor: none;
-    transition: border-color .28s, transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s, background .28s;
-    position: relative; overflow: hidden;
+    position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 1.6rem 1.4rem 1.4rem;
+    overflow: hidden; counter-increment: fc;
+    transition: border-color .3s ease, transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease;
   }
-  .func-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 0% 0%, rgba(167,209,41,.06) 0%, transparent 70%); opacity: 0; transition: opacity .3s; }
-  .func-card:hover { border-color: rgba(167,209,41,.45); transform: translateY(-6px) scale(1.015); box-shadow: 0 12px 44px rgba(0,0,0,.55); background: rgba(167,209,41,.04); }
-  .func-card:hover::after { opacity: 1; }
-  .func-card:active { transform: scale(.97); }
-  .func-card .fc-icon { font-size: 1.8rem; margin-bottom: .5rem; display: block; transition: transform .35s cubic-bezier(.22,1,.36,1); }
-  .func-card:hover .fc-icon { transform: scale(1.3) rotate(-6deg); }
-  .func-card h4 { font-family: var(--heading-font); font-size: 1rem; color: #fff; margin-bottom: .4rem; }
-  .func-card p  { font-size: .875rem; color: var(--muted); margin: 0; }
+  .func-card::before {
+    content: counter(fc, decimal-leading-zero); position: absolute; top: .9rem; right: 1.1rem;
+    font-family: var(--serif); font-size: 1.6rem; font-weight: 500; color: var(--ochre); opacity: .35;
+  }
+  .func-card:hover { border-color: #c8bfa4; transform: translateY(-4px); box-shadow: 0 12px 32px rgba(31,42,27,.08); }
+  .func-card h4 { font-family: var(--serif); font-size: 1.08rem; font-weight: 600; color: var(--green-deep); margin-bottom: .45rem; padding-right: 2rem; }
+  .func-card p  { font-size: .9rem; color: var(--muted); margin: 0; line-height: 1.6; }
 
-  /* Table */
-  table tr { transition: background .2s; }
-  table tr:hover td { background: rgba(167,209,41,.06) !important; }
+  /* ── COMPARISON TABLE ── */
+  .table-scroll { overflow-x: auto; margin-top: 1rem; }
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+  .cmp-table th {
+    text-align: left; padding: .8rem 1rem; border-bottom: 2px solid var(--green);
+    color: var(--green-deep); font-weight: 600; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em;
+  }
+  .cmp-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--line); color: var(--text); }
+  .cmp-table tbody tr:nth-child(even) { background: rgba(60,107,57,.035); }
+  .cmp-table tbody tr { transition: background .2s ease; }
+  .cmp-table tbody tr:hover { background: rgba(60,107,57,.08); }
+  .cmp-table td:first-child { font-weight: 500; color: var(--ink); }
 
-  /* ── SOURCES SECTION ── */
-  .sources-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap: 1.1rem; margin-top: 1.25rem; }
+  /* ── SOURCES ── */
+  .sources-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
   .source-card {
-    background: rgba(0,0,0,.25); border: 1px solid var(--border); border-radius: 1.1rem;
-    padding: 1.2rem 1.5rem; text-decoration: none; display: flex; flex-direction: column; gap: .5rem;
-    transition: border-color .28s, transform .32s cubic-bezier(.22,1,.36,1), box-shadow .32s, background .28s;
-    position: relative; overflow: hidden;
+    position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 12px;
+    padding: 1.35rem 1.5rem; text-decoration: none; display: flex; flex-direction: column; gap: .55rem;
+    transition: border-color .3s ease, transform .32s cubic-bezier(.22,1,.36,1), box-shadow .32s ease;
   }
-  .source-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent2), transparent); opacity: 0; transition: opacity .28s; }
-  .source-card:hover { border-color: rgba(167,209,41,.38); transform: translateY(-4px); box-shadow: 0 10px 38px rgba(0,0,0,.4); background: rgba(167,209,41,.04); }
-  .source-card:hover::before { opacity: 1; }
-  .source-card:active { transform: scale(.97); }
-  .source-top { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
-  .source-type {
-    font-size: .65rem; text-transform: uppercase; letter-spacing: .14em; padding: .2rem .7rem;
-    border-radius: 999px; font-weight: 700; flex-shrink: 0;
-  }
-  .type-wiki   { background: rgba(100,160,240,.12); color: #7ab4f5; border: 1px solid rgba(100,160,240,.25); }
-  .type-dict   { background: rgba(167,209,41,.1);  color: var(--accent3); border: 1px solid rgba(167,209,41,.25); }
-  .type-edu    { background: rgba(97,111,57,.18);  color: #b8cc70; border: 1px solid rgba(97,111,57,.4); }
-  .type-sci    { background: rgba(200,100,240,.1); color: #d4a0f5; border: 1px solid rgba(200,100,240,.2); }
-  .source-title { font-family: var(--heading-font); font-size: .98rem; font-weight: 700; color: #fff; flex: 1; }
-  .source-desc  { font-size: .82rem; color: var(--muted); line-height: 1.55; }
-  .source-url   { font-size: .72rem; color: rgba(167,209,41,.45); letter-spacing: .02em; margin-top: auto; word-break: break-all; }
-  .source-arrow { position: absolute; top: 1.2rem; right: 1.4rem; font-size: .85rem; color: rgba(167,209,41,.35); transition: transform .25s, color .25s; }
-  .source-card:hover .source-arrow { transform: translate(3px,-3px); color: var(--accent); }
+  .source-card:hover { border-color: var(--green); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(31,42,27,.09); }
+  .source-top { display: flex; align-items: flex-start; gap: .75rem; padding-right: 1.5rem; }
+  .source-title { font-family: var(--serif); font-size: 1.02rem; font-weight: 600; color: var(--green-deep); line-height: 1.3; }
+  .source-desc  { font-size: .85rem; color: var(--muted); line-height: 1.55; }
+  .source-url   { font-size: .72rem; color: var(--ochre); letter-spacing: .01em; margin-top: auto; word-break: break-all; opacity: .85; }
+  .source-arrow { position: absolute; top: 1.35rem; right: 1.4rem; font-size: .95rem; color: var(--muted);
+    transition: transform .25s ease, color .25s ease; }
+  .source-card:hover .source-arrow { transform: translate(3px,-3px); color: var(--green); }
 
-  /* Footer */
-  .footer { text-align: center; padding: 2rem 0 1rem; color: var(--muted); font-size: .8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
-  .copyright-note { margin-top: .6rem; font-size: .75rem; color: var(--accent); letter-spacing: .08em; opacity: .7; }
+  /* ── FOOTER ── */
+  .footer { text-align: center; padding: 2.5rem 0 1rem; color: var(--muted); font-size: .82rem;
+    border-top: 1px solid var(--line); margin-top: 3.5rem; }
+  .copyright-note { margin-top: .6rem; font-size: .76rem; color: var(--green); letter-spacing: .04em; }
 
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar { width: 9px; }
+  ::-webkit-scrollbar-track { background: var(--paper); }
+  ::-webkit-scrollbar-thumb { background: #cdc4ad; border-radius: 4px; border: 2px solid var(--paper); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
   @media (max-width: 640px) {
+    .wrapper { padding: 0 1.25rem 4rem; }
+    .hero { padding: 4rem 0 2rem; }
+    .card { padding: 1.75rem 1.5rem; }
     .sim-header { flex-direction: column; align-items: flex-start; }
-    canvas#simCanvas { height: 380px; }
-    .tabs-inner { flex-wrap: wrap; }
+    canvas#simCanvas { height: 400px; }
+    .tabs-inner { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; animation-delay: 0s !important; transition-duration: .001ms !important; }
+    html { scroll-behavior: auto; }
+    .reveal, .reveal-stagger > * { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
 
-<div id="cur-leaf">
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- cell membrane outer -->
-    <ellipse cx="12" cy="12" rx="9" ry="11" fill="rgba(167,209,41,0.12)" stroke="#A7D129" stroke-width="1.2"/>
-    <!-- inner cell detail (vacuole) -->
-    <ellipse cx="12" cy="13" rx="5" ry="6" fill="rgba(167,209,41,0.18)" stroke="#c8e86a" stroke-width="0.8" stroke-dasharray="2 1.5"/>
-    <!-- nucleus dot -->
-    <circle cx="10" cy="10" r="1.5" fill="#e0a030" opacity="0.85"/>
-    <!-- small chloroplast dots -->
-    <ellipse cx="15" cy="9"  rx="1.2" ry="0.7" fill="#616F39" opacity="0.7" transform="rotate(-20 15 9)"/>
-    <ellipse cx="14" cy="16" rx="1.2" ry="0.7" fill="#616F39" opacity="0.7" transform="rotate(15 14 16)"/>
-  </svg>
-</div>
-
 <div id="scroll-bar"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
 
 <div class="wrapper">
 
-  <div class="hero">
+  <header class="hero">
     <div class="hero-label">Biologie · Zellorganellen</div>
     <h1>Die Vakuole</h1>
+    <div class="rule"></div>
     <p>Entdecke die Vakuole, den flüssigkeitsgefüllten Speicher der Zelle, und erfahre mehr über ihren Aufbau, ihre Funktionen und eine anschauliche Simulation.</p>
-  </div>
+  </header>
 
-  <!-- REDESIGNED TAB NAV -->
-  <div class="tabs-wrap">
+  <!-- TAB NAV -->
+  <nav class="tabs-wrap">
     <div class="tabs-inner" id="tabsInner">
       <div class="tab-slider" id="tabSlider"></div>
-      <button class="tab-btn active" data-tab="simulation" onclick="showTab('simulation',this)"><span class="tab-icon"></span>Simulation</button>
-      <button class="tab-btn" data-tab="aufbau"     onclick="showTab('aufbau',this)"><span class="tab-icon"></span>Aufbau</button>
-      <button class="tab-btn" data-tab="funktionen" onclick="showTab('funktionen',this)"><span class="tab-icon"></span>Funktionen</button>
-      <button class="tab-btn" data-tab="typen"      onclick="showTab('typen',this)"><span class="tab-icon"></span>Typen &amp; Vorkommen</button>
-      <button class="tab-btn" data-tab="vergleich"  onclick="showTab('vergleich',this)"><span class="tab-icon"></span>Pflanzen vs. Tiere</button>
-      <button class="tab-btn" data-tab="quellen"    onclick="showTab('quellen',this)"><span class="tab-icon"></span>Quellen</button>
+      <button class="tab-btn active" data-tab="simulation" onclick="showTab('simulation',this)">Simulation</button>
+      <button class="tab-btn" data-tab="aufbau"     onclick="showTab('aufbau',this)">Aufbau</button>
+      <button class="tab-btn" data-tab="funktionen" onclick="showTab('funktionen',this)">Funktionen</button>
+      <button class="tab-btn" data-tab="typen"      onclick="showTab('typen',this)">Typen &amp; Vorkommen</button>
+      <button class="tab-btn" data-tab="vergleich"  onclick="showTab('vergleich',this)">Pflanzen vs. Tiere</button>
+      <button class="tab-btn" data-tab="quellen"    onclick="showTab('quellen',this)">Quellen</button>
     </div>
-  </div>
+  </nav>
 
   <!-- SIMULATION -->
   <div class="section active tab-enter" id="tab-simulation">
@@ -341,7 +322,7 @@
       <div class="sim-header">
         <div>
           <h2>Zell-Simulation</h2>
-          <small style="color:var(--muted)">Ziehe zum Drehen · Scrolle zum Zoomen</small>
+          <small>Ziehe zum Drehen · Scrolle zum Zoomen</small>
         </div>
         <div class="sim-controls">
           <span class="sim-status idle" id="simStatus">● Bereit</span>
@@ -352,12 +333,12 @@
       </div>
       <canvas id="simCanvas"></canvas>
       <div class="sim-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#616F39"></div>Zellmembran</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#3E432E"></div>Chloroplasten</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#A7D129"></div>Vakuole (Tonoplast)</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#e0a030"></div>Zellkern</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#c8e86a"></div>Zellsaft / Wasser</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#ff6688"></div>Ionen / Moleküle</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#5d7a2a"></div>Zellmembran</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#35591f"></div>Chloroplasten</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#7fae2e"></div>Vakuole (Tonoplast)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#c0841a"></div>Zellkern</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#8bb33a"></div>Zellsaft / Wasser</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#d8455f"></div>Ionen / Moleküle</div>
       </div>
       <div class="sim-info-bar" id="simInfoBar">Starte die Simulation, um zu sehen, wie die Vakuole Turgor aufbaut und Ionen transportiert.</div>
     </div>
@@ -413,14 +394,14 @@
       <h2>Funktionen der Vakuole</h2>
       <p>Die Vakuole ist viel mehr als nur ein Flüssigkeitsspeicher. Sie erfüllt in der Zelle viele wichtige Funktionen:</p>
       <div class="func-grid reveal-stagger">
-        <div class="func-card"><span class="fc-icon"></span><h4>Osmoregulation & Turgor</h4><p>Durch Wasser- und Ionenaufnahme erzeugt die Vakuole den Turgordruck. Dieser drückt das Zellinnere gegen die Zellwand und sorgt für die Stabilität der Pflanze.</p></div>
-        <div class="func-card"><span class="fc-icon"></span><h4>Speicherung & Entsorgung</h4><p>Die Vakuole speichert Nährstoffe wie Stärke, Proteine und Mineralstoffe und lagert Schadstoffe und zelluläre Abfallprodukte sicher ein.</p></div>
-        <div class="func-card"><span class="fc-icon"></span><h4>Abbau (Lysis)</h4><p>Pflanzliche Vakuolen enthalten Hydrolasen, die beschädigte Proteine, alte Organellen und eingedrungene Mikroorganismen abbauen, ähnlich wie Lysosomen bei Tierzellen.</p></div>
-        <div class="func-card"><span class="fc-icon"></span><h4>Pigmentspeicherung</h4><p>Anthocyane in der Vakuole verleihen Blüten und Früchten rote, blaue oder violette Farben, um Bestäuber anzulocken und Samen zu verbreiten.</p></div>
-        <div class="func-card"><span class="fc-icon"></span><h4>Abwehr & Schutz</h4><p>Toxine wie Alkaloide oder Tannine werden in der Vakuole gespeichert, um Fraßfeinde abzuwehren. Manche Pflanzen lagern auch Vorstufen ein, die bei Verletzung giftige Substanzen freisetzen.</p></div>
-        <div class="func-card"><span class="fc-icon"></span><h4>pH-Regulation</h4><p>H⁺-Pumpen im Tonoplast senken den pH-Wert im Zellsaft auf 3–6, ermöglichen saure Abbauprozesse und schützen das Zytoplasma (pH ~7).</p></div>
-        <div class="func-card"><span class="fc-icon"></span><h4>Proteinspeicherung</h4><p>Spezielle Proteinspeichervakuolen (PSV) in Samen lagern Reserveproteine, die beim Keimen abgebaut und als Nährstoffe genutzt werden.</p></div>
-        <div class="func-card"><span class="fc-icon"></span><h4>Zellwachstum</h4><p>Wasseraufnahme in die Vakuole ermöglicht schnelles, energiesparendes Zellwachstum ohne viel neues Zytoplasma produzieren zu müssen.</p></div>
+        <div class="func-card"><h4>Osmoregulation & Turgor</h4><p>Durch Wasser- und Ionenaufnahme erzeugt die Vakuole den Turgordruck. Dieser drückt das Zellinnere gegen die Zellwand und sorgt für die Stabilität der Pflanze.</p></div>
+        <div class="func-card"><h4>Speicherung & Entsorgung</h4><p>Die Vakuole speichert Nährstoffe wie Stärke, Proteine und Mineralstoffe und lagert Schadstoffe und zelluläre Abfallprodukte sicher ein.</p></div>
+        <div class="func-card"><h4>Abbau (Lysis)</h4><p>Pflanzliche Vakuolen enthalten Hydrolasen, die beschädigte Proteine, alte Organellen und eingedrungene Mikroorganismen abbauen, ähnlich wie Lysosomen bei Tierzellen.</p></div>
+        <div class="func-card"><h4>Pigmentspeicherung</h4><p>Anthocyane in der Vakuole verleihen Blüten und Früchten rote, blaue oder violette Farben, um Bestäuber anzulocken und Samen zu verbreiten.</p></div>
+        <div class="func-card"><h4>Abwehr & Schutz</h4><p>Toxine wie Alkaloide oder Tannine werden in der Vakuole gespeichert, um Fraßfeinde abzuwehren. Manche Pflanzen lagern auch Vorstufen ein, die bei Verletzung giftige Substanzen freisetzen.</p></div>
+        <div class="func-card"><h4>pH-Regulation</h4><p>H⁺-Pumpen im Tonoplast senken den pH-Wert im Zellsaft auf 3–6, ermöglichen saure Abbauprozesse und schützen das Zytoplasma (pH ~7).</p></div>
+        <div class="func-card"><h4>Proteinspeicherung</h4><p>Spezielle Proteinspeichervakuolen (PSV) in Samen lagern Reserveproteine, die beim Keimen abgebaut und als Nährstoffe genutzt werden.</p></div>
+        <div class="func-card"><h4>Zellwachstum</h4><p>Wasseraufnahme in die Vakuole ermöglicht schnelles, energiesparendes Zellwachstum ohne viel neues Zytoplasma produzieren zu müssen.</p></div>
       </div>
     </div>
   </div>
@@ -455,9 +436,9 @@
     <div class="card reveal">
       <h2>Pflanzenzelle vs. Tierzelle</h2>
       <p>Eines der auffälligsten Unterschiede zwischen Pflanzen- und Tierzellen ist das Vorhandensein und die Größe der Vakuole.</p>
-      <div class="info-grid reveal-stagger" style="margin-top:1.5rem">
-        <div class="func-card"><span class="fc-icon"></span><h4>Pflanzenzelle</h4><p><strong>Große zentrale Vakuole</strong> — nimmt bis zu 90 % des Zellvolumens ein und ist von der festen Zellwand eingebettet. Sie sorgt für den Turgor, speichert Farbstoffe und dient als Recycling-Station der Zelle.</p></div>
-        <div class="func-card"><span class="fc-icon"></span><h4>Tierzelle</h4><p>Keine echte Vakuole; Abbau übernehmen <em>Lysosomen</em>. Es gibt zwar kleine Endosomen und phagosomale Vesikel, aber keine großflächige zentrale Vakuole.</p></div>
+      <div class="func-grid reveal-stagger" style="margin-top:1.5rem">
+        <div class="func-card"><h4>Pflanzenzelle</h4><p><strong>Große zentrale Vakuole</strong> — nimmt bis zu 90 % des Zellvolumens ein und ist von der festen Zellwand eingebettet. Sie sorgt für den Turgor, speichert Farbstoffe und dient als Recycling-Station der Zelle.</p></div>
+        <div class="func-card"><h4>Tierzelle</h4><p>Keine echte Vakuole; Abbau übernehmen <em>Lysosomen</em>. Es gibt zwar kleine Endosomen und phagosomale Vesikel, aber keine großflächige zentrale Vakuole.</p></div>
       </div>
       <h3>Warum haben Tierzellen keine Vakuole?</h3>
       <p>Tierzellen haben keine starre Zellwand. Eine große Vakuole würde bei Wasseraufnahme zum Platzen führen. Stattdessen regulieren Nieren und andere Organe den Wasserhaushalt.</p>
@@ -469,19 +450,23 @@
         <li>Beide dienen dem Abbau und der Wiederverwertung von Zellmaterial</li>
       </ul>
       <h3>Vergleichstabelle</h3>
-      <div class="reveal" style="overflow-x:auto;margin-top:1rem">
-        <table style="width:100%;border-collapse:collapse;font-size:.875rem">
-          <tr style="background:rgba(167,209,41,.08)">
-            <th style="text-align:left;padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--accent)">Merkmal</th>
-            <th style="text-align:left;padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--accent)">Pflanzenzelle</th>
-            <th style="text-align:left;padding:.7rem 1rem;border-bottom:1px solid var(--border);color:var(--accent)">Tierzelle</th>
-          </tr>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.6rem 1rem">Vakuole vorhanden?</td><td style="padding:.6rem 1rem">Ja, groß</td><td style="padding:.6rem 1rem">Nein (nur kleine Vesikel)</td></tr>
-          <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)"><td style="padding:.6rem 1rem">Größe</td><td style="padding:.6rem 1rem">70–90 % der Zelle</td><td style="padding:.6rem 1rem">Sehr klein</td></tr>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.6rem 1rem">Membran</td><td style="padding:.6rem 1rem">Tonoplast</td><td style="padding:.6rem 1rem">Lysosomenmembran</td></tr>
-          <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)"><td style="padding:.6rem 1rem">Funktion Abbau</td><td style="padding:.6rem 1rem">Lytische Vakuole</td><td style="padding:.6rem 1rem">Lysosom</td></tr>
-          <tr style="border-bottom:1px solid var(--border)"><td style="padding:.6rem 1rem">Turgor</td><td style="padding:.6rem 1rem">Ja (wichtig für Stabilität)</td><td style="padding:.6rem 1rem">Nein</td></tr>
-          <tr style="background:rgba(255,255,255,.02)"><td style="padding:.6rem 1rem">Pigmentspeicherung</td><td style="padding:.6rem 1rem">Anthocyane, etc.</td><td style="padding:.6rem 1rem">Nein</td></tr>
+      <div class="table-scroll reveal">
+        <table class="cmp-table">
+          <thead>
+            <tr>
+              <th>Merkmal</th>
+              <th>Pflanzenzelle</th>
+              <th>Tierzelle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Vakuole vorhanden?</td><td>Ja, groß</td><td>Nein (nur kleine Vesikel)</td></tr>
+            <tr><td>Größe</td><td>70–90 % der Zelle</td><td>Sehr klein</td></tr>
+            <tr><td>Membran</td><td>Tonoplast</td><td>Lysosomenmembran</td></tr>
+            <tr><td>Funktion Abbau</td><td>Lytische Vakuole</td><td>Lysosom</td></tr>
+            <tr><td>Turgor</td><td>Ja (wichtig für Stabilität)</td><td>Nein</td></tr>
+            <tr><td>Pigmentspeicherung</td><td>Anthocyane, etc.</td><td>Nein</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -571,40 +556,13 @@
     </div>
   </div>
 
-  <div class="footer reveal">
+  <footer class="footer reveal">
     Interaktive Lernseite zur Vakuole · Biologie Schulprojekt
     <p class="copyright-note">© <span id="current-year"></span> Abdullah, Hennes, Fabian und Moritz</p>
-  </div>
+  </footer>
 </div>
 
 <script>
-// ── CUSTOM CURSOR (leaf / cell shape) ──
-const curLeaf = document.getElementById('cur-leaf');
-let mx = 0, my = 0, lx = 0, ly = 0, angle = 0;
-
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-
-(function animLeaf() {
-  const dx = mx - lx, dy = my - ly;
-  lx += dx * 0.13;
-  ly += dy * 0.13;
-  // gentle tilt in direction of movement
-  const speed = Math.hypot(dx, dy);
-  const targetAngle = speed > 0.5 ? Math.atan2(dy, dx) * (180 / Math.PI) + 90 : angle;
-  angle += (targetAngle - angle) * 0.08;
-  curLeaf.style.left = lx + 'px';
-  curLeaf.style.top  = ly + 'px';
-  curLeaf.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
-  requestAnimationFrame(animLeaf);
-})();
-
-document.querySelectorAll('button, a, .func-card, .info-chip, .badge, .legend-item, .source-card').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-});
-document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
-document.addEventListener('mouseup',   () => document.body.classList.remove('cursor-click'));
-
 // ── SCROLL PROGRESS ──
 const scrollBar = document.getElementById('scroll-bar');
 window.addEventListener('scroll', () => {
@@ -620,20 +578,7 @@ function attachReveal() {
 }
 attachReveal();
 
-// ── BUTTON RIPPLE ──
-document.querySelectorAll('.btn').forEach(btn => {
-  btn.addEventListener('click', function(e) {
-    const r = document.createElement('span');
-    r.classList.add('ripple');
-    const s = Math.max(this.offsetWidth, this.offsetHeight);
-    const rc = this.getBoundingClientRect();
-    r.style.cssText = `width:${s}px;height:${s}px;left:${e.clientX-rc.left-s/2}px;top:${e.clientY-rc.top-s/2}px`;
-    this.appendChild(r);
-    setTimeout(() => r.remove(), 600);
-  });
-});
-
-// ── TAB SLIDER ──
+// ── TAB UNDERLINE SLIDER ──
 const slider = document.getElementById('tabSlider');
 const tabsInner = document.getElementById('tabsInner');
 
@@ -644,13 +589,13 @@ function moveSlider(btn) {
   slider.style.width = br.width + 'px';
 }
 
-// Init slider on first active tab
 window.addEventListener('load', () => {
   const active = document.querySelector('.tab-btn.active');
-  if (active) {
-    // Small delay to let layout settle
-    setTimeout(() => moveSlider(active), 80);
-  }
+  if (active) setTimeout(() => moveSlider(active), 80);
+});
+window.addEventListener('resize', () => {
+  const active = document.querySelector('.tab-btn.active');
+  if (active) moveSlider(active);
 });
 
 // ── TAB NAVIGATION ──
@@ -741,21 +686,21 @@ function spawnParticle(ph) {
   const R = 180 * zoom, vR = vakuoleScale * R / .38;
   if (ph === 1 || ph === 2) {
     const a = Math.random() * Math.PI * 2, r = vR * 1.6 + Math.random() * 40;
-    return { x: Math.cos(a)*r, y: (Math.random()-.5)*r*.6, z: Math.sin(a)*r, tx: Math.cos(a)*vR*.5, ty: (Math.random()-.5)*vR*.4, tz: Math.sin(a)*vR*.5, life: 1, speed: .015+Math.random()*.01, progress: 0, color: ph===2?'#c8e86a':'#ff6688', size: ph===2?4:5 };
+    return { x: Math.cos(a)*r, y: (Math.random()-.5)*r*.6, z: Math.sin(a)*r, tx: Math.cos(a)*vR*.5, ty: (Math.random()-.5)*vR*.4, tz: Math.sin(a)*vR*.5, life: 1, speed: .015+Math.random()*.01, progress: 0, color: ph===2?'#5f9b2b':'#d8455f', size: ph===2?4:5 };
   }
   const a = Math.random() * Math.PI * 2, r = vR * .5;
-  return { x: Math.cos(a)*r, y: (Math.random()-.5)*r*.6, z: Math.sin(a)*r, tx: Math.cos(a)*vR*1.5, ty: (Math.random()-.5)*vR*.6, tz: Math.sin(a)*vR*1.5, life: 1, speed: .02, progress: 0, color: '#ffba40', size: 4 };
+  return { x: Math.cos(a)*r, y: (Math.random()-.5)*r*.6, z: Math.sin(a)*r, tx: Math.cos(a)*vR*1.5, ty: (Math.random()-.5)*vR*.6, tz: Math.sin(a)*vR*1.5, life: 1, speed: .02, progress: 0, color: '#c0841a', size: 4 };
 }
 
 function draw() {
   ctx.clearRect(0, 0, W, H);
   const cx = W/2, cy = H/2, R = 200*zoom, vR = vakuoleScale*R/.38, cY2 = Math.cos(rotX);
   const g = ctx.createRadialGradient(cx,cy,0,cx,cy,R*1.2);
-  g.addColorStop(0, 'rgba(167,209,41,.05)'); g.addColorStop(1, 'transparent');
+  g.addColorStop(0, 'rgba(127,174,46,.12)'); g.addColorStop(1, 'transparent');
   ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx,cy,R*1.3,R*.9,0,0,Math.PI*2); ctx.fill();
-  ctx.save(); ctx.globalAlpha = .2;
+  ctx.save(); ctx.globalAlpha = .35;
   const cg = ctx.createRadialGradient(cx,cy,0,cx,cy,R);
-  cg.addColorStop(0,'#2a3010'); cg.addColorStop(1,'#0d1008');
+  cg.addColorStop(0,'#dde9be'); cg.addColorStop(1,'#c6d79b');
   ctx.beginPath(); ctx.ellipse(cx,cy,R,R*Math.max(.3,Math.abs(cY2))*.9,0,0,Math.PI*2);
   ctx.fillStyle = cg; ctx.fill(); ctx.restore();
 
@@ -763,57 +708,57 @@ function draw() {
     const pr = (R - vR*1.15)*.5, lx=bx*pr, ly=by*pr*.6, lz=bz*pr;
     const p = project3D(lx,ly,lz), pE = project3D(lx+18*zoom,ly,lz);
     const sz = Math.max(2, Math.hypot(pE.x-p.x, pE.y-p.y)), dep = Math.max(.1,(lz+200)/400);
-    ctx.save(); ctx.globalAlpha = .75*dep;
+    ctx.save(); ctx.globalAlpha = .85*dep;
     ctx.beginPath(); ctx.ellipse(p.x,p.y,sz,sz*.55,rotY+.5,0,Math.PI*2);
     const cl = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,sz);
-    cl.addColorStop(0,'#616F39'); cl.addColorStop(1,'#3E432E');
+    cl.addColorStop(0,'#5d8a2e'); cl.addColorStop(1,'#35591f');
     ctx.fillStyle = cl; ctx.fill(); ctx.restore();
   }
 
   const nP = project3D(-R*.35,-R*.25,0);
-  { const nR = R*.12; ctx.save(); ctx.globalAlpha = .85;
+  { const nR = R*.12; ctx.save(); ctx.globalAlpha = .92;
     const ng = ctx.createRadialGradient(nP.x,nP.y,0,nP.x,nP.y,nR*1.5);
-    ng.addColorStop(0,'#e0a030'); ng.addColorStop(.6,'#a06010'); ng.addColorStop(1,'#603010');
+    ng.addColorStop(0,'#e0a838'); ng.addColorStop(.6,'#b07614'); ng.addColorStop(1,'#80500e');
     ctx.beginPath(); ctx.ellipse(nP.x,nP.y,nR*1.5,nR,.3,0,Math.PI*2); ctx.fillStyle=ng; ctx.fill();
-    ctx.globalAlpha=.6; ctx.beginPath(); ctx.ellipse(nP.x-nR*.2,nP.y-nR*.15,nR*.5,nR*.35,0,0,Math.PI*2);
-    ctx.fillStyle='#ffd060'; ctx.fill(); ctx.restore(); }
+    ctx.globalAlpha=.7; ctx.beginPath(); ctx.ellipse(nP.x-nR*.2,nP.y-nR*.15,nR*.5,nR*.35,0,0,Math.PI*2);
+    ctx.fillStyle='#f5cc66'; ctx.fill(); ctx.restore(); }
 
-  { ctx.save(); ctx.globalAlpha=.28;
+  { ctx.save(); ctx.globalAlpha=.40;
     const vg = ctx.createRadialGradient(cx,cy-vR*.1,vR*.1,cx,cy,vR*1.1);
-    vg.addColorStop(0,'#d8f07a'); vg.addColorStop(.5,'#A7D129'); vg.addColorStop(1,'#3E432E');
+    vg.addColorStop(0,'#d6ec92'); vg.addColorStop(.5,'#9cc23a'); vg.addColorStop(1,'#5d7a2a');
     ctx.beginPath(); ctx.ellipse(cx,cy,vR,vR*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2); ctx.fillStyle=vg; ctx.fill();
-    ctx.globalAlpha=.65;
+    ctx.globalAlpha=.7;
     ctx.beginPath(); ctx.ellipse(cx,cy,vR,vR*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);
-    ctx.strokeStyle='#A7D129'; ctx.lineWidth=3.5*zoom; ctx.setLineDash([8,4]); ctx.stroke(); ctx.setLineDash([]);
-    ctx.globalAlpha=.12;
+    ctx.strokeStyle='#5d8a2e'; ctx.lineWidth=3.5*zoom; ctx.setLineDash([8,4]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.globalAlpha=.14;
     ctx.beginPath(); ctx.ellipse(cx,cy,vR+8,(vR+8)*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);
-    ctx.strokeStyle='#c8e86a'; ctx.lineWidth=12*zoom; ctx.stroke(); ctx.restore(); }
+    ctx.strokeStyle='#7fae2e'; ctx.lineWidth=12*zoom; ctx.stroke(); ctx.restore(); }
 
   for (const p of particles) {
     const c3x=p.x+(p.tx-p.x)*p.progress, c3y=p.y+(p.ty-p.y)*p.progress, c3z=p.z+(p.tz-p.z)*p.progress;
     const pp = project3D(c3x,c3y,c3z);
-    ctx.save(); ctx.globalAlpha=p.life*(.4+.6*p.progress);
+    ctx.save(); ctx.globalAlpha=p.life*(.45+.55*p.progress);
     const pg = ctx.createRadialGradient(pp.x,pp.y,0,pp.x,pp.y,p.size*zoom*1.5);
     pg.addColorStop(0,p.color); pg.addColorStop(1,'transparent');
     ctx.beginPath(); ctx.arc(pp.x,pp.y,p.size*zoom*1.5,0,Math.PI*2); ctx.fillStyle=pg; ctx.fill(); ctx.restore();
   }
 
-  ctx.save(); ctx.globalAlpha=.55;
+  ctx.save(); ctx.globalAlpha=.7;
   ctx.beginPath(); ctx.ellipse(cx,cy,R,R*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);
-  ctx.strokeStyle='#616F39'; ctx.lineWidth=4*zoom; ctx.stroke();
-  ctx.globalAlpha=.18;
+  ctx.strokeStyle='#5d7a2a'; ctx.lineWidth=4*zoom; ctx.stroke();
+  ctx.globalAlpha=.2;
   ctx.beginPath(); ctx.ellipse(cx,cy,R+10*zoom,(R+10*zoom)*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);
-  ctx.strokeStyle='#616F39'; ctx.lineWidth=10*zoom; ctx.stroke(); ctx.restore();
+  ctx.strokeStyle='#5d7a2a'; ctx.lineWidth=10*zoom; ctx.stroke(); ctx.restore();
 
-  drawLabel('Vakuole\n(Tonoplast)', cx+vR*.7, cy-vR*.6, '#A7D129');
-  drawLabel('Zellkern', nP.x+40, nP.y-20, '#e0a030');
-  drawLabel('Zellmembran\n+ Zellwand', cx+R*.82, cy-R*.2, '#616F39');
+  drawLabel('Vakuole\n(Tonoplast)', cx+vR*.7, cy-vR*.6, '#2f5d2c');
+  drawLabel('Zellkern', nP.x+40, nP.y-20, '#9a6310');
+  drawLabel('Zellmembran\n+ Zellwand', cx+R*.82, cy-R*.2, '#46552f');
 }
 
 function drawLabel(t, x, y, c) {
   const ls = t.split('\n');
-  ctx.save(); ctx.font = `${Math.max(13,13*zoom)}px Nunito,sans-serif`;
-  ctx.fillStyle = c; ctx.globalAlpha = .8;
+  ctx.save(); ctx.font = `${Math.max(13,13*zoom)}px Inter, sans-serif`;
+  ctx.fillStyle = c; ctx.globalAlpha = .92;
   ls.forEach((l,i) => ctx.fillText(l, x, y+i*17*zoom));
   ctx.restore();
 }
