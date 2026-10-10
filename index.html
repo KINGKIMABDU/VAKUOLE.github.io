@@ -3,820 +3,1022 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Die Vakuole – Interaktive Lernseite</title>
+<title>Die Vakuole – Interaktives 3D-Modell | Abdullah Alhariri (KINGKIMABDU)</title>
+<meta name="description" content="Die Vakuole der Pflanzenzelle als interaktives 3D-Modell: Aufbau, Funktionen, Turgor und Plasmolyse. Deutsch und Englisch. Ein Biologie-Projekt von Abdullah Alhariri (KINGKIMABDU).">
+<meta name="author" content="Abdullah Alhariri">
+<meta property="og:title" content="Die Vakuole – Interaktives 3D-Modell">
+<meta property="og:description" content="Sieh zu, wie die Vakuole Ionen aufnimmt, Wasser zieht und Turgor aufbaut. Ein Biologie-Projekt von Abdullah Alhariri (KINGKIMABDU).">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0c1714">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2313241f'/%3E%3Crect x='5' y='7' width='22' height='18' rx='5' fill='none' stroke='%237fa86c' stroke-width='2.4'/%3E%3Cellipse cx='16' cy='16' rx='7.5' ry='5.5' fill='%23c76a98'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500..800&display=swap" rel="stylesheet">
 <style>
   :root {
-    /* ── Light botanical editorial palette ── */
-    --paper:      #efe9da;   /* page background — warm cream */
-    --paper-tint: #e7e0cd;   /* deeper cream for subtle panels */
-    --card:       #f7f2e7;   /* card surface — light on cream */
-    --ink:        #1f2a1b;   /* darkest text / display */
-    --text:       #2f3a27;   /* body text */
-    --muted:      #6c7458;   /* secondary text */
-    --line:       #d8d0bb;   /* hairline borders */
-    --green:      #3c6b39;   /* primary botanical accent */
-    --green-deep: #264a26;   /* deep heading green */
-    --green-soft: #e3ecd2;   /* faint green tint */
-    --ochre:      #a06d1a;   /* secondary accent (warm) */
-    --ochre-soft: #f0e3c4;
-
-    /* aliases kept so inline references resolve */
-    --accent: var(--green);
-    --border: var(--line);
-
-    --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
-    --sans:  'Inter', system-ui, -apple-system, sans-serif;
+    /* plate frame: lithographic green-black */
+    --plate: #13241f; --plate-2: #172b25; --plate-line: #2b443b;
+    --plate-ink: #e6efe8; --plate-muted: #a9bcb1;
+    /* reading pages: deep leaf-shade green */
+    --ground: #0c1714; --surface: #12211c; --ink: #eef4ef; --text: #d3ded7;
+    --muted: #9cb0a5; --line: #24392f;
+    /* colour is rationed by role, the same everywhere */
+    --vac: #e48ab8; --vac-l: #c76a98;
+    --wall: #93c47d; --wall-l: #7fa86c;
+    --nuc: #dcb648; --nuc-l: #c9a227;
+    --chl: #2f6a2a; --chl-l: #5d9b4a;
+    --ion: #b4561c; --ion-l: #e0823e;
+    --h2o: #2f6fa8; --h2o-l: #6aa8de;
+    --mem: #a8b89a;
+    --mark: #c9a227;
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --sans: 'Atkinson Hyperlegible Next', system-ui, -apple-system, sans-serif;
+    --ease: cubic-bezier(.22, 1, .36, 1);
   }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body { background: var(--ground); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  ::selection { background: rgba(201, 162, 39, .35); color: #fff; }
+  :focus-visible { outline: 2px solid var(--mark); outline-offset: 3px; border-radius: 3px; }
+  a { color: var(--ink); text-decoration-color: rgba(201, 162, 39, .7); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:hover { color: var(--mark); }
+  html { background: var(--ground); color-scheme: dark; }
+  button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; }
+  sup, sub { line-height: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* ── running head ───────────────────────────────── */
+  .head { position: sticky; top: 0; z-index: 50; background: var(--plate); color: var(--plate-muted); border-bottom: 1px solid var(--plate-line); }
+  .head-in { max-width: 1440px; margin: 0 auto; display: flex; align-items: center; gap: 2rem; padding: .85rem 3.5rem; font-size: .95rem; }
+  .brand { color: var(--plate-ink); text-decoration: none; white-space: nowrap; }
+  .brand b { font-weight: 700; }
+  .toc { display: flex; gap: .25rem; margin: 0 auto; overflow-x: auto; scrollbar-width: none; }
+  .toc a { color: var(--plate-muted); text-decoration: none; padding: .3rem .7rem; border-radius: 3px; white-space: nowrap; transition: color .2s; }
+  .toc a:hover { color: var(--plate-ink); }
+  .toc a[aria-current="true"] { color: var(--plate-ink); box-shadow: inset 0 -2px 0 var(--mark); border-radius: 0; }
+  .lang { display: flex; border: 1px solid #4a5b58; border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+  .lang button { padding: .25rem .75rem; font-weight: 700; font-size: .875rem; color: var(--plate-muted); }
+  .lang button[aria-pressed="true"] { background: var(--plate-ink); color: var(--plate); }
 
-  html { scroll-behavior: smooth; }
+  /* ── plate I: the model ─────────────────────────── */
+  .plate { background: var(--plate); color: var(--plate-ink); border-bottom: 1px solid var(--plate-line); }
+  .plate-in { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 380px; }
+  .figure { position: relative; padding: 2.25rem 3.5rem 0; height: clamp(680px, calc(100svh - 58px), 900px); display: flex; flex-direction: column; }
+  .plate h1 { font-family: var(--display); font-weight: 700; font-size: clamp(3.2rem, 6.2vw, 5.4rem); line-height: .95; letter-spacing: -.035em; color: #f3f5ef; margin-top: .35rem; }
+  .lede { max-width: 34ch; margin-top: 1rem; color: var(--plate-muted); font-size: 1.05rem; line-height: 1.55; position: relative; z-index: 3; }
+  .stagebox { position: relative; flex: 1; min-height: 360px; margin: -5.5rem -1rem 0; }
+  #cell { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+  #cell:active { cursor: grabbing; }
+  .labels { position: absolute; inset: 0; pointer-events: none; }
+  .labels svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .labels line { stroke: var(--plate-ink); stroke-opacity: .55; stroke-width: 1; }
+  .labels circle { fill: var(--plate-ink); }
+  .lbl { position: absolute; display: flex; align-items: center; gap: .5rem; font-size: .9rem; color: var(--plate-ink); pointer-events: auto; cursor: default; white-space: nowrap; transform: translate(-50%, -50%); transition: opacity .3s; }
+  .lbl.r { transform: translate(0, -50%); }
+  .lbl.l { transform: translate(-100%, -50%); flex-direction: row-reverse; }
+  .num { display: inline-grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; border: 1px solid currentColor; font-size: .8rem; font-weight: 700; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .lbl .num { background: var(--plate); }
+  .lbl.dim { opacity: .3; }
+  .figfoot { position: absolute; left: 1rem; right: 1rem; bottom: .6rem; display: flex; justify-content: space-between; gap: 2rem; font-size: .8rem; color: var(--plate-muted); pointer-events: none; }
+  .figfoot .caption { font-size: .8rem; max-width: 46ch; }
+  .hint.touch { display: none; }
+  @media (pointer: coarse) { .hint.fine { display: none; } .hint.touch { display: inline; } }
+  .is-touch .hint.fine { display: none; } .is-touch .hint.touch { display: inline; }
+  .nogl { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 2rem; color: var(--plate-muted); }
 
-  body {
-    background: var(--paper);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 16px;
-    line-height: 1.7;
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+  .rail { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--plate-line); margin: 0 -.25rem; }
+  .rail button { text-align: left; padding: .9rem .25rem 1.3rem; color: var(--plate-muted); font-size: .95rem; line-height: 1.35; position: relative; transition: color .2s; }
+  .rail button:hover { color: var(--plate-ink); }
+  .rail .st { display: block; font-size: .8rem; margin-bottom: .2rem; font-variant-numeric: tabular-nums; }
+  .rail button::before { content: ''; position: absolute; left: .25rem; right: .75rem; top: -1px; height: 2px; background: transparent; transition: background .3s; }
+  .rail button.done::before { background: var(--plate-line); background: #5d6e6a; }
+  .rail button[aria-current="step"] { color: #f3f5ef; font-weight: 700; }
+  .rail button[aria-current="step"]::before { background: var(--mark); }
+  .rail button[aria-current="step"] .st::before { content: ''; display: inline-block; width: 8px; height: 8px; background: var(--mark); margin-right: .45rem; vertical-align: 1px; }
+  .rail .fill { position: absolute; left: .25rem; top: -1px; height: 2px; background: var(--mark); width: 0; }
+
+  .key { background: var(--plate-2); border-left: 1px solid var(--plate-line); padding: 2.25rem 2rem 1.75rem; display: flex; flex-direction: column; gap: 1.15rem; }
+  .key h2 { font-family: var(--display); font-weight: 650; font-size: 1.7rem; line-height: 1.1; letter-spacing: -.02em; }
+  .now { font-size: .975rem; line-height: 1.55; color: #d3dbd3; min-height: 7.75em; }
+  .now b { color: #f3f5ef; }
+  .parts { list-style: none; border-top: 1px solid var(--plate-line); }
+  .parts li { display: flex; align-items: center; gap: .75rem; padding: .38rem 0; border-bottom: 1px solid var(--plate-line); font-size: .95rem; cursor: default; transition: opacity .25s; }
+  .parts li.dim { opacity: .4; }
+  .parts .sw { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-left: auto; }
+  .parts small { color: var(--plate-muted); font-size: .85rem; }
+  .gauges { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+  .g dt { font-size: .8rem; color: var(--plate-muted); }
+  .g dd { font-size: 1.35rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.3; color: #f3f5ef; }
+  .g dd small { font-size: .8rem; font-weight: 400; color: var(--plate-muted); }
+  .meter { height: 4px; background: var(--plate-line); margin-top: .35rem; border-radius: 2px; overflow: hidden; }
+  .meter i { display: block; height: 100%; width: 0; background: var(--plate-ink); transition: width .2s linear; }
+  .ph-sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: .35rem; vertical-align: 1px; }
+  .ctrl { display: flex; gap: .6rem; margin-top: auto; }
+  .btn { padding: .7rem 1.2rem; border-radius: 4px; font-weight: 700; font-size: .95rem; border: 1px solid #4a5b58; transition: background .2s, border-color .2s, color .2s; }
+  .btn:hover { border-color: var(--plate-ink); }
+  .btn.p { background: var(--plate-ink); color: var(--plate); border-color: var(--plate-ink); }
+  .btn.p:hover { background: #fff; }
+  .caption { color: var(--plate-muted); line-height: 1.45; }
+  .caption b { color: var(--plate-ink); }
+
+  /* ── reading pages ──────────────────────────────── */
+  .page { max-width: 1200px; margin: 0 auto; padding: 0 3.5rem; }
+  .sec { display: grid; grid-template-columns: minmax(0, 68ch) minmax(240px, 1fr); column-gap: 4.5rem; padding: 6rem 0 1rem; }
+  .sec > * { grid-column: 1; }
+  .sec > .margin { grid-column: 2; grid-row: 1 / span 30; align-self: start; position: sticky; top: 6rem; }
+  .sec > .wide { grid-column: 1 / -1; }
+  .sec h2 { font-family: var(--display); font-weight: 700; font-size: clamp(2.2rem, 4vw, 3.1rem); line-height: 1.04; color: var(--ink); margin-bottom: 1.25rem; letter-spacing: -.03em; }
+  .sec h3 { font-size: 1.2rem; font-weight: 700; color: var(--ink); margin: 2.5rem 0 .5rem; line-height: 1.35; }
+  .sec p { margin-bottom: 1rem; }
+  .sec .intro { font-size: 1.15rem; color: var(--ink); }
+  .sec ul.dots { list-style: none; margin-bottom: 1rem; }
+  .sec ul.dots li { position: relative; padding-left: 1.4rem; margin-bottom: .45rem; }
+  .sec ul.dots li::before { content: ''; position: absolute; left: .2rem; top: .7em; width: 6px; height: 6px; border-radius: 50%; background: var(--muted); }
+  .sec strong { color: var(--ink); font-weight: 700; }
+  .t-vac { color: var(--vac); } .t-wall { color: var(--wall); } .t-nuc { color: var(--nuc); }
+
+  .margin dl { border-top: 1px solid var(--line); }
+  .margin dl div { padding: .8rem 0; border-bottom: 1px solid var(--line); }
+  .margin dt { font-size: .875rem; color: var(--muted); }
+  .margin dd { font-size: 1.05rem; color: var(--ink); font-weight: 600; line-height: 1.4; }
+  .margin figure { margin-top: 2rem; }
+  .margin figcaption, .figcap { font-size: .875rem; color: var(--muted); line-height: 1.5; margin-top: .6rem; }
+  .margin figcaption b, .figcap b { color: var(--ink); }
+
+  .fn { display: grid; grid-template-columns: 1fr 1fr; column-gap: 3rem; margin-top: 1rem; }
+  .fn div { border-top: 1px solid var(--line); padding: 1.1rem 0 1.4rem; }
+  .fn dt { font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-bottom: .3rem; }
+  .fn dd { color: var(--text); }
+
+  .types { list-style: none; counter-reset: t; border-top: 1px solid var(--line); margin-top: 1rem; }
+  .types li { counter-increment: t; display: grid; grid-template-columns: 2.4rem 1fr; padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
+  .types li::before { content: counter(t); font-family: var(--display); font-weight: 700; font-size: 1.4rem; line-height: 1.2; color: var(--mark); }
+  .types b { display: block; color: var(--ink); font-size: 1.1rem; }
+
+  table { width: 100%; border-collapse: collapse; font-size: .975rem; margin: .5rem 0 1rem; }
+  caption { text-align: left; font-size: .875rem; color: var(--muted); padding-bottom: .5rem; }
+  th { text-align: left; font-weight: 700; color: var(--ink); padding: .7rem .9rem .7rem 0; border-bottom: 2px solid var(--ink); }
+  td { padding: .7rem .9rem .7rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td:first-child { font-weight: 600; color: var(--ink); }
+  .scroll { overflow-x: auto; }
+
+  /* ── plate II ───────────────────────────────────── */
+  .plate2 { background: var(--plate); color: var(--plate-ink); margin-top: 5rem; border-block: 1px solid var(--plate-line); }
+  .plate2-in { max-width: 1200px; margin: 0 auto; padding: 4rem 3.5rem 3.5rem; }
+  .plate-cap { margin-top: 1rem; font-size: .875rem; }
+  .plate2 h2 { font-family: var(--display); font-weight: 700; font-size: clamp(2.2rem, 4vw, 3.1rem); line-height: 1.04; letter-spacing: -.03em; color: #f3f7f3; }
+  .cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2.5rem; }
+  .cmp figure svg { width: 100%; height: auto; display: block; }
+  .cmp figcaption { margin-top: 1rem; }
+  .cmp figcaption b { display: block; font-family: var(--display); font-weight: 650; font-size: 1.45rem; letter-spacing: -.02em; color: #f3f5ef; margin-bottom: .35rem; }
+  .cmp figcaption p { color: #d3dbd3; font-size: 1rem; line-height: 1.6; }
+  .keyrow { display: flex; flex-wrap: wrap; gap: .6rem 1.6rem; list-style: none; margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--plate-line); font-size: .95rem; }
+  .keyrow li { display: flex; align-items: center; gap: .5rem; }
+
+  /* ── sources ────────────────────────────────────── */
+  .refs { list-style: none; counter-reset: r; border-top: 1px solid var(--line); margin-top: 1rem; }
+  .refs li { counter-increment: r; display: grid; grid-template-columns: 2.6rem 1fr; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+  .refs li::before { content: '[' counter(r) ']'; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .refs a { font-weight: 700; color: var(--ink); }
+  .refs p { margin: .15rem 0 0; font-size: .95rem; }
+  .refs .url { font-size: .85rem; color: var(--muted); word-break: break-all; }
+
+  .foot { margin-top: 6rem; border-top: 1px solid var(--plate-line); background: var(--plate); color: var(--plate-muted); font-size: .95rem; }
+  .foot-in { max-width: 1200px; margin: 0 auto; padding: 2.5rem 3.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
+  .foot b { color: var(--plate-ink); }
+  .foot a { color: var(--plate-ink); }
+
+  @media (max-width: 1080px) {
+    .plate-in { grid-template-columns: 1fr; }
+    .key { border-left: 0; border-top: 1px solid var(--plate-line); display: grid; grid-template-columns: 1fr 1fr; column-gap: 2.5rem; }
+    .key h2, .now { grid-column: 1; }
+    .parts { grid-column: 2; grid-row: 1 / span 3; }
+    .figure { height: auto; }
+    .stagebox { min-height: 520px; flex: none; margin-top: -3rem; }
   }
-
-  /* faint botanical paper texture — extremely subtle, no glow */
-  body::before {
-    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background:
-      radial-gradient(ellipse 70% 50% at 15% 0%,  rgba(60,107,57,.05) 0%, transparent 55%),
-      radial-gradient(ellipse 60% 50% at 90% 100%, rgba(160,109,26,.04) 0%, transparent 55%);
+  @media (max-width: 860px) {
+    .sec { grid-template-columns: 1fr; padding-top: 4.5rem; }
+    .sec > .margin { grid-column: 1; grid-row: auto; position: static; margin: 1rem 0 1.5rem; }
+    .fn, .cmp { grid-template-columns: 1fr; }
   }
-
-  ::selection { background: rgba(60,107,57,.18); }
-
-  /* slim scroll progress — single hue, understated */
-  #scroll-bar {
-    position: fixed; top: 0; left: 0; height: 2px;
-    background: var(--green); width: 0%; z-index: 9999;
-    transition: width .08s linear; opacity: .7;
-  }
-
-  .wrapper { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 2rem 5rem; }
-
-  a { color: var(--green); text-decoration-color: rgba(60,107,57,.35); text-underline-offset: 3px; }
-
-  /* ── HERO ── */
-  .hero { padding: 6rem 0 2.5rem; max-width: 720px; }
-  .hero-label {
-    display: inline-flex; align-items: center; gap: .55rem;
-    font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
-    font-weight: 600; color: var(--ochre); margin-bottom: 1.6rem;
-    animation: rise .7s cubic-bezier(.22,1,.36,1) both;
-  }
-  .hero-label::before {
-    content: ''; width: 1.6rem; height: 1px; background: var(--ochre); opacity: .6;
-  }
-  .hero h1 {
-    font-family: var(--serif);
-    font-optical-sizing: auto;
-    font-size: clamp(3rem, 7vw, 5.4rem);
-    font-weight: 600; line-height: 1.0; letter-spacing: -.015em;
-    color: var(--green-deep); margin-bottom: 1.4rem;
-    animation: rise .8s cubic-bezier(.22,1,.36,1) .08s both;
-  }
-  .hero .rule { width: 64px; height: 3px; background: var(--green); margin-bottom: 1.6rem;
-    animation: grow .7s cubic-bezier(.22,1,.36,1) .2s both; transform-origin: left; }
-  .hero p { color: var(--muted); font-size: 1.12rem; line-height: 1.7; max-width: 640px;
-    animation: rise .8s cubic-bezier(.22,1,.36,1) .28s both; }
-
-  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-  @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-
-  /* ── TABS (editorial underline) ── */
-  .tabs-wrap { margin: 2.75rem 0 2.25rem; animation: rise .8s .4s both; }
-  .tabs-inner {
-    position: relative; display: flex; gap: .35rem; flex-wrap: wrap;
-    border-bottom: 1px solid var(--line); padding-bottom: 0;
-  }
-  .tab-slider {
-    position: absolute; bottom: -1px; left: 0; height: 2px; width: 0;
-    background: var(--green);
-    transition: left .4s cubic-bezier(.65,0,.35,1), width .4s cubic-bezier(.65,0,.35,1);
-    pointer-events: none;
-  }
-  .tab-btn {
-    position: relative; background: transparent; border: none;
-    font-family: var(--sans); font-size: .9rem; font-weight: 500; color: var(--muted);
-    padding: .7rem .95rem; cursor: pointer; white-space: nowrap;
-    transition: color .25s ease;
-  }
-  .tab-btn:hover { color: var(--green); }
-  .tab-btn.active { color: var(--green-deep); font-weight: 600; }
-
-  /* ── SECTIONS ── */
-  .section { display: none; }
-  .section.active { display: block; }
-  @keyframes tabIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-  .section.tab-enter { animation: tabIn .45s cubic-bezier(.22,1,.36,1) forwards; }
-
-  /* ── SCROLL REVEAL ── */
-  .reveal { opacity: 0; transform: translateY(16px);
-    transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1); }
-  .reveal.visible { opacity: 1; transform: none; }
-  .reveal-stagger > * { opacity: 0; transform: translateY(14px);
-    transition: opacity .5s cubic-bezier(.22,1,.36,1), transform .5s cubic-bezier(.22,1,.36,1); }
-  .reveal-stagger.visible > * { opacity: 1; transform: none; }
-  .reveal-stagger.visible > *:nth-child(1){transition-delay:.0s}
-  .reveal-stagger.visible > *:nth-child(2){transition-delay:.06s}
-  .reveal-stagger.visible > *:nth-child(3){transition-delay:.12s}
-  .reveal-stagger.visible > *:nth-child(4){transition-delay:.18s}
-  .reveal-stagger.visible > *:nth-child(5){transition-delay:.24s}
-  .reveal-stagger.visible > *:nth-child(6){transition-delay:.30s}
-  .reveal-stagger.visible > *:nth-child(7){transition-delay:.36s}
-  .reveal-stagger.visible > *:nth-child(8){transition-delay:.42s}
-
-  /* ── CARD ── */
-  .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
-    padding: 2.5rem 2.75rem; margin-bottom: 1.5rem;
-    box-shadow: 0 1px 2px rgba(31,42,27,.03);
-    transition: border-color .35s ease, box-shadow .35s ease, transform .35s cubic-bezier(.22,1,.36,1);
-  }
-  .card:hover { border-color: #c8bfa4; box-shadow: 0 14px 40px rgba(31,42,27,.07); transform: translateY(-2px); }
-  .card h2 {
-    font-family: var(--serif); font-optical-sizing: auto;
-    font-size: 1.95rem; font-weight: 600; line-height: 1.15; letter-spacing: -.01em;
-    color: var(--green-deep); margin-bottom: 1rem;
-  }
-  .card h3 {
-    font-family: var(--serif); font-size: 1.28rem; font-weight: 600;
-    color: var(--green); margin: 1.8rem 0 .5rem; display: flex; align-items: baseline; gap: .55rem;
-  }
-  .card h3::before { content: ''; flex: 0 0 1.1rem; height: 2px; background: var(--ochre); align-self: center; opacity: .8; }
-  .card p  { color: var(--text); margin-bottom: .85rem; }
-  .card ul { list-style: none; margin-bottom: .85rem; }
-  .card ul li { position: relative; padding-left: 1.5rem; margin-bottom: .5rem; color: var(--text); }
-  .card ul li::before {
-    content: ''; position: absolute; left: .15rem; top: .68em;
-    width: 5px; height: 5px; border-radius: 1px; background: var(--green); transform: rotate(45deg);
-  }
-  .card strong { color: var(--green-deep); font-weight: 600; }
-  .card em { color: var(--ochre); font-style: italic; }
-
-  /* ── SPEC / INFO CHIPS ── */
-  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
-  .info-chip {
-    background: var(--green-soft); border: 1px solid #cdd9b4; border-left: 3px solid var(--green);
-    border-radius: 10px; padding: 1.15rem 1.35rem;
-    transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease;
-  }
-  .info-chip:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(31,42,27,.08); }
-  .info-chip .ic-label { font-size: .68rem; text-transform: uppercase; letter-spacing: .14em; font-weight: 600; color: var(--ochre); margin-bottom: .4rem; }
-  .info-chip .ic-value { font-size: 1rem; color: var(--ink); font-weight: 500; line-height: 1.5; }
-
-  /* ── BADGE ── */
-  .badge { display: inline-block; background: var(--green-soft); border: 1px solid #cdd9b4; color: var(--green-deep);
-    font-size: .75rem; padding: .2rem .75rem; border-radius: 999px; margin: .2rem; }
-
-  /* ── SIMULATION ── */
-  .sim-wrapper { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem;
-    box-shadow: 0 1px 2px rgba(31,42,27,.03); transition: box-shadow .35s ease; }
-  .sim-wrapper:hover { box-shadow: 0 14px 40px rgba(31,42,27,.07); }
-  .sim-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--line);
-    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
-  .sim-header h2 { font-family: var(--serif); font-size: 1.5rem; font-weight: 600; color: var(--green-deep); }
-  .sim-header small { color: var(--muted); }
-  .sim-controls { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
-
-  /* ── BUTTONS ── */
-  .btn { font-family: var(--sans); font-size: .85rem; font-weight: 500; padding: .58rem 1.3rem; border-radius: 8px;
-    border: 1px solid transparent; cursor: pointer; letter-spacing: .01em;
-    transition: background .22s ease, color .22s ease, border-color .22s ease, transform .15s ease, box-shadow .22s ease; }
-  .btn:active { transform: translateY(1px); }
-  .btn-start { background: var(--green); color: #f7f6ee; border-color: var(--green); }
-  .btn-start:hover { background: var(--green-deep); box-shadow: 0 6px 18px rgba(38,74,38,.22); }
-  .btn-stop  { background: transparent; border-color: #c06a52; color: #a8533c; }
-  .btn-stop:hover  { background: rgba(192,106,82,.1); }
-  .btn-reset { background: transparent; border-color: var(--line); color: var(--muted); }
-  .btn-reset:hover { border-color: var(--muted); color: var(--ink); }
-
-  .sim-status { font-size: .74rem; padding: .28rem .8rem; border-radius: 999px; font-weight: 600; letter-spacing: .02em; transition: all .3s; }
-  .sim-status.idle    { background: var(--paper-tint); color: var(--muted); }
-  .sim-status.running { background: var(--green-soft); color: var(--green-deep); }
-  .sim-status.stopped { background: rgba(192,106,82,.14); color: #a8533c; }
-
-  canvas#simCanvas { display: block; width: 100%; height: 520px; touch-action: none;
-    background: radial-gradient(ellipse 75% 70% at 50% 45%, #f9f5ea 0%, #ece5d2 100%); cursor: grab; }
-  canvas#simCanvas:active { cursor: grabbing; }
-
-  .sim-legend { padding: 1.1rem 2rem; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 1.1rem 1.4rem; }
-  .legend-item { display: flex; align-items: center; gap: .5rem; font-size: .8rem; color: var(--muted); transition: color .22s; }
-  .legend-item:hover { color: var(--ink); }
-  .legend-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
-
-  .sim-info-bar { padding: .9rem 2rem; border-top: 1px solid var(--line); font-size: .82rem; color: var(--muted);
-    background: var(--paper-tint); line-height: 1.6; }
-
-  /* ── FUNCTION CARDS ── */
-  .func-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1.5rem; counter-reset: fc; }
-  .func-card {
-    position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 1.6rem 1.4rem 1.4rem;
-    overflow: hidden; counter-increment: fc;
-    transition: border-color .3s ease, transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease;
-  }
-  .func-card::before {
-    content: counter(fc, decimal-leading-zero); position: absolute; top: .9rem; right: 1.1rem;
-    font-family: var(--serif); font-size: 1.6rem; font-weight: 500; color: var(--ochre); opacity: .35;
-  }
-  .func-card:hover { border-color: #c8bfa4; transform: translateY(-4px); box-shadow: 0 12px 32px rgba(31,42,27,.08); }
-  .func-card h4 { font-family: var(--serif); font-size: 1.08rem; font-weight: 600; color: var(--green-deep); margin-bottom: .45rem; padding-right: 2rem; }
-  .func-card p  { font-size: .9rem; color: var(--muted); margin: 0; line-height: 1.6; }
-
-  /* ── COMPARISON TABLE ── */
-  .table-scroll { overflow-x: auto; margin-top: 1rem; }
-  .cmp-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
-  .cmp-table th {
-    text-align: left; padding: .8rem 1rem; border-bottom: 2px solid var(--green);
-    color: var(--green-deep); font-weight: 600; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em;
-  }
-  .cmp-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--line); color: var(--text); }
-  .cmp-table tbody tr:nth-child(even) { background: rgba(60,107,57,.035); }
-  .cmp-table tbody tr { transition: background .2s ease; }
-  .cmp-table tbody tr:hover { background: rgba(60,107,57,.08); }
-  .cmp-table td:first-child { font-weight: 500; color: var(--ink); }
-
-  /* ── SOURCES ── */
-  .sources-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
-  .source-card {
-    position: relative; background: var(--paper); border: 1px solid var(--line); border-radius: 12px;
-    padding: 1.35rem 1.5rem; text-decoration: none; display: flex; flex-direction: column; gap: .55rem;
-    transition: border-color .3s ease, transform .32s cubic-bezier(.22,1,.36,1), box-shadow .32s ease;
-  }
-  .source-card:hover { border-color: var(--green); transform: translateY(-3px); box-shadow: 0 12px 30px rgba(31,42,27,.09); }
-  .source-top { display: flex; align-items: flex-start; gap: .75rem; padding-right: 1.5rem; }
-  .source-title { font-family: var(--serif); font-size: 1.02rem; font-weight: 600; color: var(--green-deep); line-height: 1.3; }
-  .source-desc  { font-size: .85rem; color: var(--muted); line-height: 1.55; }
-  .source-url   { font-size: .72rem; color: var(--ochre); letter-spacing: .01em; margin-top: auto; word-break: break-all; opacity: .85; }
-  .source-arrow { position: absolute; top: 1.35rem; right: 1.4rem; font-size: .95rem; color: var(--muted);
-    transition: transform .25s ease, color .25s ease; }
-  .source-card:hover .source-arrow { transform: translate(3px,-3px); color: var(--green); }
-
-  /* ── FOOTER ── */
-  .footer { text-align: center; padding: 2.5rem 0 1rem; color: var(--muted); font-size: .82rem;
-    border-top: 1px solid var(--line); margin-top: 3.5rem; }
-  .copyright-note { margin-top: .6rem; font-size: .76rem; color: var(--green); letter-spacing: .04em; }
-
-  ::-webkit-scrollbar { width: 9px; }
-  ::-webkit-scrollbar-track { background: var(--paper); }
-  ::-webkit-scrollbar-thumb { background: #cdc4ad; border-radius: 4px; border: 2px solid var(--paper); }
-  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
-
   @media (max-width: 640px) {
-    .wrapper { padding: 0 1.25rem 4rem; }
-    .hero { padding: 4rem 0 2rem; }
-    .card { padding: 1.75rem 1.5rem; }
-    .sim-header { flex-direction: column; align-items: flex-start; }
-    canvas#simCanvas { height: 400px; }
-    .tabs-inner { overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; }
+    body { font-size: 16px; }
+    .head-in { padding: .6rem 1.1rem; gap: .75rem; flex-wrap: wrap; }
+    .toc { order: 3; width: 100%; margin: 0 -.7rem; -webkit-mask-image: linear-gradient(90deg, #000 80%, transparent); mask-image: linear-gradient(90deg, #000 80%, transparent); padding-right: 2rem; }
+    .lang { margin-left: auto; }
+    .figure { padding: 1.75rem 1.1rem 0; }
+    .stagebox { min-height: 400px; margin: -.5rem -1.1rem 0; }
+    .lbl .name { display: none; }
+    .rail { grid-template-columns: 1fr 1fr; }
+    .key { grid-template-columns: 1fr; padding: 2rem 1.1rem; }
+    .parts { grid-column: 1; grid-row: auto; }
+    .gauges { gap: .6rem; }
+    .page, .plate2-in, .foot-in { padding-left: 1.1rem; padding-right: 1.1rem; }
+    .figfoot { flex-direction: column; gap: .2rem; left: 1.1rem; }
+    .figfoot .caption { font-size: .75rem; }
+    .stagebox { min-height: 470px; }
+    #cell { height: calc(100% - 72px); }
+    .labels { bottom: 72px; }
   }
-
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: .001ms !important; animation-delay: 0s !important; transition-duration: .001ms !important; }
     html { scroll-behavior: auto; }
-    .reveal, .reveal-stagger > * { opacity: 1; transform: none; }
+    *, *::before, *::after { transition-duration: .01ms !important; }
   }
 </style>
 </head>
 <body>
 
-<div id="scroll-bar"></div>
-
-<div class="wrapper">
-
-  <header class="hero">
-    <div class="hero-label">Biologie · Zellorganellen</div>
-    <h1>Die Vakuole</h1>
-    <div class="rule"></div>
-    <p>Entdecke die Vakuole, den flüssigkeitsgefüllten Speicher der Zelle, und erfahre mehr über ihren Aufbau, ihre Funktionen und eine anschauliche Simulation.</p>
-  </header>
-
-  <!-- TAB NAV -->
-  <nav class="tabs-wrap">
-    <div class="tabs-inner" id="tabsInner">
-      <div class="tab-slider" id="tabSlider"></div>
-      <button class="tab-btn active" data-tab="simulation" onclick="showTab('simulation',this)">Simulation</button>
-      <button class="tab-btn" data-tab="aufbau"     onclick="showTab('aufbau',this)">Aufbau</button>
-      <button class="tab-btn" data-tab="funktionen" onclick="showTab('funktionen',this)">Funktionen</button>
-      <button class="tab-btn" data-tab="typen"      onclick="showTab('typen',this)">Typen &amp; Vorkommen</button>
-      <button class="tab-btn" data-tab="vergleich"  onclick="showTab('vergleich',this)">Pflanzen vs. Tiere</button>
-      <button class="tab-btn" data-tab="quellen"    onclick="showTab('quellen',this)">Quellen</button>
+<header class="head">
+  <div class="head-in">
+    <a class="brand" href="#modell"><b>Die Vakuole</b> <span data-i18n="brand_sub">· Interaktive Lernseite</span></a>
+    <nav class="toc" aria-label="Inhalt" data-i18n-attr="aria-label:toc_label">
+      <a href="#modell" data-i18n="nav_model">Modell</a>
+      <a href="#aufbau" data-i18n="nav_struct">Aufbau</a>
+      <a href="#funktionen" data-i18n="nav_func">Funktionen</a>
+      <a href="#typen" data-i18n="nav_types">Typen</a>
+      <a href="#vergleich" data-i18n="nav_cmp">Vergleich</a>
+      <a href="#quellen" data-i18n="nav_src">Quellen</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Sprache / Language">
+      <button type="button" data-lang="de" aria-pressed="true">DE</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
     </div>
-  </nav>
+  </div>
+</header>
 
-  <!-- SIMULATION -->
-  <div class="section active tab-enter" id="tab-simulation">
-    <div class="sim-wrapper reveal">
-      <div class="sim-header">
-        <div>
-          <h2>Zell-Simulation</h2>
-          <small>Ziehe zum Drehen · Scrolle zum Zoomen</small>
-        </div>
-        <div class="sim-controls">
-          <span class="sim-status idle" id="simStatus">● Bereit</span>
-          <button class="btn btn-reset" onclick="resetSim()">Reset</button>
-          <button class="btn btn-stop"  onclick="stopSim()">Stopp</button>
-          <button class="btn btn-start" onclick="startSim()">Simulation starten</button>
-        </div>
+<main>
+<section class="plate" id="modell" aria-labelledby="title">
+  <div class="plate-in">
+    <div class="figure">
+      <h1 id="title" data-i18n="title">Die Vakuole</h1>
+      <p class="lede" data-i18n="lede">Der flüssigkeitsgefüllte Speicher der Pflanzenzelle. Dreh das Modell und sieh zu, wie sie Ionen aufnimmt, Wasser zieht und die Zelle prall macht.</p>
+      <div class="stagebox" id="stagebox">
+        <canvas id="cell" role="img" aria-label="3D-Modell einer Pflanzenzelle mit Zentralvakuole" data-i18n-attr="aria-label:canvas_label"></canvas>
+        <div class="labels" id="labels" aria-hidden="true"><svg id="leaders"></svg></div>
+        <div class="figfoot"><p class="caption" data-i18n="cap1"><b>Tafel I, Abb. 1</b> · Modell einer Pflanzenzelle. Stark vereinfacht und nicht maßstäblich; Zahlenwerte sind typische Größenordnungen.</p><span class="hint fine" data-i18n="hint">Ziehen: drehen · Strg + Scrollen: zoomen</span><span class="hint touch" data-i18n="hint_t">Ziehen: drehen · Zwei Finger: zoomen</span></div>
       </div>
-      <canvas id="simCanvas"></canvas>
-      <div class="sim-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#5d7a2a"></div>Zellmembran</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#35591f"></div>Chloroplasten</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#7fae2e"></div>Vakuole (Tonoplast)</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#c0841a"></div>Zellkern</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#8bb33a"></div>Zellsaft / Wasser</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#d8455f"></div>Ionen / Moleküle</div>
+      <div class="rail" id="rail" role="group" aria-label="Ablauf" data-i18n-attr="aria-label:rail_label">
+        <button type="button" data-stage="1"><span class="st">1</span><span data-i18n="s1">Ionen strömen ein</span></button>
+        <button type="button" data-stage="2"><span class="st">2</span><span data-i18n="s2">Wasser folgt (Osmose)</span></button>
+        <button type="button" data-stage="3"><span class="st">3</span><span data-i18n="s3">Turgor</span></button>
+        <button type="button" data-stage="4"><span class="st">4</span><span data-i18n="s4">Plasmolyse</span></button>
       </div>
-      <div class="sim-info-bar" id="simInfoBar">Starte die Simulation, um zu sehen, wie die Vakuole Turgor aufbaut und Ionen transportiert.</div>
     </div>
-    <div class="card reveal">
-      <h2>Was zeigt die Simulation?</h2>
-      <p>Du siehst eine vereinfachte <strong>Pflanzenzelle</strong> mit einer großen zentralen Vakuole. Im Ruhezustand kannst du die Zelle frei drehen und erkunden. Wenn du die Simulation startest, passiert Folgendes:</p>
-      <ul>
-        <li><strong>Ionen & Moleküle</strong> werden aktiv über den Tonoplasten (Vakuolenmembran) in die Vakuole hineintransportiert.</li>
-        <li><strong>Osmose:</strong> Wasser strömt durch Aquaporine (Wasserkanäle) nach, der Zellsaft-Druck (Turgordruck) steigt.</li>
-        <li>Die Vakuole <strong>wächst sichtbar</strong> und drückt das Zytoplasma an die Zellwand.</li>
-        <li>Am Ende kehrt sich der Prozess um, Ionenpumpen können Stoffe auch wieder abgeben.</li>
+
+    <aside class="key" aria-label="Legende">
+      <h2 data-i18n="key_h">Was du siehst</h2>
+      <p class="now" id="now" aria-live="polite"></p>
+      <ul class="parts" id="parts">
+        <li data-part="tonoplast"><span class="num">1</span><span data-i18n="p1">Tonoplast</span> <small data-i18n="p1s">Vakuolenmembran</small><span class="sw" style="background:var(--vac-l)"></span></li>
+        <li data-part="sap"><span class="num">2</span><span data-i18n="p2">Zellsaft</span><span class="sw" style="background:#9a5aa8"></span></li>
+        <li data-part="wall"><span class="num">3</span><span data-i18n="p3">Zellwand</span><span class="sw" style="background:var(--wall-l)"></span></li>
+        <li data-part="membrane"><span class="num">4</span><span data-i18n="p4">Zellmembran</span><span class="sw" style="background:var(--mem)"></span></li>
+        <li data-part="nucleus"><span class="num">5</span><span data-i18n="p5">Zellkern</span><span class="sw" style="background:var(--nuc-l)"></span></li>
+        <li data-part="chloro"><span class="num">6</span><span data-i18n="p6">Chloroplasten</span><span class="sw" style="background:var(--chl-l)"></span></li>
+        <li data-part="ions"><span class="num">7</span><span data-i18n="p7">Ionen (K⁺, Cl⁻)</span><span class="sw" style="background:var(--ion-l)"></span></li>
+        <li data-part="water"><span class="num">8</span><span data-i18n="p8">Wasser</span><span class="sw" style="background:var(--h2o-l)"></span></li>
+        <li data-part="salt"><span class="num">9</span><span data-i18n="p9">Salzlösung außen</span> <small data-i18n="p9s">Na⁺, Cl⁻ (Schritt 4)</small><span class="sw" style="background:#e4ddcc"></span></li>
       </ul>
-      <p style="color:var(--muted);font-size:.875rem">Hinweis: Die Animation ist sehr vereinfacht und ist nur als Modell, keine maßstäbliche Darstellung.</p>
-    </div>
-  </div>
-
-  <!-- AUFBAU -->
-  <div class="section" id="tab-aufbau">
-    <div class="card reveal">
-      <h2>Aufbau der Vakuole</h2>
-      <p>Die Vakuole ist ein von einer Membran umschlossener Bereich im Inneren der Zelle, der mit Flüssigkeit, dem sogenannten Zellsaft, gefüllt ist. Sie gehört zu den Organellen, also zu den Bestandteilen einer Zelle.</p>
-      <div class="info-grid reveal-stagger">
-        <div class="info-chip"><div class="ic-label">Größe (Pflanzenzelle)</div><div class="ic-value">bis zu 90 % des Zellvolumens</div></div>
-        <div class="info-chip"><div class="ic-label">Membran</div><div class="ic-value">Tonoplast (Lipiddoppelschicht)</div></div>
-        <div class="info-chip"><div class="ic-label">Inhalt</div><div class="ic-value">Zellsaft (wässrige Lösung)</div></div>
-        <div class="info-chip"><div class="ic-label">pH-Wert (Zellsaft)</div><div class="ic-value">oft sauer (pH 3–6)</div></div>
+      <dl class="gauges">
+        <div class="g"><dt data-i18n="g_turgor">Turgordruck</dt><dd id="gP">1,0 <small>bar</small></dd><div class="meter"><i id="mP"></i></div></div>
+        <div class="g"><dt data-i18n="g_vol">Vakuole</dt><dd id="gV">41 <small>%</small></dd><div class="meter"><i id="mV"></i></div></div>
+        <div class="g"><dt data-i18n="g_ph">pH Zellsaft</dt><dd id="gH"><span class="ph-sw" id="phsw"></span>5,5</dd></div>
+      </dl>
+      <div class="ctrl">
+        <button type="button" class="btn p" id="play" data-i18n="play">Modell starten</button>
+        <button type="button" class="btn" id="reset" data-i18n="reset">Zurücksetzen</button>
       </div>
-      <h3>Der Tonoplast</h3>
-      <p>Die Membran, die die Vakuole umgibt, nennt man <strong>Tonoplast</strong>. Wie alle biologischen Membranen besteht sie aus einer <em>Lipiddoppelschicht</em>, in die verschiedene Proteine eingelagert sind.</p>
-      <ul>
-        <li><strong>Aquaporine:</strong> Spezielle Wasserkanäle, die die Osmose regulieren.</li>
-        <li><strong>Protonenpumpen::</strong> Transportieren H⁺-Ionen in die Vakuole, senken den pH-Wert.</li>
-        <li><strong>Transporter</strong> Befördern Ionen, Zucker und Aminosäuren in die Vakuole oder aus ihr heraus.</li>
-      </ul>
-      <h3>Der Zellsaft</h3>
-      <p>Das Innere der Vakuole ist mit <strong>Zellsaft</strong> gefüllt. Dieser enthält:</p>
-      <ul>
-        <li>Wasser als Hauptbestandteil</li>
-        <li>Anorganische Ionen (K⁺, Na⁺, Ca²⁺, Cl⁻, PO₄³⁻)</li>
-        <li>Organische Säuren (Äpfelsäure, Zitronensäure)</li>
-        <li>Zucker und Aminosäuren</li>
-        <li>Sekundäre Pflanzenstoffe wie Anthocyane, Tannine oder Alkaloide</li>
-        <li>Abbauenzyme wie Proteasen und Nukleasen</li>
-      </ul>
-      <h3>Entstehung der Vakuole</h3>
-      <p>Vakuolen entstehen durch das Verschmelzen kleiner Vesikel aus dem ER oder dem Golgi-Apparat. In jungen Pflanzenzellen gibt es zunächst viele kleine Vakuolen, die dann zu einer großen zentralen Vakuole verschmelzen.</p>
-    </div>
+    </aside>
   </div>
+</section>
 
-  <!-- FUNKTIONEN -->
-  <div class="section" id="tab-funktionen">
-    <div class="card reveal">
-      <h2>Funktionen der Vakuole</h2>
-      <p>Die Vakuole ist viel mehr als nur ein Flüssigkeitsspeicher. Sie erfüllt in der Zelle viele wichtige Funktionen:</p>
-      <div class="func-grid reveal-stagger">
-        <div class="func-card"><h4>Osmoregulation & Turgor</h4><p>Durch Wasser- und Ionenaufnahme erzeugt die Vakuole den Turgordruck. Dieser drückt das Zellinnere gegen die Zellwand und sorgt für die Stabilität der Pflanze.</p></div>
-        <div class="func-card"><h4>Speicherung & Entsorgung</h4><p>Die Vakuole speichert Nährstoffe wie Stärke, Proteine und Mineralstoffe und lagert Schadstoffe und zelluläre Abfallprodukte sicher ein.</p></div>
-        <div class="func-card"><h4>Abbau (Lysis)</h4><p>Pflanzliche Vakuolen enthalten Hydrolasen, die beschädigte Proteine, alte Organellen und eingedrungene Mikroorganismen abbauen, ähnlich wie Lysosomen bei Tierzellen.</p></div>
-        <div class="func-card"><h4>Pigmentspeicherung</h4><p>Anthocyane in der Vakuole verleihen Blüten und Früchten rote, blaue oder violette Farben, um Bestäuber anzulocken und Samen zu verbreiten.</p></div>
-        <div class="func-card"><h4>Abwehr & Schutz</h4><p>Toxine wie Alkaloide oder Tannine werden in der Vakuole gespeichert, um Fraßfeinde abzuwehren. Manche Pflanzen lagern auch Vorstufen ein, die bei Verletzung giftige Substanzen freisetzen.</p></div>
-        <div class="func-card"><h4>pH-Regulation</h4><p>H⁺-Pumpen im Tonoplast senken den pH-Wert im Zellsaft auf 3–6, ermöglichen saure Abbauprozesse und schützen das Zytoplasma (pH ~7).</p></div>
-        <div class="func-card"><h4>Proteinspeicherung</h4><p>Spezielle Proteinspeichervakuolen (PSV) in Samen lagern Reserveproteine, die beim Keimen abgebaut und als Nährstoffe genutzt werden.</p></div>
-        <div class="func-card"><h4>Zellwachstum</h4><p>Wasseraufnahme in die Vakuole ermöglicht schnelles, energiesparendes Zellwachstum ohne viel neues Zytoplasma produzieren zu müssen.</p></div>
-      </div>
-    </div>
-  </div>
+<div class="page">
+  <section class="sec" id="aufbau" aria-labelledby="h-aufbau">
+    <h2 id="h-aufbau" data-i18n="aufbau_h">Aufbau der Vakuole</h2>
+    <aside class="margin">
+      <dl>
+        <div><dt data-i18n="f1t">Größe in der Pflanzenzelle</dt><dd data-i18n="f1v">bis zu 90 % des Zellvolumens</dd></div>
+        <div><dt data-i18n="f2t">Membran</dt><dd data-i18n="f2v">Tonoplast (Lipiddoppelschicht)</dd></div>
+        <div><dt data-i18n="f3t">Inhalt</dt><dd data-i18n="f3v">Zellsaft (wässrige Lösung)</dd></div>
+        <div><dt data-i18n="f4t">pH-Wert des Zellsafts</dt><dd data-i18n="f4v">oft sauer, pH 3–6</dd></div>
+      </dl>
+      <figure>
+        <svg viewBox="0 0 300 110" role="img" aria-labelledby="abb2" fill="none">
+          <rect x="4" y="14" width="80" height="62" rx="12" stroke="#93c47d" stroke-width="3"/>
+          <circle cx="70" cy="62" r="6" fill="#c9a227"/><circle cx="182" cy="26" r="5" fill="#c9a227"/>
+          <g fill="#c76a98"><circle cx="24" cy="32" r="6"/><circle cx="46" cy="28" r="5"/><circle cx="64" cy="40" r="7"/><circle cx="30" cy="56" r="7"/><circle cx="54" cy="60" r="5"/></g>
+          <path d="M92 45h18m-6-5 6 5-6 5" stroke="#9cb0a5" stroke-width="1.6"/>
+          <rect x="114" y="14" width="80" height="62" rx="12" stroke="#93c47d" stroke-width="3"/>
+          <g fill="#c76a98"><ellipse cx="140" cy="38" rx="15" ry="12"/><ellipse cx="170" cy="52" rx="13" ry="11"/></g>
+          <path d="M202 45h18m-6-5 6 5-6 5" stroke="#9cb0a5" stroke-width="1.6"/>
+          <rect x="224" y="14" width="72" height="62" rx="12" stroke="#93c47d" stroke-width="3"/>
+          <ellipse cx="260" cy="45" rx="27" ry="21" fill="#c76a98"/>
+          <circle cx="234" cy="24" r="5" fill="#c9a227"/>
+          <text x="44" y="100" text-anchor="middle" fill="#9cb0a5" font-size="11" font-family="Atkinson Hyperlegible Next, sans-serif" data-i18n="abb2a">jung</text>
+          <text x="260" y="100" text-anchor="middle" fill="#9cb0a5" font-size="11" font-family="Atkinson Hyperlegible Next, sans-serif" data-i18n="abb2b">ausgewachsen</text>
+        </svg>
+        <figcaption id="abb2" data-i18n="abb2">Abb. 2 · Viele kleine Vakuolen einer jungen Zelle verschmelzen zur großen Zentralvakuole.</figcaption>
+      </figure>
+    </aside>
+    <p class="intro" data-i18n="aufbau_p">Die Vakuole ist ein von einer Membran umschlossener Bereich im Inneren der Zelle, der mit Flüssigkeit, dem sogenannten Zellsaft, gefüllt ist. Sie gehört zu den Organellen, also zu den Bestandteilen einer Zelle.</p>
 
-  <!-- TYPEN -->
-  <div class="section" id="tab-typen">
-    <div class="card reveal">
-      <h2>Typen von Vakuolen & Vorkommen</h2>
-      <p>Vakuolen kommen in verschiedenen Formen vor, abhängig von Zelltyp, Organismus und Funktion.</p>
-      <h3>1. Zentrale Vakuole (Pflanzenzellen)</h3>
-      <p>Die bekannteste Form: eine einzige große Vakuole in ausgereiften Pflanzenzellen, die 70–90 % des Zellvolumens ausfüllt und Turgoraufbau, Speicherung und Abbau übernimmt.</p>
-      <h3>2. Proteinspeichervakuolen (PSV)</h3>
-      <p>Kommen in Samen vor (Bohnen, Erbsen, Weizen). Sie speichern Reserveproteine wie Gluteline, Prolamine und Legumine, die beim Keimen abgebaut werden.</p>
-      <h3>3. Lytische Vakuolen</h3>
-      <p>Niedriger pH (~5), reich an Hydrolasen. Funktionell den Lysosomen in Tierzellen vergleichbar, diese sind zuständig für die Autophagie.</p>
-      <h3>4. Kontraktile Vakuolen</h3>
-      <p>Bei Süßwasser-Einzeller wie Paramecium oder Amöben befördern überschüssiges Wasser in regelmäßigen Abständen aus der Zelle heraus.</p>
-      <h3>5. Gasvakuolen</h3>
-      <p>Gasgefüllte Proteinzylinder die als Auftriebskörper dienen.</p>
-      <h3>Vorkommen im Überblick</h3>
-      <div class="info-grid reveal-stagger">
-        <div class="info-chip"><div class="ic-label">Pflanzenzellen:</div><div class="ic-value">zentrale Vakuole, PSV, lytische Vakuolen</div></div>
-        <div class="info-chip"><div class="ic-label">Pilze (Fungi):</div><div class="ic-value">kleine bis mittelgroße Vakuolen für Speicherung und Abbau</div></div>
-        <div class="info-chip"><div class="ic-label">Tierzellen:</div><div class="ic-value">kleine Vesikel; Lysosomen übernehmen die Abbauaufgaben</div></div>
-        <div class="info-chip"><div class="ic-label">Protisten:</div><div class="ic-value">kontraktile und nahrungsaufnehmende Vakuolen</div></div>
-      </div>
-    </div>
-  </div>
+    <h3 data-i18n="tono_h">Der Tonoplast</h3>
+    <p data-i18n="tono_p">Die Membran, die die Vakuole umgibt, nennt man <strong class="t-vac">Tonoplast</strong>. Wie alle biologischen Membranen besteht sie aus einer Lipiddoppelschicht, in die verschiedene Proteine eingelagert sind.</p>
+    <ul class="dots">
+      <li data-i18n="tono_l1"><strong>Aquaporine:</strong> Wasserkanäle, durch die Wasser schnell in die Vakuole hinein- oder aus ihr herausströmen kann. Die Richtung bestimmt das osmotische Gefälle.</li>
+      <li data-i18n="tono_l2"><strong>Protonenpumpen:</strong> Transportieren H⁺-Ionen in die Vakuole und senken den pH-Wert.</li>
+      <li data-i18n="tono_l3"><strong>Transporter:</strong> Befördern Ionen, Zucker und Aminosäuren in die Vakuole oder aus ihr heraus.</li>
+    </ul>
 
-  <!-- VERGLEICH -->
-  <div class="section" id="tab-vergleich">
-    <div class="card reveal">
-      <h2>Pflanzenzelle vs. Tierzelle</h2>
-      <p>Eines der auffälligsten Unterschiede zwischen Pflanzen- und Tierzellen ist das Vorhandensein und die Größe der Vakuole.</p>
-      <div class="func-grid reveal-stagger" style="margin-top:1.5rem">
-        <div class="func-card"><h4>Pflanzenzelle</h4><p><strong>Große zentrale Vakuole</strong> — nimmt bis zu 90 % des Zellvolumens ein und ist von der festen Zellwand eingebettet. Sie sorgt für den Turgor, speichert Farbstoffe und dient als Recycling-Station der Zelle.</p></div>
-        <div class="func-card"><h4>Tierzelle</h4><p>Keine echte Vakuole; Abbau übernehmen <em>Lysosomen</em>. Es gibt zwar kleine Endosomen und phagosomale Vesikel, aber keine großflächige zentrale Vakuole.</p></div>
-      </div>
-      <h3>Warum haben Tierzellen keine Vakuole?</h3>
-      <p>Tierzellen haben keine starre Zellwand. Eine große Vakuole würde bei Wasseraufnahme zum Platzen führen. Stattdessen regulieren Nieren und andere Organe den Wasserhaushalt.</p>
-      <h3>Lysosom vs. Vakuole, Gemeinsamkeiten</h3>
-      <ul>
-        <li>Beide sind membranumhüllte, saure Zellbereiche</li>
-        <li>Beide enthalten wasserspaltende Enzyme (Proteasen, Lipasen, Nukleasen)</li>
-        <li>Beide entstehen aus dem ER/Golgi-System</li>
-        <li>Beide dienen dem Abbau und der Wiederverwertung von Zellmaterial</li>
-      </ul>
-      <h3>Vergleichstabelle</h3>
-      <div class="table-scroll reveal">
-        <table class="cmp-table">
-          <thead>
-            <tr>
-              <th>Merkmal</th>
-              <th>Pflanzenzelle</th>
-              <th>Tierzelle</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>Vakuole vorhanden?</td><td>Ja, groß</td><td>Nein (nur kleine Vesikel)</td></tr>
-            <tr><td>Größe</td><td>70–90 % der Zelle</td><td>Sehr klein</td></tr>
-            <tr><td>Membran</td><td>Tonoplast</td><td>Lysosomenmembran</td></tr>
-            <tr><td>Funktion Abbau</td><td>Lytische Vakuole</td><td>Lysosom</td></tr>
-            <tr><td>Turgor</td><td>Ja (wichtig für Stabilität)</td><td>Nein</td></tr>
-            <tr><td>Pigmentspeicherung</td><td>Anthocyane, etc.</td><td>Nein</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+    <h3 data-i18n="sap_h">Der Zellsaft</h3>
+    <p data-i18n="sap_p">Das Innere der Vakuole ist mit <strong class="t-vac">Zellsaft</strong> gefüllt. Dieser enthält:</p>
+    <ul class="dots">
+      <li data-i18n="sap_l1">Wasser als Hauptbestandteil</li>
+      <li data-i18n="sap_l2">Anorganische Ionen (K⁺, Na⁺, Ca²⁺, Cl⁻, PO₄³⁻)</li>
+      <li data-i18n="sap_l3">Organische Säuren (Äpfelsäure, Zitronensäure)</li>
+      <li data-i18n="sap_l4">Zucker und Aminosäuren</li>
+      <li data-i18n="sap_l5">Sekundäre Pflanzenstoffe wie Anthocyane, Tannine oder Alkaloide</li>
+      <li data-i18n="sap_l6">Abbauenzyme wie Proteasen und Nukleasen</li>
+    </ul>
 
-  <!-- QUELLEN -->
-  <div class="section" id="tab-quellen">
-    <div class="card reveal">
-      <h2>Quellenverzeichnis</h2>
-      <p>Alle inhaltlichen Informationen dieser Webseite basieren auf den folgenden Quellen. Klicke auf eine Karte, um die Quelle direkt aufzurufen.</p>
+    <h3 data-i18n="ent_h">Entstehung der Vakuole</h3>
+    <p data-i18n="ent_p">Vakuolen entstehen durch das Verschmelzen kleiner Vesikel aus dem ER oder dem Golgi-Apparat. In jungen Pflanzenzellen gibt es zunächst viele kleine Vakuolen, die dann zu einer großen zentralen Vakuole verschmelzen.</p>
+  </section>
 
-      <div class="sources-grid reveal-stagger">
+  <section class="sec" id="funktionen" aria-labelledby="h-fn">
+    <h2 id="h-fn" data-i18n="fn_h">Funktionen der Vakuole</h2>
+    <p class="intro" data-i18n="fn_p">Die Vakuole ist viel mehr als nur ein Flüssigkeitsspeicher. Sie erfüllt in der Zelle viele wichtige Funktionen:</p>
+    <dl class="fn wide">
+      <div><dt data-i18n="fn1t">Osmoregulation und Turgor</dt><dd data-i18n="fn1d">Durch Wasser- und Ionenaufnahme erzeugt die Vakuole den Turgordruck. Dieser drückt das Zellinnere gegen die Zellwand und sorgt für die Stabilität der Pflanze.</dd></div>
+      <div><dt data-i18n="fn2t">Speicherung und Entsorgung</dt><dd data-i18n="fn2d">Die Vakuole speichert Nährstoffe wie Zucker, Proteine und Mineralstoffe und lagert Schadstoffe und zelluläre Abfallprodukte sicher ein.</dd></div>
+      <div><dt data-i18n="fn3t">Abbau (Lyse)</dt><dd data-i18n="fn3d">Pflanzliche Vakuolen enthalten Hydrolasen, die beschädigte Proteine, alte Organellen und eingedrungene Mikroorganismen abbauen, ähnlich wie Lysosomen in Tierzellen.</dd></div>
+      <div><dt data-i18n="fn4t">Pigmentspeicherung</dt><dd data-i18n="fn4d">Anthocyane in der Vakuole verleihen Blüten und Früchten rote, blaue oder violette Farben, um Bestäuber anzulocken und Samen zu verbreiten.</dd></div>
+      <div><dt data-i18n="fn5t">Abwehr und Schutz</dt><dd data-i18n="fn5d">Giftstoffe wie Alkaloide und Fraßschutzstoffe wie Tannine werden in der Vakuole gespeichert, um Fraßfeinde abzuwehren. Manche Pflanzen lagern auch Vorstufen ein, die bei Verletzung giftige Substanzen freisetzen.</dd></div>
+      <div><dt data-i18n="fn6t">pH-Regulation</dt><dd data-i18n="fn6d">H⁺-Pumpen im Tonoplasten senken den pH-Wert im Zellsaft auf 3–6, ermöglichen saure Abbauprozesse und schützen das Zytoplasma (pH ~7).</dd></div>
+      <div><dt data-i18n="fn7t">Proteinspeicherung</dt><dd data-i18n="fn7d">Spezielle Proteinspeichervakuolen (PSV) in Samen lagern Reserveproteine, die beim Keimen abgebaut und als Nährstoffe genutzt werden.</dd></div>
+      <div><dt data-i18n="fn8t">Zellwachstum</dt><dd data-i18n="fn8d">Wasseraufnahme in die Vakuole ermöglicht schnelles, energiesparendes Zellwachstum, ohne dass viel neues Zytoplasma produziert werden muss.</dd></div>
+    </dl>
+  </section>
 
-        <a class="source-card" href="https://www.u-helmich.de/bio/lexikon/V/Vakuole.html" target="_blank" rel="noopener">
-          <span class="source-arrow">↗</span>
-          <div class="source-top">
-            <span class="source-title">Vakuole → u-helmich.de</span>
-          </div>
-          <p class="source-desc">Erklärungen zu Tonoplast, Zellsaft (pH 3–6), Protonenpumpen (H⁺-ATPasen), Osmose und Turgor-Gleichgewicht.</p>
-          <span class="source-url">u-helmich.de/bio/lexikon/V/Vakuole.html</span>
-        </a>
-
-        <a class="source-card" href="https://www.u-helmich.de/bio/lexikon/T/Tu-Tz/Turgor.html" target="_blank" rel="noopener">
-          <span class="source-arrow">↗</span>
-          <div class="source-top">
-            <span class="source-title">Turgor → u-helmich.de</span>
-          </div>
-          <p class="source-desc">Erklärt wird der Turgordruck, Wasseraufnahme durch die Vakuole und turgorbedingte Pflanzenbewegungen.</p>
-          <span class="source-url">u-helmich.de/bio/lexikon/T/Tu-Tz/Turgor.html</span>
-        </a>
-
-        <a class="source-card" href="https://www.spektrum.de/lexikon/biologie/vakuole/68931" target="_blank" rel="noopener">
-          <span class="source-arrow">↗</span>
-          <div class="source-top">
-            <span class="source-title">Vakuole → Spektrum Lexikon der Biologie</span>
-          </div>
-          <p class="source-desc">Wissenschaftlicher Lexikonartikel: Tonoplast-Translokatoren, Aquaporine, H⁺-ATPasen, Vergleich mit tierischen Lysosomen.</p>
-          <span class="source-url">spektrum.de/lexikon/biologie/vakuole/68931</span>
-        </a>
-
-        <a class="source-card" href="https://www.studysmarter.de/schule/biologie/zellbiologie/vakuole/" target="_blank" rel="noopener">
-          <span class="source-arrow">↗</span>
-          <div class="source-top">
-            <span class="source-title">Vakuole → StudySmarter</span>
-          </div>
-          <p class="source-desc">Lernartikel zu Aufbau, Tonoplast, Zellsaft-Zusammensetzung, Funktionen (Turgor, Speicherung, Schutz, Verdauung) und Arten von Vakuolen.</p>
-          <span class="source-url">studysmarter.de/schule/biologie/zellbiologie/vakuole</span>
-        </a>
-
-        <a class="source-card" href="https://studyflix.de/biologie/vakuole-1996" target="_blank" rel="noopener">
-          <span class="source-arrow">↗</span>
-          <div class="source-top">
-            <span class="source-title">Vakuole → Studyflix</span>
-          </div>
-          <p class="source-desc">Lernvideo und Artikel: Entstehung der Zentralvakuole durch Verschmelzen kleiner Vakuolen, Turgordruckaufbau durch Osmose, Blütenfärbung durch Anthocyane.</p>
-          <span class="source-url">studyflix.de/biologie/vakuole-1996</span>
-        </a>
-
-        <a class="source-card" href="https://www.pflanzenforschung.de/de/pflanzenwissen/lexikon-a-z/vakuole-225" target="_blank" rel="noopener">
-          <span class="source-arrow">↗</span>
-          <div class="source-top">
-            <span class="source-title">Vakuole → Pflanzenforschung.de</span>
-          </div>
-          <p class="source-desc">Erklärung der Vakuolenfunktion: Turgoraufbau durch Zuckerkonzentration in der Vakuole, Osmose, Wasserabgabe bei Trockenheit und Stabilität krautiger Pflanzen.</p>
-          <span class="source-url">pflanzenforschung.de/de/pflanzenwissen/lexikon-a-z/vakuole-225</span>
-        </a>
-
-        <a class="source-card" href="https://abitur-wissen.org/index.php/biologie/cytologie/78-cytologie-vakuole" target="_blank" rel="noopener">
-          <span class="source-arrow">↗</span>
-          <div class="source-top">
-            <span class="source-title">Cytologie: Vakuole → abitur-wissen.org</span>
-          </div>
-          <p class="source-desc">Entstehung durch osmotische Wasseraufnahme im Streckungswachstum, Bildung der Zentralvakuole, Funktionen (Turgor, Stoffspeicher, Schutz durch Giftstoffe, Farbstoffe, Bewegung).</p>
-          <span class="source-url">abitur-wissen.org · Cytologie: Vakuole</span>
-        </a>
-
-        <a class="source-card" href="https://www.studysmarter.de/schule/biologie/zellbiologie/turgor/" target="_blank" rel="noopener">
-          <span class="source-arrow">↗</span>
-          <div class="source-top">
-            <span class="source-title">Turgor → StudySmarter</span>
-          </div>
-          <p class="source-desc">Erklärt Turgordruck, Grenzplasmolyse, Vakuolengröße als Funktion des Wassergehalts.</p>
-          <span class="source-url">studysmarter.de/schule/biologie/zellbiologie/turgor</span>
-        </a>
-
-      </div>
-    </div>
-  </div>
-
-  <footer class="footer reveal">
-    Interaktive Lernseite zur Vakuole · Biologie Schulprojekt
-    <p class="copyright-note">© <span id="current-year"></span> Abdullah, Hennes, Fabian und Moritz</p>
-  </footer>
+  <section class="sec" id="typen" aria-labelledby="h-typ">
+    <h2 id="h-typ" data-i18n="typ_h">Typen und Vorkommen</h2>
+    <aside class="margin">
+      <table>
+        <caption data-i18n="occ_cap">Vorkommen im Überblick</caption>
+        <tbody>
+          <tr><td data-i18n="o1t">Pflanzenzellen</td><td data-i18n="o1v">zentrale Vakuole, PSV, lytische Vakuolen</td></tr>
+          <tr><td data-i18n="o2t">Pilze</td><td data-i18n="o2v">kleine bis mittelgroße Vakuolen für Speicherung und Abbau</td></tr>
+          <tr><td data-i18n="o3t">Tierzellen</td><td data-i18n="o3v">kleine Vesikel; Lysosomen übernehmen den Abbau</td></tr>
+          <tr><td data-i18n="o4t">Protisten</td><td data-i18n="o4v">kontraktile Vakuolen und Nahrungsvakuolen</td></tr>
+        </tbody>
+      </table>
+    </aside>
+    <p class="intro" data-i18n="typ_p">Vakuolen kommen in verschiedenen Formen vor, abhängig von Zelltyp, Organismus und Funktion.</p>
+    <ol class="types">
+      <li><div><b data-i18n="t1h">Zentrale Vakuole (Pflanzenzellen)</b><span data-i18n="t1p">Die bekannteste Form: eine einzige große Vakuole in ausgewachsenen Pflanzenzellen, die 70–90 % des Zellvolumens ausfüllt und Turgoraufbau, Speicherung und Abbau übernimmt.</span></div></li>
+      <li><div><b data-i18n="t2h">Proteinspeichervakuolen (PSV)</b><span data-i18n="t2p">Kommen in Samen vor (Bohnen, Erbsen, Weizen). Sie speichern Reserveproteine wie Gluteline, Prolamine und Legumine, die beim Keimen abgebaut werden.</span></div></li>
+      <li><div><b data-i18n="t3h">Lytische Vakuolen</b><span data-i18n="t3p">Niedriger pH-Wert (~5), reich an Hydrolasen. Funktionell den Lysosomen in Tierzellen vergleichbar und an der Autophagie beteiligt.</span></div></li>
+      <li><div><b data-i18n="t4h">Kontraktile Vakuolen</b><span data-i18n="t4p">Bei Süßwasser-Einzellern wie Paramecium oder Amöben befördern sie überschüssiges Wasser in regelmäßigen Abständen aus der Zelle heraus.</span></div></li>
+      <li><div><b data-i18n="t5h">Gasvakuolen</b><span data-i18n="t5p">Gasgefüllte Proteinzylinder, die als Auftriebskörper dienen. Sie kommen nicht in Pflanzen vor, sondern bei Prokaryoten wie Cyanobakterien.</span></div></li>
+    </ol>
+  </section>
 </div>
 
+<section class="plate2" id="vergleich" aria-labelledby="h-cmp">
+  <div class="plate2-in">
+    <h2 id="h-cmp" data-i18n="cmp_h">Pflanzenzelle und Tierzelle</h2>
+    <div class="cmp">
+      <figure>
+        <svg viewBox="0 0 440 300" role="img" aria-labelledby="cap-plant" fill="none" font-family="Atkinson Hyperlegible Next, sans-serif" font-size="13" font-weight="700">
+          <rect x="30" y="30" width="330" height="230" rx="26" stroke="#7fa86c" stroke-width="9"/>
+          <rect x="41" y="41" width="308" height="208" rx="18" stroke="#a8b89a" stroke-width="1.5"/>
+          <ellipse cx="205" cy="148" rx="128" ry="82" fill="#c76a98" fill-opacity=".85" stroke="#e6a5c6" stroke-width="2"/>
+          <ellipse cx="78" cy="72" rx="22" ry="17" fill="#c9a227"/><circle cx="82" cy="70" r="6" fill="#8a6a12"/>
+          <g fill="#5d9b4a"><ellipse cx="150" cy="54" rx="13" ry="6"/><ellipse cx="250" cy="52" rx="13" ry="6"/><ellipse cx="330" cy="100" rx="6" ry="13"/><ellipse cx="330" cy="200" rx="6" ry="13"/><ellipse cx="260" cy="238" rx="13" ry="6"/><ellipse cx="140" cy="240" rx="13" ry="6"/><ellipse cx="58" cy="180" rx="6" ry="13"/></g>
+          <g stroke="#e9ede4" stroke-opacity=".6" stroke-width="1"><path d="M360 60h40"/><path d="M290 150h110"/><path d="M98 72h-60V18"/><path d="M336 200h64"/></g>
+          <g fill="#13241f" stroke="#e6efe8"><circle cx="410" cy="60" r="10"/><circle cx="410" cy="150" r="10"/><circle cx="38" cy="14" r="10"/><circle cx="410" cy="200" r="10"/></g>
+          <g fill="#e9ede4" text-anchor="middle"><text x="410" y="64.5">1</text><text x="410" y="154.5">2</text><text x="38" y="18.5">3</text><text x="410" y="204.5">4</text></g>
+        </svg>
+        <figcaption id="cap-plant"><b data-i18n="plant_h">Pflanzenzelle</b><p data-i18n="plant_p"><strong>Große zentrale Vakuole:</strong> Sie nimmt bis zu 90 % des Zellvolumens ein und ist von der festen Zellwand umgeben. Sie sorgt für den Turgor, speichert Farbstoffe und dient als Recycling-Station der Zelle.</p></figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 440 300" role="img" aria-labelledby="cap-animal" fill="none" font-family="Atkinson Hyperlegible Next, sans-serif" font-size="13" font-weight="700">
+          <path d="M70 140c-6-62 50-104 120-108 74-5 150 18 168 80 16 58-22 118-96 136-80 19-186 0-192-108z" stroke="#a8b89a" stroke-width="3" fill="#a8b89a" fill-opacity=".06"/>
+          <ellipse cx="205" cy="150" rx="40" ry="32" fill="#c9a227"/><circle cx="212" cy="146" r="10" fill="#8a6a12"/>
+          <g fill="#c76a98"><circle cx="120" cy="110" r="8"/><circle cx="300" cy="104" r="7"/><circle cx="296" cy="204" r="9"/><circle cx="130" cy="200" r="6"/><circle cx="250" cy="74" r="5"/></g>
+          <g stroke="#e9ede4" stroke-opacity=".6" stroke-width="1"><path d="M304 204h96"/><path d="M245 150h155"/><path d="M350 78h50"/></g>
+          <g fill="#13241f" stroke="#e6efe8"><circle cx="410" cy="204" r="10"/><circle cx="410" cy="150" r="10"/><circle cx="410" cy="78" r="10"/></g>
+          <g fill="#e9ede4" text-anchor="middle"><text x="410" y="208.5">5</text><text x="410" y="154.5">3</text><text x="410" y="82.5">6</text></g>
+        </svg>
+        <figcaption id="cap-animal"><b data-i18n="animal_h">Tierzelle</b><p data-i18n="animal_p">Keine große Zentralvakuole; den Abbau übernehmen <strong>Lysosomen</strong>. Es gibt kleine Endosomen und Vesikel, aber keine Zellwand.</p></figcaption>
+      </figure>
+    </div>
+    <ul class="keyrow">
+      <li><span class="num">1</span><span data-i18n="k1">Zellwand</span></li>
+      <li><span class="num">2</span><span data-i18n="k2">Zentralvakuole</span></li>
+      <li><span class="num">3</span><span data-i18n="k3">Zellkern</span></li>
+      <li><span class="num">4</span><span data-i18n="k4">Chloroplast</span></li>
+      <li><span class="num">5</span><span data-i18n="k5">Lysosom</span></li>
+      <li><span class="num">6</span><span data-i18n="k6">Zellmembran</span></li>
+    </ul>
+    <p class="caption plate-cap" data-i18n="cap2"><b>Tafel II</b> · Pflanzen- und Tierzelle, schematisch und nicht maßstäblich.</p>
+  </div>
+</section>
+
+<div class="page">
+  <section class="sec" aria-labelledby="h-why">
+    <h2 id="h-why" data-i18n="why_h">Warum haben Tierzellen keine große Vakuole?</h2>
+    <p class="intro" data-i18n="cmp_p">Einer der auffälligsten Unterschiede zwischen Pflanzen- und Tierzellen ist das Vorhandensein und die Größe der Vakuole.</p>
+    <p data-i18n="why_p">Tierzellen haben keine starre Zellwand, die einem Turgordruck standhalten könnte. Eine große, Wasser ziehende Vakuole würde die Zelle anschwellen und schließlich platzen lassen. Tierzellen halten ihr osmotisches Gleichgewicht stattdessen mit Ionenpumpen in der Zellmembran (z. B. der Na⁺/K⁺-ATPase), und der Körper hält die Flüssigkeit um die Zellen über Nieren und Hormone konstant.</p>
+    <h3 data-i18n="lys_h">Lysosom und Vakuole: Gemeinsamkeiten</h3>
+    <ul class="dots">
+      <li data-i18n="lys_l1">Beide sind membranumhüllte, saure Zellbereiche.</li>
+      <li data-i18n="lys_l2">Beide enthalten hydrolytische Enzyme (Proteasen, Lipasen, Nukleasen).</li>
+      <li data-i18n="lys_l3">Beide entstehen aus dem ER-Golgi-System.</li>
+      <li data-i18n="lys_l4">Beide dienen dem Abbau und der Wiederverwertung von Zellmaterial.</li>
+    </ul>
+    <h3 data-i18n="tab_h">Vergleichstabelle</h3>
+    <div class="scroll wide">
+      <table>
+        <thead><tr><th data-i18n="th1">Merkmal</th><th data-i18n="th2">Pflanzenzelle</th><th data-i18n="th3">Tierzelle</th></tr></thead>
+        <tbody>
+          <tr><td data-i18n="r1a">Vakuole vorhanden?</td><td data-i18n="r1b">Ja, groß</td><td data-i18n="r1c">Nur kleine Vakuolen und Vesikel</td></tr>
+          <tr><td data-i18n="r2a">Größe</td><td data-i18n="r2b">70–90 % der Zelle</td><td data-i18n="r2c">Sehr klein</td></tr>
+          <tr><td data-i18n="r3a">Membran</td><td data-i18n="r3b">Tonoplast</td><td data-i18n="r3c">Lysosomenmembran</td></tr>
+          <tr><td data-i18n="r4a">Abbau</td><td data-i18n="r4b">Lytische Vakuole</td><td data-i18n="r4c">Lysosom</td></tr>
+          <tr><td data-i18n="r5a">Turgor</td><td data-i18n="r5b">Ja, wichtig für die Stabilität</td><td data-i18n="r5c">Nein</td></tr>
+          <tr><td data-i18n="r6a">Pigmentspeicherung</td><td data-i18n="r6b">Anthocyane u. a.</td><td data-i18n="r6c">Nicht in einer Vakuole (Melanin in Melanosomen)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="quellen" aria-labelledby="h-src">
+    <h2 id="h-src" data-i18n="src_h">Quellen</h2>
+    <p class="intro" data-i18n="src_p">Alle Inhalte dieser Seite basieren auf den folgenden Quellen (deutschsprachig).</p>
+    <ol class="refs wide">
+      <li><div><a href="https://www.u-helmich.de/bio/lexikon/V/Vakuole.html" target="_blank" rel="noopener">Vakuole · u-helmich.de</a><p data-i18n="q1">Tonoplast, Zellsaft (pH 3–6), Protonenpumpen (H⁺-ATPasen), Osmose und Turgor-Gleichgewicht.</p><span class="url">u-helmich.de/bio/lexikon/V/Vakuole.html</span></div></li>
+      <li><div><a href="https://www.u-helmich.de/bio/lexikon/T/Tu-Tz/Turgor.html" target="_blank" rel="noopener">Turgor · u-helmich.de</a><p data-i18n="q2">Turgordruck, Wasseraufnahme durch die Vakuole und turgorbedingte Pflanzenbewegungen.</p><span class="url">u-helmich.de/bio/lexikon/T/Tu-Tz/Turgor.html</span></div></li>
+      <li><div><a href="https://www.spektrum.de/lexikon/biologie/vakuole/68931" target="_blank" rel="noopener">Vakuole · Spektrum Lexikon der Biologie</a><p data-i18n="q3">Wissenschaftlicher Lexikonartikel: Tonoplast-Translokatoren, Aquaporine, H⁺-ATPasen, Vergleich mit tierischen Lysosomen.</p><span class="url">spektrum.de/lexikon/biologie/vakuole/68931</span></div></li>
+      <li><div><a href="https://www.studysmarter.de/schule/biologie/zellbiologie/vakuole/" target="_blank" rel="noopener">Vakuole · StudySmarter</a><p data-i18n="q4">Aufbau, Tonoplast, Zusammensetzung des Zellsafts, Funktionen (Turgor, Speicherung, Schutz, Verdauung) und Arten von Vakuolen.</p><span class="url">studysmarter.de/schule/biologie/zellbiologie/vakuole</span></div></li>
+      <li><div><a href="https://studyflix.de/biologie/vakuole-1996" target="_blank" rel="noopener">Vakuole · Studyflix</a><p data-i18n="q5">Entstehung der Zentralvakuole durch Verschmelzen kleiner Vakuolen, Turgoraufbau durch Osmose, Blütenfärbung durch Anthocyane.</p><span class="url">studyflix.de/biologie/vakuole-1996</span></div></li>
+      <li><div><a href="https://www.pflanzenforschung.de/de/pflanzenwissen/lexikon-a-z/vakuole-225" target="_blank" rel="noopener">Vakuole · Pflanzenforschung.de</a><p data-i18n="q6">Turgoraufbau durch Zuckerkonzentration in der Vakuole, Osmose, Wasserabgabe bei Trockenheit und Stabilität krautiger Pflanzen.</p><span class="url">pflanzenforschung.de/de/pflanzenwissen/lexikon-a-z/vakuole-225</span></div></li>
+      <li><div><a href="https://abitur-wissen.org/index.php/biologie/cytologie/78-cytologie-vakuole" target="_blank" rel="noopener">Cytologie: Vakuole · abitur-wissen.org</a><p data-i18n="q7">Entstehung durch osmotische Wasseraufnahme im Streckungswachstum, Bildung der Zentralvakuole, Funktionen (Turgor, Stoffspeicher, Schutz durch Giftstoffe, Farbstoffe, Bewegung).</p><span class="url">abitur-wissen.org · Cytologie: Vakuole</span></div></li>
+      <li><div><a href="https://www.studysmarter.de/schule/biologie/zellbiologie/turgor/" target="_blank" rel="noopener">Turgor · StudySmarter</a><p data-i18n="q8">Turgordruck, Grenzplasmolyse und Vakuolengröße in Abhängigkeit vom Wassergehalt.</p><span class="url">studysmarter.de/schule/biologie/zellbiologie/turgor</span></div></li>
+    </ol>
+  </section>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <span>© <span id="year">2026</span> <b>Abdullah Alhariri</b> (KINGKIMABDU) · <span data-i18n="foot_proj">Biologie-Projekt</span></span>
+    <span><span data-i18n="foot_more">Auch von mir:</span> <a href="https://kingkimabdu.github.io/MITOSIS/" data-i18n="foot_mit">Die Mitose, interaktive Zellsimulation</a></span>
+  </div>
+</footer>
+
 <script>
-// ── SCROLL PROGRESS ──
-const scrollBar = document.getElementById('scroll-bar');
-window.addEventListener('scroll', () => {
-  scrollBar.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
-}, { passive: true });
+if (matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0) document.documentElement.classList.add('is-touch');
+/* ── i18n ───────────────────────────────────────────── */
+const EN = {
+  brand_sub: '· Interactive study page', toc_label: 'Contents',
+  nav_model: 'Model', nav_struct: 'Structure', nav_func: 'Functions', nav_types: 'Types', nav_cmp: 'Comparison', nav_src: 'Sources',
+  title: 'The Vacuole',
+  lede: 'The fluid-filled store of the plant cell. Turn the model and watch it take up ions, draw in water and make the cell firm.',
+  canvas_label: '3D model of a plant cell with a central vacuole',
+  hint: 'Drag: rotate · Ctrl + scroll: zoom', hint_t: 'Drag: rotate · Pinch: zoom', rail_label: 'Sequence',
+  s1: 'Ions flow in', s2: 'Water follows (osmosis)', s3: 'Turgor', s4: 'Plasmolysis',
+  key_h: 'What you see',
+  p1: 'Tonoplast', p1s: 'vacuole membrane', p2: 'Cell sap', p3: 'Cell wall', p4: 'Cell membrane', p5: 'Nucleus', p6: 'Chloroplasts', p7: 'Ions (K⁺, Cl⁻)', p8: 'Water', p9: 'Salt solution outside', p9s: 'Na⁺, Cl⁻ (step 4)',
+  g_turgor: 'Turgor pressure', g_vol: 'Vacuole', g_ph: 'Cell sap pH',
+  play: 'Start model', reset: 'Reset',
+  cap1: '<b>Plate I, Fig. 1</b> · Model of a plant cell. Strongly simplified and not to scale; values are typical orders of magnitude.',
+  aufbau_h: 'Structure of the vacuole',
+  f1t: 'Size in a plant cell', f1v: 'up to 90 % of the cell volume', f2t: 'Membrane', f2v: 'Tonoplast (lipid bilayer)', f3t: 'Contents', f3v: 'Cell sap (aqueous solution)', f4t: 'pH of the cell sap', f4v: 'often acidic, pH 3–6',
+  abb2a: 'young', abb2b: 'mature', abb2: 'Fig. 2 · The many small vacuoles of a young cell fuse into one large central vacuole.',
+  aufbau_p: 'The vacuole is a membrane-bound compartment inside the cell, filled with a fluid called cell sap. It is one of the organelles, the functional parts of a cell.',
+  tono_h: 'The tonoplast',
+  tono_p: 'The membrane surrounding the vacuole is called the <strong class="t-vac">tonoplast</strong>. Like all biological membranes it is a lipid bilayer with various proteins embedded in it.',
+  tono_l1: '<strong>Aquaporins:</strong> water channels that let water flow quickly into or out of the vacuole. The osmotic gradient sets the direction.',
+  tono_l2: '<strong>Proton pumps:</strong> move H⁺ ions into the vacuole and lower its pH.',
+  tono_l3: '<strong>Transporters:</strong> carry ions, sugars and amino acids into or out of the vacuole.',
+  sap_h: 'The cell sap', sap_p: 'The inside of the vacuole is filled with <strong class="t-vac">cell sap</strong>. It contains:',
+  sap_l1: 'Water as the main component', sap_l2: 'Inorganic ions (K⁺, Na⁺, Ca²⁺, Cl⁻, PO₄³⁻)', sap_l3: 'Organic acids (malic acid, citric acid)', sap_l4: 'Sugars and amino acids', sap_l5: 'Secondary plant compounds such as anthocyanins, tannins or alkaloids', sap_l6: 'Digestive enzymes such as proteases and nucleases',
+  ent_h: 'How the vacuole forms',
+  ent_p: 'Vacuoles form when small vesicles from the ER or the Golgi apparatus fuse. Young plant cells first contain many small vacuoles, which then merge into one large central vacuole.',
+  fn_h: 'Functions of the vacuole', fn_p: 'The vacuole is much more than a fluid store. It carries out many important tasks in the cell:',
+  fn1t: 'Osmoregulation and turgor', fn1d: 'By taking up water and ions, the vacuole builds turgor pressure. It presses the cell contents against the cell wall and keeps the plant upright.',
+  fn2t: 'Storage and disposal', fn2d: 'The vacuole stores nutrients such as sugars, proteins and minerals, and safely locks away toxins and cellular waste.',
+  fn3t: 'Breakdown (lysis)', fn3d: 'Plant vacuoles contain hydrolases that break down damaged proteins, old organelles and invading microorganisms, much like lysosomes in animal cells.',
+  fn4t: 'Pigment storage', fn4d: 'Anthocyanins in the vacuole give flowers and fruits their red, blue or purple colours, attracting pollinators and seed dispersers.',
+  fn5t: 'Defence and protection', fn5d: 'Toxins such as alkaloids and deterrents such as tannins are stored in the vacuole to keep herbivores away. Some plants also store precursors that release toxic substances when the tissue is damaged.',
+  fn6t: 'pH regulation', fn6d: 'H⁺ pumps in the tonoplast lower the pH of the cell sap to 3–6, enabling acidic breakdown and protecting the cytoplasm (pH ~7).',
+  fn7t: 'Protein storage', fn7d: 'Special protein storage vacuoles (PSV) in seeds hold reserve proteins that are broken down and used as nutrients during germination.',
+  fn8t: 'Cell growth', fn8d: 'Taking up water into the vacuole allows fast, energy-saving cell growth without producing much new cytoplasm.',
+  typ_h: 'Types and occurrence', typ_p: 'Vacuoles come in different forms depending on the cell type, the organism and their function.',
+  occ_cap: 'Occurrence at a glance',
+  o1t: 'Plant cells', o1v: 'central vacuole, PSV, lytic vacuoles', o2t: 'Fungi', o2v: 'small to medium vacuoles for storage and breakdown', o3t: 'Animal cells', o3v: 'small vesicles; lysosomes handle breakdown', o4t: 'Protists', o4v: 'contractile and food vacuoles',
+  t1h: 'Central vacuole (plant cells)', t1p: 'The best-known form: a single large vacuole in mature plant cells that fills 70–90 % of the cell volume and handles turgor, storage and breakdown.',
+  t2h: 'Protein storage vacuoles (PSV)', t2p: 'Found in seeds (beans, peas, wheat). They store reserve proteins such as glutelins, prolamins and legumins, which are broken down during germination.',
+  t3h: 'Lytic vacuoles', t3p: 'Low pH (~5) and rich in hydrolases. Functionally comparable to lysosomes in animal cells and involved in autophagy.',
+  t4h: 'Contractile vacuoles', t4p: 'In freshwater protists such as Paramecium or amoebae they pump excess water out of the cell at regular intervals.',
+  t5h: 'Gas vacuoles', t5p: 'Gas-filled protein cylinders that act as floats. They do not occur in plants but in prokaryotes such as cyanobacteria.',
+  cmp_h: 'Plant cell and animal cell',
+  plant_h: 'Plant cell', plant_p: '<strong>Large central vacuole:</strong> it takes up to 90 % of the cell volume and is enclosed by the rigid cell wall. It maintains turgor, stores pigments and serves as the cell’s recycling station.',
+  animal_h: 'Animal cell', animal_p: 'No large central vacuole; breakdown is handled by <strong>lysosomes</strong>. There are small endosomes and vesicles, but no cell wall.',
+  k1: 'Cell wall', k2: 'Central vacuole', k3: 'Nucleus', k4: 'Chloroplast', k5: 'Lysosome', k6: 'Cell membrane', cap2: '<b>Plate II</b> · Plant and animal cell, schematic and not to scale.',
+  why_h: 'Why don’t animal cells have a large vacuole?',
+  cmp_p: 'One of the most striking differences between plant and animal cells is whether a vacuole is present, and how large it is.',
+  why_p: 'Animal cells have no rigid cell wall that could withstand turgor pressure. A large, water-drawing vacuole would make the cell swell and eventually burst. Instead, animal cells keep their osmotic balance with ion pumps in the cell membrane (such as the Na⁺/K⁺-ATPase), and the body keeps the fluid around the cells constant through the kidneys and hormones.',
+  lys_h: 'Lysosome and vacuole: what they share',
+  lys_l1: 'Both are membrane-bound, acidic compartments.', lys_l2: 'Both contain hydrolytic enzymes (proteases, lipases, nucleases).', lys_l3: 'Both originate from the ER–Golgi system.', lys_l4: 'Both break down and recycle cell material.',
+  tab_h: 'Comparison table', th1: 'Feature', th2: 'Plant cell', th3: 'Animal cell',
+  r1a: 'Vacuole present?', r1b: 'Yes, large', r1c: 'Only small vacuoles and vesicles', r2a: 'Size', r2b: '70–90 % of the cell', r2c: 'Very small', r3a: 'Membrane', r3b: 'Tonoplast', r3c: 'Lysosomal membrane', r4a: 'Breakdown', r4b: 'Lytic vacuole', r4c: 'Lysosome', r5a: 'Turgor', r5b: 'Yes, important for stability', r5c: 'No', r6a: 'Pigment storage', r6b: 'Anthocyanins and others', r6c: 'Not in a vacuole (melanin in melanosomes)',
+  src_h: 'Sources', src_p: 'All content on this page is based on the following sources (in German).',
+  q1: 'Tonoplast, cell sap (pH 3–6), proton pumps (H⁺-ATPases), osmosis and turgor equilibrium.',
+  q2: 'Turgor pressure, water uptake by the vacuole and turgor-driven plant movements.',
+  q3: 'Scientific encyclopedia entry: tonoplast translocators, aquaporins, H⁺-ATPases, comparison with animal lysosomes.',
+  q4: 'Structure, tonoplast, cell sap composition, functions (turgor, storage, protection, digestion) and types of vacuoles.',
+  q5: 'Formation of the central vacuole by fusion of small vacuoles, turgor through osmosis, flower colour from anthocyanins.',
+  q6: 'Turgor from sugar concentration in the vacuole, osmosis, water loss in drought and the stability of herbaceous plants.',
+  q7: 'Formation by osmotic water uptake during cell elongation, the central vacuole, functions (turgor, storage, toxins, pigments, movement).',
+  q8: 'Turgor pressure, incipient plasmolysis and vacuole size depending on water content.',
+  foot_proj: 'Biology project', foot_more: 'Also by me:', foot_mit: 'Mitosis, interactive cell simulation'
+};
+const LIVE = {
+  de: {
+    now0: 'Eine Pflanzenzelle mit großer <b>Zentralvakuole</b>. Starte das Modell oder wähle unten einen Schritt. Fahre über eine Nummer, um ein Bauteil hervorzuheben.',
+    now0t: 'Eine Pflanzenzelle mit großer <b>Zentralvakuole</b>. Starte das Modell oder wähle unten einen Schritt. Tippe auf eine Nummer, um ein Bauteil hervorzuheben.',
+    now1: '<b>1 · Ionen strömen ein.</b> Protonenpumpen im Tonoplasten säuern den Zellsaft an; Transporter laden K⁺ und Cl⁻ in die Vakuole. Das osmotische Potenzial des Zellsafts sinkt.',
+    now2: '<b>2 · Wasser folgt.</b> Durch Aquaporine strömt Wasser osmotisch nach. Die Vakuole wächst und drückt das Zytoplasma mit den Chloroplasten gegen die Zellwand.',
+    now3: '<b>3 · Turgor.</b> Die Zellwand hält dem Innendruck von etwa 8 bar stand. Die Zelle ist prall, die Pflanze steht aufrecht.',
+    now4: '<b>4 · Plasmolyse.</b> Jetzt liegt die Zelle in einer Salzlösung, die konzentrierter ist als der Zellsaft. Wasser strömt hinaus, die Ionen bleiben in der Vakuole. Der Protoplast schrumpft und löst sich von der Zellwand.',
+    play: 'Modell starten', pause: 'Pause', resume: 'Fortsetzen', again: 'Noch einmal',
+    labels: ['Tonoplast', 'Zellsaft', 'Zellwand', 'Zellmembran', 'Zellkern', 'Chloroplast'],
+    nogl: 'Dein Browser unterstützt kein WebGL. Das 3D-Modell kann hier nicht angezeigt werden; alle Inhalte stehen unten.',
+    title: 'Die Vakuole – Interaktives 3D-Modell | Abdullah Alhariri (KINGKIMABDU)'
+  },
+  en: {
+    now0: 'A plant cell with a large <b>central vacuole</b>. Start the model or pick a step below. Hover a number to highlight that part.',
+    now0t: 'A plant cell with a large <b>central vacuole</b>. Start the model or pick a step below. Tap a number to highlight that part.',
+    now1: '<b>1 · Ions flow in.</b> Proton pumps in the tonoplast acidify the cell sap; transporters load K⁺ and Cl⁻ into the vacuole. The osmotic potential of the cell sap drops.',
+    now2: '<b>2 · Water follows.</b> Water flows in by osmosis through aquaporins. The vacuole grows and presses the cytoplasm with its chloroplasts against the cell wall.',
+    now3: '<b>3 · Turgor.</b> The cell wall withstands an internal pressure of about 8 bar. The cell is firm and the plant stands upright.',
+    now4: '<b>4 · Plasmolysis.</b> Now the cell sits in a salt solution that is more concentrated than the cell sap. Water flows out while the ions stay in the vacuole. The protoplast shrinks and pulls away from the cell wall.',
+    play: 'Start model', pause: 'Pause', resume: 'Resume', again: 'Play again',
+    labels: ['Tonoplast', 'Cell sap', 'Cell wall', 'Cell membrane', 'Nucleus', 'Chloroplast'],
+    nogl: 'Your browser does not support WebGL, so the 3D model cannot be shown here; all content is below.',
+    title: 'The Vacuole – Interactive 3D Model | Abdullah Alhariri (KINGKIMABDU)'
+  }
+};
+const DE = {};
+document.querySelectorAll('[data-i18n]').forEach(el => { DE[el.dataset.i18n] = el.innerHTML; });
+const DE_ATTR = {};
+document.querySelectorAll('[data-i18n-attr]').forEach(el => { const [a, k] = el.dataset.i18nAttr.split(':'); DE_ATTR[k] = el.getAttribute(a); });
 
-// ── SCROLL REVEAL ──
-const revObs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: .12 });
-function attachReveal() {
-  document.querySelectorAll('.reveal:not(.visible), .reveal-stagger:not(.visible)').forEach(el => revObs.observe(el));
+window.lang = 'de';
+window.L = () => LIVE[window.lang];
+function setLang(lang) {
+  window.lang = lang;
+  const dict = lang === 'en' ? EN : DE;
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { const v = dict[el.dataset.i18n]; if (v != null) el.innerHTML = v; });
+  document.querySelectorAll('[data-i18n-attr]').forEach(el => { const [a, k] = el.dataset.i18nAttr.split(':'); const v = lang === 'en' ? EN[k] : DE_ATTR[k]; if (v != null) el.setAttribute(a, v); });
+  document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  document.title = LIVE[lang].title;
+  try { localStorage.setItem('vakuole-lang', lang); } catch (e) {}
+  window.dispatchEvent(new Event('langchange'));
 }
-attachReveal();
+document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+let saved = null; try { saved = localStorage.getItem('vakuole-lang'); } catch (e) {}
+const initial = saved || ((navigator.language || 'de').toLowerCase().startsWith('de') ? 'de' : 'en');
+if (initial !== 'de') setLang('en');
+document.getElementById('year').textContent = new Date().getFullYear();
 
-// ── TAB UNDERLINE SLIDER ──
-const slider = document.getElementById('tabSlider');
-const tabsInner = document.getElementById('tabsInner');
-
-function moveSlider(btn) {
-  const cr = tabsInner.getBoundingClientRect();
-  const br = btn.getBoundingClientRect();
-  slider.style.left  = (br.left - cr.left + tabsInner.scrollLeft) + 'px';
-  slider.style.width = br.width + 'px';
-}
-
-window.addEventListener('load', () => {
-  const active = document.querySelector('.tab-btn.active');
-  if (active) setTimeout(() => moveSlider(active), 80);
-});
-window.addEventListener('resize', () => {
-  const active = document.querySelector('.tab-btn.active');
-  if (active) moveSlider(active);
-});
-
-// ── TAB NAVIGATION ──
-function showTab(id, btn) {
-  const cur = document.querySelector('.section.active');
-  if (cur && cur.id === 'tab-' + id) return;
-  document.querySelectorAll('.section').forEach(s => {
-    s.classList.remove('active', 'tab-enter');
-    s.style.display = 'none';
+/* ── running-head section tracking ─────────────────── */
+const tocLinks = [...document.querySelectorAll('.toc a')];
+const io = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (!e.isIntersecting) return;
+    tocLinks.forEach(a => a.setAttribute('aria-current', String(a.getAttribute('href') === '#' + e.target.id)));
   });
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const next = document.getElementById('tab-' + id);
-  next.style.display = 'block';
-  void next.offsetWidth;
-  next.classList.add('active', 'tab-enter');
-  btn.classList.add('active');
-  moveSlider(btn);
-  setTimeout(attachReveal, 50);
-  if (id === 'simulation') setTimeout(() => { resize(); draw(); }, 50);
+}, { rootMargin: '-45% 0px -50% 0px' });
+['modell', 'aufbau', 'funktionen', 'typen', 'vergleich', 'quellen'].forEach(id => io.observe(document.getElementById(id)));
+</script>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const box = document.getElementById('stagebox');
+const canvas = document.getElementById('cell');
+const labelsEl = document.getElementById('labels');
+const leaders = document.getElementById('leaders');
+const nowEl = document.getElementById('now');
+const playBtn = document.getElementById('play');
+const rail = [...document.querySelectorAll('#rail button')];
+const partsLi = [...document.querySelectorAll('#parts li')];
+
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+} catch (e) {
+  box.insertAdjacentHTML('beforeend', `<p class="nogl">${window.L().nogl}</p>`);
+  throw e;
+}
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setClearColor(0x000000, 0);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+camera.position.set(8.2, 4.6, 9.6);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.target.set(0, -0.45, 0); controls.enablePan = false; controls.minDistance = 7; controls.maxDistance = 20;
+controls.autoRotate = !reduce; controls.autoRotateSpeed = 0.45;
+let idleTimer;
+controls.addEventListener('start', () => { controls.autoRotate = false; clearTimeout(idleTimer); });
+controls.addEventListener('end', () => { if (!reduce) idleTimer = setTimeout(() => controls.autoRotate = true, 6000); });
+// page scroll keeps working; zoom needs Ctrl (or pinch)
+box.addEventListener('wheel', e => { if (!e.ctrlKey) e.stopPropagation(); }, { capture: true });
+
+scene.add(new THREE.HemisphereLight(0xeef3ea, 0x1d2b2a, 1.1));
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(5, 8, 6); scene.add(key);
+const rim = new THREE.DirectionalLight(0xc76a98, 0.7); rim.position.set(-6, -2, -5); scene.add(rim);
+
+/* translucent membranes: fresnel shells read like a light-microscope image */
+function shell(color, rimColor, base, rimA, pow = 2.2, wobble = 0) {
+  return new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, side: THREE.DoubleSide,
+    uniforms: { uColor: { value: new THREE.Color(color) }, uRim: { value: new THREE.Color(rimColor) }, uBase: { value: base }, uRimA: { value: rimA }, uPow: { value: pow }, uOpacity: { value: 1 }, uTime: { value: 0 }, uWobble: { value: wobble } },
+    vertexShader: `
+      uniform float uTime, uWobble; varying vec3 vN; varying vec3 vV;
+      void main(){
+        vec3 p = position + normal * uWobble * sin(uTime*0.9 + position.x*2.3 + position.y*1.7) * sin(uTime*0.6 + position.z*2.1);
+        vec4 mv = modelViewMatrix * vec4(p,1.0);
+        vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz);
+        gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: `
+      uniform vec3 uColor, uRim; uniform float uBase, uRimA, uPow, uOpacity; varying vec3 vN; varying vec3 vV;
+      void main(){
+        float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), uPow);
+        gl_FragColor = vec4(mix(uColor, uRim, f), mix(uBase, uRimA, f) * uOpacity); }`
+  });
 }
 
-// ── SIMULATION ──
-const canvas = document.getElementById('simCanvas'), ctx = canvas.getContext('2d');
-let W, H, simRunning = false, animId = null, tick = 0;
-let rotX = .3, rotY = .5, isDragging = false, lastMX = 0, lastMY = 0, zoom = 1;
-let vakuoleScale = .38, targetVakuoleScale = .38, particles = [], phase = 0;
+/* geometry --------------------------------------------------------- */
+const WALL = new THREE.Vector3(3.0, 2.1, 2.1);        // half extents
+const MEM = new THREE.Vector3(2.82, 1.93, 1.93);
+const VAC = new THREE.Vector3(2.42, 1.6, 1.6);         // vacuole radii at full turgor
 
-function resize() {
-  const r = canvas.getBoundingClientRect();
-  W = canvas.width  = r.width  * devicePixelRatio;
-  H = canvas.height = r.height * devicePixelRatio;
-  canvas.style.width  = r.width  + 'px';
-  canvas.style.height = r.height + 'px';
+const wallMat = shell(0x7fa86c, 0xb8d8a0, 0.05, 0.55, 2.6);
+const wall = new THREE.Mesh(new RoundedBoxGeometry(6.0, 4.2, 4.2, 8, 0.62), wallMat);
+wall.renderOrder = 4; scene.add(wall);
+
+const memMat = shell(0xa8b89a, 0xdfe8d6, 0.035, 0.32, 3.0, 0.01);
+const membrane = new THREE.Mesh(new RoundedBoxGeometry(MEM.x * 2, MEM.y * 2, MEM.z * 2, 8, 0.5), memMat);
+membrane.renderOrder = 3; scene.add(membrane);
+
+const vacGeo = new THREE.IcosahedronGeometry(1, 6);
+{ const p = vacGeo.attributes.position, v = new THREE.Vector3();
+  for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i).normalize();
+    const n = 1 + 0.045 * Math.sin(3.1 * v.x + 1.2) * Math.sin(2.6 * v.y + 0.4) * Math.sin(2.9 * v.z + 2.0) + 0.02 * Math.sin(7 * v.x + 5 * v.z);
+    v.multiplyScalar(n); p.setXYZ(i, v.x, v.y, v.z); }
+  vacGeo.computeVertexNormals(); }
+const vacMat = shell(0xa2449a, 0xf6b8d6, 0.48, 0.95, 1.8, 0.018);
+const vacuole = new THREE.Mesh(vacGeo, vacMat);
+vacuole.renderOrder = 2; scene.add(vacuole);
+
+const nucMat = new THREE.MeshStandardMaterial({ color: 0xc9a227, roughness: 0.45, transparent: true, opacity: 0.92 });
+const nucleus = new THREE.Mesh(new THREE.SphereGeometry(0.56, 40, 28), nucMat);
+nucleus.scale.set(1.15, 0.92, 1);
+const nucleolus = new THREE.Mesh(new THREE.SphereGeometry(0.2, 24, 16), new THREE.MeshStandardMaterial({ color: 0x7d5f08, roughness: 0.6, transparent: true }));
+nucleolus.position.set(0.12, 0.1, 0.32); nucleus.add(nucleolus);
+scene.add(nucleus);
+
+const rnd = (() => { let s = 7; return () => (s = (s * 16807) % 2147483647) / 2147483647; })();
+function shellPoint(dir, half, n = 7) {
+  const s = Math.pow(Math.pow(Math.abs(dir.x / half.x), n) + Math.pow(Math.abs(dir.y / half.y), n) + Math.pow(Math.abs(dir.z / half.z), n), -1 / n);
+  return dir.clone().multiplyScalar(s);
 }
-window.addEventListener('resize', () => { resize(); draw(); });
-resize();
 
-canvas.addEventListener('mousedown', e => { isDragging = true; lastMX = e.clientX; lastMY = e.clientY; });
-window.addEventListener('mouseup',   () => isDragging = false);
-window.addEventListener('mousemove', e => {
-  if (!isDragging) return;
-  rotY += (e.clientX - lastMX) * .012;
-  rotX += (e.clientY - lastMY) * .008;
-  rotX = Math.max(-.6, Math.min(.6, rotX));
-  lastMX = e.clientX; lastMY = e.clientY;
-  if (!simRunning) draw();
+// organelles that stream around the long axis (cyclosis)
+function streamers(count, geo, mat, k0) {
+  const mesh = new THREE.InstancedMesh(geo, mat, count);
+  const data = [];
+  for (let i = 0; i < count; i++) data.push({ u: rnd() * 1.9 - 0.95, a: rnd() * Math.PI * 2, sp: 0.05 + rnd() * 0.06, k: k0 + rnd() * 0.03 });
+  scene.add(mesh); return { mesh, data };
+}
+const chl = streamers(30, new THREE.SphereGeometry(1, 20, 12), new THREE.MeshStandardMaterial({ color: 0x4f8a3c, roughness: 0.55, emissive: 0x16310f, transparent: true }), 0.0);
+const mito = streamers(16, new THREE.CapsuleGeometry(0.07, 0.22, 4, 10), new THREE.MeshStandardMaterial({ color: 0x8c6d5a, roughness: 0.6, transparent: true }), -0.04);
+
+// tonoplast proteins: proton pumps (white) and aquaporins (blue)
+function fib(n, off) { const out = []; for (let i = 0; i < n; i++) { const y = 1 - (i + 0.5) / n * 2, r = Math.sqrt(1 - y * y), t = i * 2.39996 + off; out.push(new THREE.Vector3(Math.cos(t) * r, y, Math.sin(t) * r)); } return out; }
+const pumpDirs = fib(12, 0), aquaDirs = fib(14, 1.2), transDirs = fib(10, 2.4);
+const pumps = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.075, 0.075, 0.2, 12), new THREE.MeshStandardMaterial({ color: 0xf3f5ef, roughness: 0.4, transparent: true }), pumpDirs.length);
+const aquas = new THREE.InstancedMesh(new THREE.TorusGeometry(0.075, 0.03, 8, 16), new THREE.MeshStandardMaterial({ color: 0x6aa8de, roughness: 0.4, transparent: true }), aquaDirs.length);
+const transMat = new THREE.MeshStandardMaterial({ color: 0xc8692a, roughness: 0.45, transparent: true });
+const trans = new THREE.InstancedMesh(new THREE.BoxGeometry(0.13, 0.17, 0.13), transMat, transDirs.length);
+scene.add(pumps, aquas, trans);
+
+// particles
+const ionMat = new THREE.MeshStandardMaterial({ color: 0xe0823e, roughness: 0.35, emissive: 0x3a1a05, transparent: true });
+const waterMat = new THREE.MeshStandardMaterial({ color: 0x6aa8de, roughness: 0.3, emissive: 0x0a2236, transparent: true });
+const saltMat = new THREE.MeshStandardMaterial({ color: 0xe4ddcc, roughness: 0.3, transparent: true, opacity: 0, depthWrite: false });
+const NI = 170, NW = 260, NS = 90;
+const ions = new THREE.InstancedMesh(new THREE.SphereGeometry(0.055, 10, 8), ionMat, NI);
+const water = new THREE.InstancedMesh(new THREE.SphereGeometry(0.04, 8, 6), waterMat, NW);
+const salt = new THREE.InstancedMesh(new THREE.SphereGeometry(0.05, 8, 6), saltMat, NS);
+scene.add(ions, water, salt);
+const saltPos = [];
+for (let i = 0; i < NS; i++) { const d = new THREE.Vector3(rnd() * 2 - 1, rnd() * 2 - 1, rnd() * 2 - 1).normalize(); const q = shellPoint(d, WALL).multiplyScalar(1.1 + rnd() * 0.28); q.y = Math.min(q.y, WALL.y * 0.95); saltPos.push(q); }
+
+/* ghosting: everything not involved recedes ------------------------ */
+const parts = {
+  tonoplast: { mats: [vacMat, pumps.material], ghost: 0.2 }, sap: { mats: [vacMat], ghost: 0.2 },
+  wall: { mats: [wallMat], ghost: 0.25 }, membrane: { mats: [memMat], ghost: 0.25 },
+  nucleus: { mats: [nucMat, nucleolus.material], ghost: 0.15 },
+  chloro: { mats: [chl.mesh.material, mito.mesh.material], ghost: 0.15 },
+  ions: { mats: [ionMat, transMat], ghost: 0.12 },
+  salt: { mats: [], ghost: 1 },
+  water: { mats: [waterMat, aquas.material], ghost: 0.12 }
+};
+const allMats = new Map();
+Object.values(parts).forEach(p => p.mats.forEach(m => allMats.set(m, { f: 1, base: m.isShaderMaterial ? 1 : (m.opacity ?? 1) })));
+const stageFocus = { 0: null, 1: ['tonoplast', 'sap', 'ions'], 2: ['tonoplast', 'sap', 'water'], 3: ['tonoplast', 'sap', 'wall', 'membrane'], 4: ['membrane', 'tonoplast', 'sap', 'wall', 'water'] };
+let hoverPart = null;
+function targetFor(mat) {
+  const focus = hoverPart ? [hoverPart] : stageFocus[stage];
+  if (!focus) return 1;
+  for (const name of focus) if (parts[name].mats.includes(mat)) return 1;
+  let g = 1; for (const [name, p] of Object.entries(parts)) if (p.mats.includes(mat)) g = Math.min(g, p.ghost);
+  return g;
+}
+
+/* the stage timeline --------------------------------------------- */
+// g: vacuole fill 0..1, q: plasmolysis 0..1, P: turgor bar, pH
+const S0 = { g: 0.35, q: 0, P: 1.0, pH: 5.5 };
+const STAGES = [null,
+  { dur: 7, to: { g: 0.35, q: 0, P: 1.0, pH: 4.5 } },
+  { dur: 8, to: { g: 1.0, q: 0, P: 7.6, pH: 4.6 } },
+  { dur: 5, to: { g: 1.0, q: 0, P: 8.0, pH: 4.6 } },
+  { dur: 9, to: { g: 0.18, q: 1, P: 0.0, pH: 4.6 } }];
+let stage = 0, st = 0, playing = false, from = { ...S0 }, cur = { ...S0 }, finished = false;
+const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+function stateAtStageStart(n) { let s = { ...S0 }; for (let i = 1; i < n; i++) s = { ...STAGES[i].to }; return s; }
+function goStage(n, autoplay = true) {
+  stage = n; st = 0; finished = false;
+  from = stateAtStageStart(n); cur = { ...from };
+  if (n === 1) seedIons();
+  playing = autoplay;
+  if (reduce) { st = STAGES[n].dur; cur = { ...STAGES[n].to }; }
+  updateUI();
+}
+function seedIons() { ionState.forEach((s, i) => { s.mode = i < 26 ? 'in' : 'off'; if (s.mode === 'in') s.u.copy(randIn(0.8)); }); }
+function reset() { stage = 0; st = 0; playing = false; finished = false; from = { ...S0 }; cur = { ...S0 }; seedIons(); waterState.forEach(w => w.mode = 'off'); updateUI(); }
+
+function updateUI() {
+  const L = window.L();
+  rail.forEach((b, i) => {
+    const n = i + 1;
+    b.classList.toggle('done', n < stage || (finished && n === stage));
+    if (n === stage) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+  });
+  nowEl.innerHTML = L[stage === 0 && document.documentElement.classList.contains('is-touch') ? 'now0t' : 'now' + stage];
+  playBtn.textContent = finished ? L.again : playing ? L.pause : stage === 0 ? L.play : L.resume;
+}
+playBtn.addEventListener('click', () => {
+  if (finished) { goStage(1); return; }
+  if (stage === 0) { goStage(1); return; }
+  playing = !playing; updateUI();
 });
-canvas.addEventListener('wheel', e => {
-  zoom -= e.deltaY * .001;
-  zoom = Math.max(.5, Math.min(1.8, zoom));
-  if (!simRunning) draw();
-  e.preventDefault();
-}, { passive: false });
+document.getElementById('reset').addEventListener('click', reset);
+rail.forEach(b => b.addEventListener('click', () => goStage(+b.dataset.stage)));
+window.addEventListener('langchange', () => { updateUI(); buildLabels(); });
 
-let lastTD = 0;
-canvas.addEventListener('touchstart', e => {
-  if (e.touches.length === 1) { isDragging = true; lastMX = e.touches[0].clientX; lastMY = e.touches[0].clientY; }
-  if (e.touches.length === 2) lastTD = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-  e.preventDefault();
-}, { passive: false });
-canvas.addEventListener('touchend', () => isDragging = false);
-canvas.addEventListener('touchmove', e => {
-  if (e.touches.length === 1 && isDragging) {
-    rotY += (e.touches[0].clientX - lastMX) * .012;
-    rotX += (e.touches[0].clientY - lastMY) * .008;
-    lastMX = e.touches[0].clientX; lastMY = e.touches[0].clientY;
-    if (!simRunning) draw();
+/* hover isolation from the key and the leader labels */
+function bindHover(el, name) {
+  el.addEventListener('mouseenter', () => setHover(name));
+  el.addEventListener('mouseleave', () => setHover(null));
+}
+function setHover(name) {
+  hoverPart = name;
+  partsLi.forEach(li => li.classList.toggle('dim', !!name && li.dataset.part !== name));
+  labelEls.forEach(l => l.el.classList.toggle('dim', !!name && l.part !== name));
+}
+partsLi.forEach(li => { li.tabIndex = 0; bindHover(li, li.dataset.part); li.addEventListener('click', () => setHover(hoverPart === li.dataset.part ? null : li.dataset.part)); li.addEventListener('focus', () => setHover(li.dataset.part)); li.addEventListener('blur', () => setHover(null)); });
+
+/* particles ------------------------------------------------------- */
+const tmpM = new THREE.Matrix4(), tmpQ = new THREE.Quaternion(), tmpS = new THREE.Vector3(), tmpV = new THREE.Vector3();
+const UP = new THREE.Vector3(0, 1, 0);
+function randIn(r) { const v = new THREE.Vector3(); do { v.set(rnd() * 2 - 1, rnd() * 2 - 1, rnd() * 2 - 1); } while (v.lengthSq() > 1); return v.multiplyScalar(r); }
+const vacR = new THREE.Vector3(), memS = new THREE.Vector3(1, 1, 1);
+const ionState = Array.from({ length: NI }, () => ({ mode: 'off', p: new THREE.Vector3(), u: new THREE.Vector3(), t: 0, pump: 0, a: new THREE.Vector3() }));
+const waterState = Array.from({ length: NW }, () => ({ mode: 'off', p: new THREE.Vector3(), a: new THREE.Vector3(), b: new THREE.Vector3(), c: new THREE.Vector3(), t: 0, sp: 1 }));
+seedIons();
+let ionAcc = 0, waterAcc = 0;
+function cytoPoint() { const d = new THREE.Vector3(rnd() * 2 - 1, (rnd() * 2 - 1) * 0.8, rnd() * 2 - 1).normalize(); return shellPoint(d, MEM).multiply(memS).multiplyScalar(0.9); }
+function aquaWorld(i, out) { return out.copy(aquaDirs[i]).multiply(vacR); }
+function nearest(dirs, p) { let best = 0, bd = 1e9; dirs.forEach((d, i) => { const dd = tmpV.copy(d).multiply(vacR).distanceToSquared(p); if (dd < bd) { bd = dd; best = i; } }); return best; }
+const bez = (a, b, c, t, out) => out.set(0, 0, 0).addScaledVector(a, (1 - t) * (1 - t)).addScaledVector(b, 2 * (1 - t) * t).addScaledVector(c, t * t);
+
+function stepParticles(dt) {
+  // ion import during stage 1
+  if (stage === 1 && playing && st < STAGES[1].dur - 1) {
+    ionAcc += dt * 16;
+    while (ionAcc > 1) { ionAcc--; const s = ionState.find(s => s.mode === 'off'); if (!s) break; s.mode = 'go'; s.p.copy(cytoPoint()); s.pump = nearest(transDirs, s.p); s.t = 0; s.a.copy(s.p); s.u.copy(randIn(0.8)); }
   }
-  if (e.touches.length === 2) {
-    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    zoom += (d - lastTD) * .003;
-    zoom = Math.max(.5, Math.min(1.8, zoom));
-    lastTD = d;
-    if (!simRunning) draw();
+  ionState.forEach(s => {
+    if (s.mode === 'go') {
+      s.t += dt * 0.55;
+      const pw = tmpV.clone().copy(transDirs[s.pump]).multiply(vacR);
+      if (s.t < 1) s.p.lerpVectors(s.a, pw, ease(s.t));
+      else if (s.t < 1.6) s.p.lerpVectors(pw, s.u.clone().multiply(vacR), (s.t - 1) / 0.6);
+      else s.mode = 'in';
+    } else if (s.mode === 'in') {
+      if (!reduce) { s.u.x += (rnd() - 0.5) * dt * 0.5; s.u.y += (rnd() - 0.5) * dt * 0.5; s.u.z += (rnd() - 0.5) * dt * 0.5; if (s.u.length() > 0.85) s.u.multiplyScalar(0.84 / s.u.length()); }
+      s.p.copy(s.u).multiply(vacR);
+    }
+  });
+  // water: in through aquaporins (stage 2), out (stage 4)
+  const wIn = stage === 2 && playing, wOut = stage === 4 && playing && st < STAGES[4].dur - 1;
+  if (wIn || wOut) {
+    waterAcc += dt * 38;
+    while (waterAcc > 1) {
+      waterAcc--; const w = waterState.find(w => w.mode === 'off'); if (!w) break;
+      const outside = shellPoint(new THREE.Vector3(rnd() * 2 - 1, rnd() * 2 - 1, rnd() * 2 - 1).normalize(), WALL).multiplyScalar(1.35);
+      const ai = nearest(aquaDirs, outside), gate = aquaWorld(ai, new THREE.Vector3());
+      const inside = randIn(0.7).multiply(vacR);
+      if (wIn) { w.a.copy(outside); w.b.copy(gate); w.c.copy(inside); } else { w.a.copy(inside); w.b.copy(gate); w.c.copy(outside); }
+      w.mode = 'go'; w.t = 0; w.sp = 0.45 + rnd() * 0.25;
+    }
   }
-  e.preventDefault();
-}, { passive: false });
-
-function project3D(x, y, z) {
-  const cY = Math.cos(rotY), sY = Math.sin(rotY), cX = Math.cos(rotX), sX = Math.sin(rotX);
-  const xr = x * cY + z * sY, yt = -x * sY + z * cY;
-  const zr = y * sX + yt * cX, yr = y * cX - yt * sX;
-  const fov = 900, pz = fov + zr;
-  return { x: xr / pz * fov + W / 2, y: yr / pz * fov + H / 2, z: zr };
+  waterState.forEach(w => { if (w.mode === 'go') { w.t += dt * w.sp; if (w.t >= 1) w.mode = 'off'; else bez(w.a, w.b, w.c, w.t, w.p); } });
 }
 
-function spawnParticle(ph) {
-  const R = 180 * zoom, vR = vakuoleScale * R / .38;
-  if (ph === 1 || ph === 2) {
-    const a = Math.random() * Math.PI * 2, r = vR * 1.6 + Math.random() * 40;
-    return { x: Math.cos(a)*r, y: (Math.random()-.5)*r*.6, z: Math.sin(a)*r, tx: Math.cos(a)*vR*.5, ty: (Math.random()-.5)*vR*.4, tz: Math.sin(a)*vR*.5, life: 1, speed: .015+Math.random()*.01, progress: 0, color: ph===2?'#5f9b2b':'#d8455f', size: ph===2?4:5 };
+function writeInstances() {
+  let i = 0;
+  ionState.forEach(s => { const on = s.mode !== 'off'; tmpS.setScalar(on ? 1 : 0); tmpM.compose(s.p, tmpQ.identity(), tmpS); ions.setMatrixAt(i++, tmpM); });
+  ions.instanceMatrix.needsUpdate = true;
+  i = 0;
+  waterState.forEach(w => { const on = w.mode === 'go'; const fade = on ? Math.min(1, w.t * 6, (1 - w.t) * 6) : 0; tmpS.setScalar(fade); tmpM.compose(w.p, tmpQ.identity(), tmpS); water.setMatrixAt(i++, tmpM); });
+  water.instanceMatrix.needsUpdate = true;
+  saltPos.forEach((p, j) => { tmpS.setScalar(1); tmpM.compose(p, tmpQ.identity(), tmpS); salt.setMatrixAt(j, tmpM); });
+  salt.instanceMatrix.needsUpdate = true;
+  [[pumps, pumpDirs], [aquas, aquaDirs], [trans, transDirs]].forEach(([mesh, dirs]) => {
+    dirs.forEach((d, j) => { tmpV.copy(d).multiply(vacR); tmpQ.setFromUnitVectors(UP, d); tmpS.setScalar(1); tmpM.compose(tmpV, tmpQ, tmpS); mesh.setMatrixAt(j, tmpM); });
+    mesh.instanceMatrix.needsUpdate = true;
+  });
+}
+
+function placeStreamers(obj, dt, scale, kBase) {
+  obj.data.forEach((d, j) => {
+    if (!reduce) d.a += d.sp * dt;
+    const r = Math.sqrt(1 - d.u * d.u);
+    const dir = tmpV.set(d.u, Math.cos(d.a) * r, Math.sin(d.a) * r).normalize();
+    const pos = shellPoint(dir, MEM).multiply(memS).multiplyScalar(kBase + d.k);
+    tmpQ.setFromUnitVectors(UP, dir);
+    tmpS.copy(scale);
+    tmpM.compose(pos, tmpQ, tmpS); obj.mesh.setMatrixAt(j, tmpM);
+  });
+  obj.mesh.instanceMatrix.needsUpdate = true;
+}
+
+/* leader labels ---------------------------------------------------- */
+const LABEL_PARTS = ['tonoplast', 'sap', 'wall', 'membrane', 'nucleus', 'chloro'];
+let labelEls = [];
+function buildLabels() {
+  labelsEl.querySelectorAll('.lbl').forEach(n => n.remove());
+  leaders.innerHTML = '';
+  labelEls = LABEL_PARTS.map((part, i) => {
+    const el = document.createElement('div');
+    el.className = 'lbl';
+    el.innerHTML = `<span class="num">${i + 1}</span><span class="name">${window.L().labels[i]}</span>`;
+    labelsEl.appendChild(el); bindHover(el, part);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); dot.setAttribute('r', '2.5');
+    leaders.append(line, dot);
+    return { el, line, dot, part };
+  });
+  setHover(hoverPart);
+}
+buildLabels();
+const anchors = () => [
+  tmpA[0].set(0.35, 0.82, 0.45).normalize().multiply(vacR),
+  tmpA[1].set(0.25, -0.35, 0.3).multiply(vacR),
+  tmpA[2].set(WALL.x * 0.86, -WALL.y * 0.8, WALL.z).multiplyScalar(wall.scale.x),
+  tmpA[3].set(-MEM.x * memS.x * 0.97, -MEM.y * memS.y * 0.55, MEM.z * memS.z * 0.75),
+  tmpA[4].copy(nucleus.position),
+  chlAnchor
+];
+const tmpA = Array.from({ length: 6 }, () => new THREE.Vector3());
+const chlAnchor = new THREE.Vector3();
+
+function placeLabels(w, h) {
+  const cx = w * 0.5, cy = h * 0.52, narrow = w < 560;
+  anchors().forEach((a, i) => {
+    const v = a.clone().project(camera);
+    const x = Math.max(6, Math.min(w - 6, (v.x + 1) / 2 * w)), y = Math.max(6, Math.min(h - 50, (1 - v.y) / 2 * h));
+    let dx = x - cx, dy = y - cy; const len = Math.hypot(dx, dy) || 1; dx /= len; dy /= len;
+    const L = narrow ? 34 : 70 + 30 * Math.abs(dx);
+    let lx = x + dx * L, ly = y + dy * L * 0.8;
+    lx = Math.max(16, Math.min(w - 16, lx)); ly = Math.max(16, Math.min(h - 44, ly));
+    const o = labelEls[i]; if (!o) return;
+    o.el.className = 'lbl ' + (narrow ? '' : dx >= 0 ? 'r' : 'l') + (o.el.classList.contains('dim') ? ' dim' : '');
+    o.el.style.left = lx + 'px'; o.el.style.top = ly + 'px';
+    o.line.setAttribute('x1', x); o.line.setAttribute('y1', y); o.line.setAttribute('x2', lx); o.line.setAttribute('y2', ly);
+    o.dot.setAttribute('cx', x); o.dot.setAttribute('cy', y);
+  });
+}
+
+/* readouts ---------------------------------------------------------- */
+const gP = document.getElementById('gP'), gV = document.getElementById('gV'), gH = document.getElementById('gH');
+const mP = document.getElementById('mP'), mV = document.getElementById('mV');
+const fmt = (n, d = 1) => n.toFixed(d).replace('.', window.lang === 'de' ? ',' : '.');
+const phLow = new THREE.Color(0xd23a78), phHigh = new THREE.Color(0xa2449a), phC = new THREE.Color();
+let lastUI = 0;
+function readouts() {
+  const vol = 15 + 75 * cur.g * (1 - 0.25 * cur.q);
+  gP.innerHTML = `${fmt(cur.P)} <small>bar</small>`; mP.style.width = (cur.P / 10 * 100) + '%';
+  gV.innerHTML = `${Math.round(vol)} <small>%</small>`; mV.style.width = vol + '%';
+  gH.innerHTML = `<span class="ph-sw" style="background:#${phC.getHexString()}"></span>${fmt(cur.pH)}`;
+}
+
+/* resize ------------------------------------------------------------ */
+let W = 1, H = 1;
+function resize() {
+  W = canvas.clientWidth; H = canvas.clientHeight;
+  renderer.setSize(W, H, false);
+  camera.aspect = W / H;
+  camera.position.setLength(W / H < 1 ? 16 : W / H < 1.3 ? 13.6 : 12.8);
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(canvas); resize();
+
+/* loop -------------------------------------------------------------- */
+const clock = new THREE.Clock();
+let visible = true;
+new IntersectionObserver(e => { visible = e[0].isIntersecting; }).observe(box);
+function frame() {
+  requestAnimationFrame(frame);
+  if (!visible) { clock.getDelta(); return; }
+  const dt = Math.min(clock.getDelta(), 0.05), time = clock.elapsedTime;
+
+  if (stage > 0 && playing) {
+    st += dt;
+    const S = STAGES[stage], k = ease(Math.min(1, st / S.dur));
+    for (const key in cur) cur[key] = from[key] + (S.to[key] - from[key]) * k;
+    if (st >= S.dur) {
+      if (stage < 4) goStage(stage + 1);
+      else { playing = false; finished = true; updateUI(); }
+    }
   }
-  const a = Math.random() * Math.PI * 2, r = vR * .5;
-  return { x: Math.cos(a)*r, y: (Math.random()-.5)*r*.6, z: Math.sin(a)*r, tx: Math.cos(a)*vR*1.5, ty: (Math.random()-.5)*vR*.6, tz: Math.sin(a)*vR*1.5, life: 1, speed: .02, progress: 0, color: '#c0841a', size: 4 };
+
+  const g = cur.g, q = cur.q;
+  memS.set(1 - 0.3 * q, 1 - 0.24 * q, 1 - 0.24 * q);
+  const vs = 0.55 + 0.45 * g;
+  vacR.copy(VAC).multiplyScalar(vs);
+  vacuole.scale.copy(vacR);
+  membrane.scale.copy(memS);
+  const bulge = 1 + 0.022 * Math.min(1, cur.P / 8);
+  wall.scale.set(bulge, bulge, bulge);
+  phC.lerpColors(phLow, phHigh, Math.min(1, Math.max(0, (cur.pH - 4.4) / 1.1)));
+  vacMat.uniforms.uColor.value.copy(phC);
+  [vacMat, memMat].forEach(m => m.uniforms.uTime.value = reduce ? 0 : time);
+
+  const nd = tmpV.set(-0.62, 0.42, 0.66).normalize();
+  nucleus.position.copy(shellPoint(nd, MEM).multiply(memS).multiplyScalar(0.72 + 0.12 * g));
+
+  const chlScale = new THREE.Vector3(0.24, 0.1, 0.17);
+  placeStreamers(chl, dt, chlScale, 0.86 + 0.06 * g);
+  placeStreamers(mito, dt * 0.7, new THREE.Vector3(1, 1, 1), 0.86 + 0.04 * g);
+  { const d = chl.data[0], r = Math.sqrt(1 - d.u * d.u); chlAnchor.copy(shellPoint(new THREE.Vector3(d.u, Math.cos(d.a) * r, Math.sin(d.a) * r).normalize(), MEM).multiply(memS).multiplyScalar(0.86 + 0.06 * g + d.k)); }
+
+  stepParticles(dt);
+  writeInstances();
+  saltMat.opacity += ((stage === 4 || hoverPart === 'salt' ? 0.85 : 0) - saltMat.opacity) * Math.min(1, dt * 2);
+  salt.visible = saltMat.opacity > 0.01;
+
+  allMats.forEach((s, m) => {
+    s.f += (targetFor(m) - s.f) * Math.min(1, dt * 5);
+    if (m.isShaderMaterial) m.uniforms.uOpacity.value = s.f; else m.opacity = s.base * s.f;
+  });
+
+  controls.update();
+  renderer.render(scene, camera);
+  placeLabels(W, H);
+  if (time - lastUI > 0.1) { lastUI = time; readouts(); }
 }
-
-function draw() {
-  ctx.clearRect(0, 0, W, H);
-  const cx = W/2, cy = H/2, R = 200*zoom, vR = vakuoleScale*R/.38, cY2 = Math.cos(rotX);
-  const g = ctx.createRadialGradient(cx,cy,0,cx,cy,R*1.2);
-  g.addColorStop(0, 'rgba(127,174,46,.12)'); g.addColorStop(1, 'transparent');
-  ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(cx,cy,R*1.3,R*.9,0,0,Math.PI*2); ctx.fill();
-  ctx.save(); ctx.globalAlpha = .35;
-  const cg = ctx.createRadialGradient(cx,cy,0,cx,cy,R);
-  cg.addColorStop(0,'#dde9be'); cg.addColorStop(1,'#c6d79b');
-  ctx.beginPath(); ctx.ellipse(cx,cy,R,R*Math.max(.3,Math.abs(cY2))*.9,0,0,Math.PI*2);
-  ctx.fillStyle = cg; ctx.fill(); ctx.restore();
-
-  for (const [bx,by,bz] of [[-0.7,-0.5,0.3],[0.7,-0.4,0.2],[-0.5,0.6,0.4],[0.6,0.5,-0.3],[-0.3,-0.7,-0.4],[0.4,-0.6,0.5]]) {
-    const pr = (R - vR*1.15)*.5, lx=bx*pr, ly=by*pr*.6, lz=bz*pr;
-    const p = project3D(lx,ly,lz), pE = project3D(lx+18*zoom,ly,lz);
-    const sz = Math.max(2, Math.hypot(pE.x-p.x, pE.y-p.y)), dep = Math.max(.1,(lz+200)/400);
-    ctx.save(); ctx.globalAlpha = .85*dep;
-    ctx.beginPath(); ctx.ellipse(p.x,p.y,sz,sz*.55,rotY+.5,0,Math.PI*2);
-    const cl = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,sz);
-    cl.addColorStop(0,'#5d8a2e'); cl.addColorStop(1,'#35591f');
-    ctx.fillStyle = cl; ctx.fill(); ctx.restore();
-  }
-
-  const nP = project3D(-R*.35,-R*.25,0);
-  { const nR = R*.12; ctx.save(); ctx.globalAlpha = .92;
-    const ng = ctx.createRadialGradient(nP.x,nP.y,0,nP.x,nP.y,nR*1.5);
-    ng.addColorStop(0,'#e0a838'); ng.addColorStop(.6,'#b07614'); ng.addColorStop(1,'#80500e');
-    ctx.beginPath(); ctx.ellipse(nP.x,nP.y,nR*1.5,nR,.3,0,Math.PI*2); ctx.fillStyle=ng; ctx.fill();
-    ctx.globalAlpha=.7; ctx.beginPath(); ctx.ellipse(nP.x-nR*.2,nP.y-nR*.15,nR*.5,nR*.35,0,0,Math.PI*2);
-    ctx.fillStyle='#f5cc66'; ctx.fill(); ctx.restore(); }
-
-  { ctx.save(); ctx.globalAlpha=.40;
-    const vg = ctx.createRadialGradient(cx,cy-vR*.1,vR*.1,cx,cy,vR*1.1);
-    vg.addColorStop(0,'#d6ec92'); vg.addColorStop(.5,'#9cc23a'); vg.addColorStop(1,'#5d7a2a');
-    ctx.beginPath(); ctx.ellipse(cx,cy,vR,vR*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2); ctx.fillStyle=vg; ctx.fill();
-    ctx.globalAlpha=.7;
-    ctx.beginPath(); ctx.ellipse(cx,cy,vR,vR*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);
-    ctx.strokeStyle='#5d8a2e'; ctx.lineWidth=3.5*zoom; ctx.setLineDash([8,4]); ctx.stroke(); ctx.setLineDash([]);
-    ctx.globalAlpha=.14;
-    ctx.beginPath(); ctx.ellipse(cx,cy,vR+8,(vR+8)*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);
-    ctx.strokeStyle='#7fae2e'; ctx.lineWidth=12*zoom; ctx.stroke(); ctx.restore(); }
-
-  for (const p of particles) {
-    const c3x=p.x+(p.tx-p.x)*p.progress, c3y=p.y+(p.ty-p.y)*p.progress, c3z=p.z+(p.tz-p.z)*p.progress;
-    const pp = project3D(c3x,c3y,c3z);
-    ctx.save(); ctx.globalAlpha=p.life*(.45+.55*p.progress);
-    const pg = ctx.createRadialGradient(pp.x,pp.y,0,pp.x,pp.y,p.size*zoom*1.5);
-    pg.addColorStop(0,p.color); pg.addColorStop(1,'transparent');
-    ctx.beginPath(); ctx.arc(pp.x,pp.y,p.size*zoom*1.5,0,Math.PI*2); ctx.fillStyle=pg; ctx.fill(); ctx.restore();
-  }
-
-  ctx.save(); ctx.globalAlpha=.7;
-  ctx.beginPath(); ctx.ellipse(cx,cy,R,R*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);
-  ctx.strokeStyle='#5d7a2a'; ctx.lineWidth=4*zoom; ctx.stroke();
-  ctx.globalAlpha=.2;
-  ctx.beginPath(); ctx.ellipse(cx,cy,R+10*zoom,(R+10*zoom)*Math.max(.35,Math.abs(cY2)),0,0,Math.PI*2);
-  ctx.strokeStyle='#5d7a2a'; ctx.lineWidth=10*zoom; ctx.stroke(); ctx.restore();
-
-  drawLabel('Vakuole\n(Tonoplast)', cx+vR*.7, cy-vR*.6, '#2f5d2c');
-  drawLabel('Zellkern', nP.x+40, nP.y-20, '#9a6310');
-  drawLabel('Zellmembran\n+ Zellwand', cx+R*.82, cy-R*.2, '#46552f');
-}
-
-function drawLabel(t, x, y, c) {
-  const ls = t.split('\n');
-  ctx.save(); ctx.font = `${Math.max(13,13*zoom)}px Inter, sans-serif`;
-  ctx.fillStyle = c; ctx.globalAlpha = .92;
-  ls.forEach((l,i) => ctx.fillText(l, x, y+i*17*zoom));
-  ctx.restore();
-}
-
-function simLoop() {
-  tick++;
-  if (tick < 200)      phase = 1;
-  else if (tick < 500) phase = 2;
-  else if (tick < 600) phase = 3;
-  else { tick = 0; phase = 1; }
-
-  if (phase === 1) targetVakuoleScale = .38 + (tick/200)*.04;
-  if (phase === 2) targetVakuoleScale = .42 + ((tick-200)/300)*.14;
-  if (phase === 3) targetVakuoleScale = .56 - ((tick-500)/100)*.18;
-
-  vakuoleScale += (targetVakuoleScale - vakuoleScale) * .03;
-  vakuoleScale = Math.max(.3, Math.min(.58, vakuoleScale));
-  rotY += .004;
-
-  if (tick % 6 === 0) particles.push(spawnParticle(phase));
-  for (const p of particles) { p.progress = Math.min(1, p.progress + p.speed); if (p.progress >= 1) p.life -= .08; }
-  particles = particles.filter(p => p.life > 0);
-
-  const bar = document.getElementById('simInfoBar');
-  if      (phase === 1) bar.textContent = 'Phase 1: Ionen (K⁺, Cl⁻) werden aktiv über H⁺-ATPasen in die Vakuole gepumpt, das Osmotisches Potential sinkt.';
-  else if (phase === 2) bar.textContent = 'Phase 2: Wasser strömt durch Aquaporine osmotisch nach, die Vakuole wächst, Turgordruck steigt auf ~8 bar.';
-  else                  bar.textContent = 'Phase 3: Ionenpumpen arbeiten rückwärts, Zellsaft wird teilweise entleert, die Vakuole schrumpft.';
-
-  draw();
-  if (simRunning) animId = requestAnimationFrame(simLoop);
-}
-
-function startSim() {
-  if (simRunning) return;
-  simRunning = true;
-  document.getElementById('simStatus').textContent = '● Läuft';
-  document.getElementById('simStatus').className = 'sim-status running';
-  simLoop();
-}
-function stopSim() {
-  simRunning = false;
-  if (animId) cancelAnimationFrame(animId);
-  document.getElementById('simStatus').textContent = '● Gestoppt';
-  document.getElementById('simStatus').className = 'sim-status stopped';
-  document.getElementById('simInfoBar').textContent = 'Simulation gestoppt. Du kannst die Zelle noch drehen und zoomen.';
-}
-function resetSim() {
-  stopSim();
-  vakuoleScale = .38; targetVakuoleScale = .38; rotX = .3; rotY = .5; zoom = 1;
-  particles = []; tick = 0; phase = 0;
-  document.getElementById('simStatus').textContent = '● Bereit';
-  document.getElementById('simStatus').className = 'sim-status idle';
-  document.getElementById('simInfoBar').textContent = 'Starte die Simulation, um zu sehen, wie die Vakuole Turgor aufbaut und Ionen transportiert.';
-  draw();
-}
-
-setTimeout(() => { resize(); draw(); }, 100);
-(function() { const y = document.getElementById('current-year'); if (y) y.textContent = new Date().getFullYear(); })();
+updateUI();
+frame();
+window.__vakuole = { goStage, reset, setHover, jump(n) { goStage(n, false); st = STAGES[n].dur; cur = { ...STAGES[n].to }; } };
 </script>
 </body>
 </html>
